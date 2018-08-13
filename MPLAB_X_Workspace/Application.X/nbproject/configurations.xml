@@ -4,6 +4,11 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="Controller" projectFiles="true">
+        <itemPath>../../Include/Controller/Lighting.h</itemPath>
+        <itemPath>../../Include/Controller/Controller.h</itemPath>
+        <itemPath>../../Include/Controller/Animation.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="HardwareProfile"
                      displayName="HardwareProfile"
                      projectFiles="true">
@@ -30,7 +35,7 @@
       </logicalFolder>
       <itemPath>../../Include/GenericTypeDefs.h</itemPath>
       <itemPath>../../Include/NVMem.h</itemPath>
-      <itemPath>../../Include/main.h</itemPath>
+      <itemPath>../../Include/Main.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -48,6 +53,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="f1" displayName="Controller" projectFiles="true">
+        <itemPath>../../Source/Controller/Lighting.c</itemPath>
+        <itemPath>../../Source/Controller/Controller.c</itemPath>
+        <itemPath>../../Source/Controller/Animation.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="TransportLayer"
                      displayName="TransportLayer"
                      projectFiles="true">
@@ -58,7 +68,7 @@
         <itemPath>../../Source/USB/usb_device.c</itemPath>
         <itemPath>../../Source/USB/usb_function_hid.c</itemPath>
       </logicalFolder>
-      <itemPath>../../Source/main.c</itemPath>
+      <itemPath>../../Source/Main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -70,6 +80,8 @@
     <Elem>../../Include/HardwareProfile</Elem>
     <Elem>../../linker_scripts</Elem>
     <Elem>../../Source/USB</Elem>
+    <Elem>../../Source/Controller</Elem>
+    <Elem>../../Include/Controller</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -81,7 +93,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
-        <languageToolchainVersion></languageToolchainVersion>
+        <languageToolchainVersion>1.20</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
@@ -121,7 +133,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value="../..;../../Include;../../Include/Usb/Stack;../../Include/FrameWork;../../Include/Usb;../../Include/HardwareProfile;../../Include/USB;../../Include/Framework"/>
+                  value="../..;../../Include;../../Include/Usb/Stack;../../Include/FrameWork;../../Include/Usb;../../Include/HardwareProfile;../../Include/USB;../../Include/Framework;../../Include/Controller"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="false"/>

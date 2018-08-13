@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../../Source/USB/usb_descriptors.c ../../Source/USB/usb_device.c ../../Source/USB/usb_function_hid.c ../../Source/main.c ../../Source/USB/Usb_HID_tasks_application.c
+SOURCEFILES_QUOTED_IF_SPACED=../../Source/USB/usb_descriptors.c ../../Source/USB/Usb_HID_tasks_application.c ../../Source/USB/usb_device.c ../../Source/USB/usb_function_hid.c ../../Source/Main.c ../../Source/Controller/Lighting.c ../../Source/Controller/Controller.c ../../Source/Controller/Animation.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/313519312/usb_descriptors.o ${OBJECTDIR}/_ext/313519312/usb_device.o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ${OBJECTDIR}/_ext/1787047461/main.o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d ${OBJECTDIR}/_ext/313519312/usb_device.o.d ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d ${OBJECTDIR}/_ext/1787047461/main.o.d ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/313519312/usb_descriptors.o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ${OBJECTDIR}/_ext/313519312/usb_device.o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ${OBJECTDIR}/_ext/1787047461/Main.o ${OBJECTDIR}/_ext/1332549744/Lighting.o ${OBJECTDIR}/_ext/1332549744/Controller.o ${OBJECTDIR}/_ext/1332549744/Animation.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d ${OBJECTDIR}/_ext/313519312/usb_device.o.d ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d ${OBJECTDIR}/_ext/1787047461/Main.o.d ${OBJECTDIR}/_ext/1332549744/Lighting.o.d ${OBJECTDIR}/_ext/1332549744/Controller.o.d ${OBJECTDIR}/_ext/1332549744/Animation.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/313519312/usb_descriptors.o ${OBJECTDIR}/_ext/313519312/usb_device.o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ${OBJECTDIR}/_ext/1787047461/main.o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o
+OBJECTFILES=${OBJECTDIR}/_ext/313519312/usb_descriptors.o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ${OBJECTDIR}/_ext/313519312/usb_device.o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ${OBJECTDIR}/_ext/1787047461/Main.o ${OBJECTDIR}/_ext/1332549744/Lighting.o ${OBJECTDIR}/_ext/1332549744/Controller.o ${OBJECTDIR}/_ext/1332549744/Animation.o
 
 # Source Files
-SOURCEFILES=../../Source/USB/usb_descriptors.c ../../Source/USB/usb_device.c ../../Source/USB/usb_function_hid.c ../../Source/main.c ../../Source/USB/Usb_HID_tasks_application.c
+SOURCEFILES=../../Source/USB/usb_descriptors.c ../../Source/USB/Usb_HID_tasks_application.c ../../Source/USB/usb_device.c ../../Source/USB/usb_function_hid.c ../../Source/Main.c ../../Source/Controller/Lighting.c ../../Source/Controller/Controller.c ../../Source/Controller/Animation.c
 
 
 CFLAGS=
@@ -110,62 +110,98 @@ ${OBJECTDIR}/_ext/313519312/usb_descriptors.o: ../../Source/USB/usb_descriptors.
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors.o ../../Source/USB/usb_descriptors.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o.d 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/_ext/1787047461/main.o: ../../Source/main.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
-	@${RM} ${OBJECTDIR}/_ext/1787047461/main.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1787047461/main.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1787047461/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/1787047461/main.o.d" -o ${OBJECTDIR}/_ext/1787047461/main.o ../../Source/main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors.o ../../Source/USB/usb_descriptors.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o: ../../Source/USB/Usb_HID_tasks_application.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o.d 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1787047461/Main.o: ../../Source/Main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
+	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1787047461/Main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1787047461/Main.o.d" -o ${OBJECTDIR}/_ext/1787047461/Main.o ../../Source/Main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1332549744/Lighting.o: ../../Source/Controller/Lighting.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" -o ${OBJECTDIR}/_ext/1332549744/Lighting.o ../../Source/Controller/Lighting.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1332549744/Controller.o: ../../Source/Controller/Controller.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1332549744/Controller.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1332549744/Controller.o.d" -o ${OBJECTDIR}/_ext/1332549744/Controller.o ../../Source/Controller/Controller.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1332549744/Animation.o: ../../Source/Controller/Animation.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1332549744/Animation.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1332549744/Animation.o.d" -o ${OBJECTDIR}/_ext/1332549744/Animation.o ../../Source/Controller/Animation.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
 	
 else
 ${OBJECTDIR}/_ext/313519312/usb_descriptors.o: ../../Source/USB/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors.o ../../Source/USB/usb_descriptors.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o.d 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d 
-	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
-	
-${OBJECTDIR}/_ext/1787047461/main.o: ../../Source/main.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
-	@${RM} ${OBJECTDIR}/_ext/1787047461/main.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1787047461/main.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1787047461/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/1787047461/main.o.d" -o ${OBJECTDIR}/_ext/1787047461/main.o ../../Source/main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors.o ../../Source/USB/usb_descriptors.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
 	
 ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o: ../../Source/USB/Usb_HID_tasks_application.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o.d 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d 
+	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1787047461/Main.o: ../../Source/Main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
+	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1787047461/Main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1787047461/Main.o.d" -o ${OBJECTDIR}/_ext/1787047461/Main.o ../../Source/Main.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1332549744/Lighting.o: ../../Source/Controller/Lighting.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" -o ${OBJECTDIR}/_ext/1332549744/Lighting.o ../../Source/Controller/Lighting.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1332549744/Controller.o: ../../Source/Controller/Controller.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1332549744/Controller.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1332549744/Controller.o.d" -o ${OBJECTDIR}/_ext/1332549744/Controller.o ../../Source/Controller/Controller.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
+	
+${OBJECTDIR}/_ext/1332549744/Animation.o: ../../Source/Controller/Animation.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1332549744/Animation.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DTRANSPORT_LAYER_USB -DBOARD_THERMALTAKE_CONTROLLER -D_SUPPRESS_PLIB_WARNING -I"../.." -I"../../Include" -I"../../Include/Usb/Stack" -I"../../Include/FrameWork" -I"../../Include/Usb" -I"../../Include/HardwareProfile" -I"../../Include/USB" -I"../../Include/Framework" -I"../../Include/Controller" -MMD -MF "${OBJECTDIR}/_ext/1332549744/Animation.o.d" -o ${OBJECTDIR}/_ext/1332549744/Animation.o ../../Source/Controller/Animation.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD) 
 	
 endif
 

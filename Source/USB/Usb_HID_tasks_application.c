@@ -8,7 +8,7 @@
 #include "HardwareProfile.h"
 #include "./USB/usb_function_hid.h"
 
-#include "Include\main.h"
+#include "Include\Main.h"
 #include "Include\Framework\Framework.h"
 
 

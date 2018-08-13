@@ -3,99 +3,19 @@
 #include "Include\HardwareProfile\HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "main.h"
+#include "Include\Controller\Lighting.h"
 
-#define DELAY1  0x78
-#define DELAY2  0x1000
-
-/*** DEVCFG0 ***/
-#pragma config DEBUG =      ON
-#pragma config JTAGEN =     OFF
-#pragma config ICESEL =     ICS_PGx4
-#pragma config PWP =        OFF
-#pragma config BWP =        OFF
-#pragma config CP =         OFF
-
-/*** DEVCFG1 ***/
-#pragma config FNOSC =      PRIPLL
-#pragma config FSOSCEN =    OFF
-#pragma config IESO =       OFF
-#pragma config POSCMOD =    HS
-#pragma config OSCIOFNC =   OFF
-#pragma config FPBDIV =     DIV_1
-#pragma config FCKSM =      CSDCMD
-#pragma config WDTPS =      PS1048576
-#pragma config FWDTEN =     OFF
-#pragma config WINDIS =     OFF
-#pragma config FWDTWINSZ =  WINSZ_50
-
-/*** DEVCFG2 ***/
-#pragma config FPLLIDIV =   DIV_3
-#pragma config FPLLMUL =    MUL_24
-#pragma config FPLLODIV =   DIV_2
-#pragma config UPLLIDIV =   DIV_3
-#pragma config UPLLEN =     ON
-
-/*** DEVCFG3 ***/
-//#pragma config USERID =     0x0000
-#pragma config PMDL1WAY =   ON
-#pragma config IOL1WAY =    ON
-#pragma config FUSBIDIO =   OFF
-#pragma config FVBUSONIO =  OFF
-
-#define SWITCH_PRESSED 0
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
-void PIXEL_Initialize(void);
-
-
-INT main(void)
-{
-	UINT pbClk;
-
-	// Setup configuration
-	pbClk = SYSTEMConfig(SYS_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
-    INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);
-    INTEnableInterrupts();
-	
-	InitLED();
-    
-    // Initialize the transport layer - UART/USB/Ethernet
-    TRANS_LAYER_Init(pbClk);
-    
-    PIXEL_Initialize();
-
-    while(1) // main loop
-    {
-        BlinkLED();
-        TRANS_LAYER_Task(); // Run Transport layer tasks
-    }
-
-    // Close transport layer.
-    TRANS_LAYER_Close();
-	
-	return 0;
-}			
-
-DWORD data[5][12];
+DWORD LedBufferA[5][9];
+DWORD LedBufferB[5][9];
+BYTE *LedDrawBuffer = (BYTE*)LedBufferA;
+BYTE *LedWriteBuffer = (BYTE*)LedBufferB;
+BOOL LedBusy = FALSE;
 
 DWORD byteIndex = 0x0;
 DWORD bitIndex = 0x100;
 DWORD shiftAmount = 8;
-DWORD dPtr[5];
-BOOL pause = FALSE;
-DWORD testByte1;
-BYTE testByte2;
-BYTE testByte3;
 
-void PIXEL_Initialize(void) 
+void LightingInit(void) 
 {
     ANSELA = 0;
     TRISCCLR = 0x0384;
@@ -104,48 +24,63 @@ void PIXEL_Initialize(void)
     T2CON = 0x0; // Stop the timer and clear the control register,
     // prescaler at 1:1,internal clock source
     TMR2 = 0x0; // Clear the timer register
-    PR2 = DELAY1; // Load the period register
-    IPC2bits.T2IP = 2;
-    IPC2bits.T2IS = 1;
+    PR2 = INNERBITDELAY; // Load the period register
+    IPC2bits.T2IP = 7;
+    IPC2bits.T2IS = 3;
     // Can be done in a single operation by assigning PC2SET = 0x0000000D
     IFS0CLR = _IFS0_T2IF_MASK; // Clear the timer interrupt status flag
     IEC0SET = _IEC0_T2IE_MASK; // Enable timer interrupts
     
-    
-    data[0][0] = 0x40000040;
-    data[0][1] = 0x40404040;
-    data[0][2] = 0x40404040;
-    data[1][0] = 0x40000040;
-    data[1][1] = 0x00400000;
-    data[1][2] = 0x00004000;
-    data[2][0] = 0x00004000;
-    data[2][1] = 0x40000040;
-    data[2][2] = 0x00400000;
-    data[3][0] = 0x00400000;
-    data[3][1] = 0x00004000;
-    data[3][2] = 0x40000040;
-    data[4][0] = 0x40400000;
-    data[4][1] = 0x40400000;
-    data[4][2] = 0x40400000;
-    
     T2CONbits.TON = 1;
 }
 
+void SwapBuffer(void)
+{
+    if(LedDrawBuffer == (BYTE*)LedBufferA) 
+    {
+        LedDrawBuffer = (BYTE*)LedBufferB;
+        LedWriteBuffer = (BYTE*)LedBufferA;
+    }
+    else
+    {
+        LedDrawBuffer = (BYTE*)LedBufferA;
+        LedWriteBuffer = (BYTE*)LedBufferB;
+    }
+}
 
+void LightingUpdate(void)
+{
+    SwapBuffer();
+    TMR2 = 0x0;
+    //PR2 = INNERBITDELAY;
+    T2CONbits.TON = 1;
+    LedBusy = TRUE;
+}
 
-void __ISR(_TIMER_2_VECTOR, ipl2) Timer1Handler(void)
+void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, DWORD color)
+{
+    WORD offset = devIndex*DEVICESIZE + ledIndex * LEDSIZE;
+    BYTE * ledWrite = LedWriteBuffer + offset;
+    *ledWrite++ = color & 0xFF;
+    *ledWrite++ = color >> 8 & 0xFF;
+    *ledWrite++ = color >> 16 & 0xFF;
+}
+
+void SetDeviceSolidColor(BYTE devIndex, DWORD color)
+{
+    BYTE i;
+    for(i = 0; i < DEVICESIZE; i++) 
+    {
+        SetDeviceLedColor(devIndex, i, color);
+    }
+}
+
+void __ISR(_TIMER_2_VECTOR, IPL7SOFT) Timer1Handler(void)
 {
     IFS0CLR = _IFS0_T2IF_MASK; // Clear the timer interrupt status flag
-    if(pause) {
-        T2CONbits.TON = 0;
-        TMR2 = 0x0;
-        PR2 = DELAY1;
-        pause = FALSE;
-        T2CONbits.TON = 1;
-    }
     
     asm volatile (
-        "LA $t5, data \n"
+        "LW $t5, LedDrawBuffer \n"
         "LA $t0, shiftAmount \n"
         "LW $t7, shiftAmount \n"
         "ADDI $t7, $t7, -1 \n"      // decrement shiftAmount
@@ -215,22 +150,14 @@ void __ISR(_TIMER_2_VECTOR, ipl2) Timer1Handler(void)
         "SW $v1, 0($t1) \n"
         
     );
-     
-    //testByte1++;
-    //testByte2++;
+    
     if(shiftAmount == 0) {
         byteIndex += 1;
-        if(byteIndex == 12) {
+        if(byteIndex == 36) {
             T2CONbits.TON = 0;
             byteIndex = 0;
-            LATAbits.LATA8 = ~LATAbits.LATA8;
-            TMR2 = 0x0;
-            PR2 = DELAY2;
-            pause = TRUE;
-            T2CONbits.TON = 1;
+            LedBusy = FALSE;
         }
         shiftAmount = 8;
     }
-    
-    
 }
