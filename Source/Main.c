@@ -59,8 +59,6 @@ INT main(void)
 	pbClk = SYSTEMConfig(SYS_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
     INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);
     INTEnableInterrupts();
-	
-	InitLED();
     
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
@@ -69,7 +67,6 @@ INT main(void)
 
     while(1) // main loop
     {
-        BlinkLED();
         TRANS_LAYER_Task(); // Run Transport layer tasks
         ControllerLoop();
     }

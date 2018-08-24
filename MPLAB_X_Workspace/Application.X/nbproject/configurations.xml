@@ -8,6 +8,7 @@
         <itemPath>../../Include/Controller/Lighting.h</itemPath>
         <itemPath>../../Include/Controller/Controller.h</itemPath>
         <itemPath>../../Include/Controller/Animation.h</itemPath>
+        <itemPath>../../Include/Controller/Fan.h</itemPath>
       </logicalFolder>
       <logicalFolder name="HardwareProfile"
                      displayName="HardwareProfile"
@@ -57,6 +58,7 @@
         <itemPath>../../Source/Controller/Lighting.c</itemPath>
         <itemPath>../../Source/Controller/Controller.c</itemPath>
         <itemPath>../../Source/Controller/Animation.c</itemPath>
+        <itemPath>../../Source/Controller/Fan.c</itemPath>
       </logicalFolder>
       <logicalFolder name="TransportLayer"
                      displayName="TransportLayer"

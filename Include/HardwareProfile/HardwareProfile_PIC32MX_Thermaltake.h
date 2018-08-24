@@ -30,27 +30,8 @@
     /*******************************************************************/
     /*******************************************************************/
     /*******************************************************************/
-
-    /** Board definition ***********************************************/
-    //These definitions will tell the main() function which board is
-    //  currently selected.  This will allow the application to add
-    //  the correct configuration bits as well use the correct
-    //  initialization functions for the board.  These definitions are only
-    //  required for this demo.  They are not required in
-    //  final application design.
-
-
+				
 	
-	#define mLED              LATBbits.LATB4
-	// Blinks LED 1 on USB Starter kit
-	#define BlinkLED() (mLED = ((ReadCoreTimer() & 0x0800000) != 0))
-	#define InitLED() do{	\
-							/*AD1PCFG = 0;*/ \
-							TRISBbits.TRISB4 = 0; TRISAbits.TRISA8 = 0; \
-							LATBbits.LATB4 = 1; LATAbits.LATA8 = 1;  \
-						}while(0)					
-	
-	// Dipswitch #4
 	#define ReadSwitchStatus() (PORTReadBits(IOPORT_B, BIT_1) & BIT_1)
    // Error indication.	
 	#define Error()   do{LATBbits.LATB4 = 0; LATAbits.LATA8 = 1;} while(0);

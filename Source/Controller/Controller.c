@@ -9,6 +9,7 @@ void ControllerInitialize(void)
 {
     LightingInit();
     AnimationInit();
+    FanInit();
     
     AnimationSetInterval(500);
     
@@ -21,4 +22,5 @@ void ControllerLoop(void)
     if(LedBusy) return;
     
     AnimationUpdate();
+    FanLoop();
 }
