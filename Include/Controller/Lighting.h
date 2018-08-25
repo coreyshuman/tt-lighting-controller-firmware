@@ -12,5 +12,6 @@ extern BOOL LedBusy;
 void LightingInit(void);
 void LightingUpdate(void);
 
+void ClearLeds(void);
 void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, DWORD color);
 void SetDeviceSolidColor(BYTE devIndex, DWORD color);

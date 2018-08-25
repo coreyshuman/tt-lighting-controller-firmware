@@ -6,9 +6,6 @@
 
 
 //-------User configurable macros begin---------
-#define MAJOR_VERSION 1
-#define MINOR_VERSION 0
-
 
 /* APP_FLASH_BASE_ADDRESS and APP_FLASH_END_ADDRESS reserves program Flash for the application*/ 
 /* Rule: 

@@ -5,10 +5,10 @@
 #include <plib.h>
 #include "Include\Controller\Lighting.h"
 
-DWORD LedBufferA[5][9];
-DWORD LedBufferB[5][9];
-BYTE *LedDrawBuffer = (BYTE*)LedBufferA;
-BYTE *LedWriteBuffer = (BYTE*)LedBufferB;
+BYTE LedBufferA[5][36];
+BYTE LedBufferB[5][36];
+BYTE *LedDrawBuffer = (BYTE*)&LedBufferA;
+BYTE *LedWriteBuffer = (BYTE*)&LedBufferB;
 BOOL LedBusy = FALSE;
 
 DWORD byteIndex = 0x0;
@@ -21,17 +21,17 @@ void LightingInit(void)
     TRISCCLR = 0x0384;
     TRISBCLR = 0x0100;
     
-    T2CON = 0x0; // Stop the timer and clear the control register,
+    T1CON = 0x0; // Stop the timer and clear the control register,
     // prescaler at 1:1,internal clock source
-    TMR2 = 0x0; // Clear the timer register
-    PR2 = INNERBITDELAY; // Load the period register
-    IPC2bits.T2IP = 7;
-    IPC2bits.T2IS = 3;
+    TMR1 = 0x0; // Clear the timer register
+    PR1 = INNERBITDELAY; // Load the period register
+    IPC1bits.T1IP = 7;
+    IPC1bits.T1IS = 3;
     // Can be done in a single operation by assigning PC2SET = 0x0000000D
-    IFS0CLR = _IFS0_T2IF_MASK; // Clear the timer interrupt status flag
-    IEC0SET = _IEC0_T2IE_MASK; // Enable timer interrupts
+    IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
+    IEC0SET = _IEC0_T1IE_MASK; // Enable timer interrupts
     
-    T2CONbits.TON = 1;
+    T1CONbits.TON = 1;
 }
 
 void SwapBuffer(void)
@@ -51,10 +51,19 @@ void SwapBuffer(void)
 void LightingUpdate(void)
 {
     SwapBuffer();
-    TMR2 = 0x0;
-    //PR2 = INNERBITDELAY;
-    T2CONbits.TON = 1;
+    TMR1 = 0x0;
+    T1CONbits.TON = 1;
     LedBusy = TRUE;
+}
+
+void ClearLeds(void)
+{
+    int i = 0;
+    BYTE *ledWrite = LedWriteBuffer;
+    for(i=0; i<DEVICESIZE*DEVICECOUNT; i++)
+    {
+        *ledWrite++ = 0x00;
+    }
 }
 
 void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, DWORD color)
@@ -75,9 +84,9 @@ void SetDeviceSolidColor(BYTE devIndex, DWORD color)
     }
 }
 
-void __ISR(_TIMER_2_VECTOR, IPL7SOFT) Timer1Handler(void)
+void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
 {
-    IFS0CLR = _IFS0_T2IF_MASK; // Clear the timer interrupt status flag
+    IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
     
     asm volatile (
         "LW $t5, LedDrawBuffer \n"
@@ -88,10 +97,10 @@ void __ISR(_TIMER_2_VECTOR, IPL7SOFT) Timer1Handler(void)
         "LW $t0, byteIndex \n"
         "ADD $t5, $t5, $t0 \n"         // byte offset
         "LB $t0, 0($t5) \n"         // load data 1
-        "LB $t1, 48($t5) \n"         // load data 2
-        "LB $t2, 96($t5) \n"         // load data 3
-        "LB $t3, 144($t5) \n"         // load data 4
-        "LB $t4, 192($t5) \n"         // load data 5
+        "LB $t1, 36($t5) \n"         // load data 2
+        "LB $t2, 72($t5) \n"         // load data 3
+        "LB $t3, 108($t5) \n"         // load data 4
+        "LB $t4, 144($t5) \n"         // load data 5
         "LI $v0, 0x0000 \n"
         "LI $v1, 0x0100 \n"
         "LA $t6, LATCCLR \n"
@@ -154,7 +163,7 @@ void __ISR(_TIMER_2_VECTOR, IPL7SOFT) Timer1Handler(void)
     if(shiftAmount == 0) {
         byteIndex += 1;
         if(byteIndex == 36) {
-            T2CONbits.TON = 0;
+            T1CONbits.TON = 0;
             byteIndex = 0;
             LedBusy = FALSE;
         }

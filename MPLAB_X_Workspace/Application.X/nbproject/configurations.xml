@@ -63,8 +63,8 @@
       <logicalFolder name="TransportLayer"
                      displayName="TransportLayer"
                      projectFiles="true">
-        <itemPath>../../Source/USB/usb_descriptors.c</itemPath>
         <itemPath>../../Source/USB/Usb_HID_tasks_application.c</itemPath>
+        <itemPath>../../Source/USB/usb_descriptors_app.c</itemPath>
       </logicalFolder>
       <logicalFolder name="USB_Stack" displayName="USB_Stack" projectFiles="true">
         <itemPath>../../Source/USB/usb_device.c</itemPath>
@@ -296,6 +296,7 @@
         <property key="UART2" value="true"/>
         <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

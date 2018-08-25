@@ -9,7 +9,7 @@
 #include "./USB/usb_function_hid.h"
 
 #include "Include\Main.h"
-#include "Include\Framework\Framework.h"
+#include "Include\Controller\Controller.h"
 
 
 #define UsbTxBusy() 		(USBHandleBusy(USBInHandle))
@@ -20,7 +20,7 @@
 
 
 static UINT8 UsbRxData[MaxUsbPacketSize];
-static UINT8 UsbTxData[FRAMEWORK_BUFF_SIZE];
+static UINT8 UsbTxData[CONTROLLER_BUFF_SIZE];
 
 
 
@@ -110,7 +110,7 @@ void UsbTasks(void)
     if(USBGetDeviceState() == CONFIGURED_STATE)
 	{
     	// Check if bootloader has something to send out to PC. 
-    	//TxLen = FRAMEWORK_GetTransmitFrame(UsbTxData);
+    	TxLen = ControllerGetTransmitFrame(UsbTxData);
     
     	// Initialize the transmit pointer.
     	TxPtr = &UsbTxData[0];
@@ -140,14 +140,14 @@ void UsbTasks(void)
     	}
     	
     	// Following part of the code checks if there is any data from USB.
-    	// If there are any data available, it just pushes the data to the frame work. 
-    	// Framework decodes the packet and takes necessary action like erasing/ programming etc.	
+    	// If there are any data available, it just pushes the data to the controller. 
+    	// Controller decodes the packet and takes necessary action.	
     		
     	if(UsbRxDataAvlbl())// Check if we have got any data from USB.	 		
         {
     	    // Yes, we got a packet from HID End point.	    
-    	    // Pass the buffer to frame work. Framework decodes the packet and executes the Bootloder specific commands (Erasing/Programming etc).
-    		//FRAMEWORK_BuildRxFrame(UsbRxData, MaxUsbPacketSize);
+    	    // Pass the buffer to frame work. Controller decodes the packet and executes command.
+    		ControllerBuildRxFrame(UsbRxData, MaxUsbPacketSize);
     	    	    
     	    // Re-arm the HID endpoint to receive next packet.(Remember! We have armed the HID endpoint for the first time in function USBCBInitEP())
     	    USBOutHandle = HIDRxPacket(HID_EP,(BYTE*)UsbRxData,MaxUsbPacketSize);	    	    		
@@ -443,6 +443,7 @@ BOOL USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
             break;
         case EVENT_CONFIGURED: 
             USBCBInitEP();
+            SetDeviceLedColor(3, 7, 0x00101000);
             break;
         case EVENT_SET_DESCRIPTOR:
             USBCBStdSetDscHandler();

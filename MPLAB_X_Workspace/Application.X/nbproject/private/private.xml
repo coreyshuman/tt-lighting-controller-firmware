@@ -6,13 +6,23 @@
         <group>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Controller.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Fan.h</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Controller.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/USB/usb_descriptors.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/HardwareProfile/HardwareProfile_PIC32MX_Thermaltake.h</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Lighting.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Lighting.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Animation.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/USB/Usb_Tasks.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/USB/usb_function_hid.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Main.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/USB/usb_descriptors_app.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Main.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/USB/usb_device.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Controller.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/USB/Usb_HID_tasks_application.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Lighting.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/USB/usb_device.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Fan.c</file>
             <file>file:/D:/Program%20Files%20(x86)/Microchip/xc32/v2.10/pic32mx/include/proc/p32mx230f064d.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/USB/usb_config.h</file>
         </group>
     </open-files>
 </project-private>

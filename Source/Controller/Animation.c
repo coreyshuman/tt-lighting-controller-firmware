@@ -10,6 +10,9 @@
 BYTE AnimationFrame;
 BOOL ReadyToUpdate;
 
+BYTE fanSpeed = 0;
+BYTE fanDir = 1;
+
 // 00 blue red green
 enum _colors {
     PINK =      0x00808040,
@@ -62,6 +65,8 @@ void AnimationStop(void)
     T4CONCLR = 0x8000; // Stop 32-bit timer
 }
 
+extern DWORD fan1speed;
+extern DWORD fan1period;
 void RotateColors(void)
 {
     BYTE i, y;
@@ -72,6 +77,8 @@ void RotateColors(void)
         AnimationFrame = 0;
     }
     
+    //ClearLeds();
+    
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
         BYTE idx = i + AnimationFrame;
@@ -79,11 +86,44 @@ void RotateColors(void)
         {
             idx -= 12;
         }
-        for(y = 0; y < DEVICECOUNT; y++)
+        for(y = 0; y < DEVICECOUNT-2; y++)
         {
             SetDeviceLedColor(y, i, colors[idx]);
         }
     }
+    // testing fan spin speed
+    SetDeviceLedColor(4, 0, 0x00101000);
+    if(fan1speed > 900)
+        SetDeviceLedColor(4, 1, 0x00101000);
+    if(fan1speed > 1200)
+        SetDeviceLedColor(4, 2, 0x00101000);
+    if(fan1speed > 1500)
+        SetDeviceLedColor(4, 3, 0x00101000);
+    if(fan1speed > 1800)
+        SetDeviceLedColor(4, 4, 0x00101000);
+    if(fan1speed > 2100)
+        SetDeviceLedColor(4, 5, 0x00101000);
+    if(fan1speed > 2400)
+        SetDeviceLedColor(4, 6, 0x00101000);
+    if(fan1speed > 2700)
+        SetDeviceLedColor(4, 7, 0x00101000);
+ 
+    
+        if(fanSpeed == 0) {
+        fanDir = 1;
+    } 
+    else if (fanSpeed == 100) {
+        fanDir = 0;
+    }
+    if(fanDir > 0)
+    {
+        fanSpeed += 5;
+    }
+    else
+    {
+        fanSpeed -= 5;
+    }
+    FanSetSpeed(0, fanSpeed);
 }
 
 // setup next frame
