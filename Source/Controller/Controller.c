@@ -51,6 +51,7 @@ void HandleCommand(void);
 
 void ControllerInitialize(void) 
 {
+    EepromInit();
     LightingInit();
     AnimationInit();
     FanInit();
@@ -104,7 +105,7 @@ void HandleCommand(void)
 	UINT Result;
 	WORD_VAL crc;
 	void* pFlash;
-	SetDeviceLedColor(3, 1, 0x00200000);
+	SetDeviceLedColor(3, 3, 0x00200000);
 	// First byte of the data field is command.
 	Cmd = RxBuff.Data[0];
 	// Partially build response frame. First byte in the data field carries command.
@@ -123,16 +124,34 @@ void HandleCommand(void)
 			break;
             
         case 0x35: // read fan speed
-            memcpy(&TxBuff.Data[1], fan1speed, 2);
+            memcpy(&TxBuff.Data[1], &fan1speed, 2);
 			//Set the transmit frame length.
 			TxBuff.Len = 2 + 1; // fan speed + command
-            SetDeviceLedColor(3, 2, 0x00200000);
+            SetDeviceLedColor(3, 4, 0x00200000);
 			break;
 			
-		
+        case 0x38: // read eeprom, max 30 bytes at a time
+            if(RxBuff.Data[2] > 30) {
+                RxBuff.Data[2] = 30;
+            }
+            EepromRead(RxBuff.Data[1], &TxBuff.Data[2], RxBuff.Data[2]);
+            TxBuff.Data[1] = RxBuff.Data[2];
+            TxBuff.Len = RxBuff.Data[2] + 2;
+            break;
+            
+        case 0x39: // write eeprom, max address is 255
+            if(RxBuff.Data[1] + RxBuff.Data[2] >= 256)
+            {
+                RxBuff.Data[2] = 256 - RxBuff.Data[1];
+            }
+            EepromWrite(RxBuff.Data[1], &RxBuff.Data[3], RxBuff.Data[2]);
+            TxBuff.Data[1] = RxBuff.Data[2];
+            TxBuff.Len = 1 + 1; // cmd plus bytes written
+            break;
+            
 	    default:
 	    	// Nothing to do.
-            SetDeviceLedColor(3, 2, 0x00002000);
+            SetDeviceLedColor(3, 4, 0x00002000);
 	    	break;
 	}   
 	
@@ -175,6 +194,7 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 		{
 			
 			case SOH: //Start of header
+                SetDeviceLedColor(3, 1, 0x00200000);
 				if(Escape)
 				{
 					// Received byte is not SOH, but data.
@@ -190,6 +210,7 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 				break;
 				
 			case EOT: // End of transmission
+                SetDeviceLedColor(3, 1, 0x00202000);
 				if(Escape)
 				{
 					// Received byte is not EOT, but data.

@@ -1,5 +1,5 @@
 /********************************************************************
- FileName:     	usb_descriptors.c
+ FileName:     	usb_descriptors_app.c
  Dependencies:	See INCLUDES section
  Processor:		PIC18 or PIC24 USB Microcontrollers
  Hardware:		The code is natively intended to be used on the following

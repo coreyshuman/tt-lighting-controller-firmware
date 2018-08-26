@@ -9,6 +9,7 @@
         <itemPath>../../Include/Controller/Controller.h</itemPath>
         <itemPath>../../Include/Controller/Animation.h</itemPath>
         <itemPath>../../Include/Controller/Fan.h</itemPath>
+        <itemPath>../../Include/Controller/Eeprom.h</itemPath>
       </logicalFolder>
       <logicalFolder name="HardwareProfile"
                      displayName="HardwareProfile"
@@ -33,9 +34,9 @@
         <itemPath>../../Include/USB/usb_function_hid.h</itemPath>
         <itemPath>../../Include/USB/usb_hal.h</itemPath>
         <itemPath>../../Include/USB/usb_hal_pic32.h</itemPath>
+        <itemPath>../../Include/USB/usb_config_device.h</itemPath>
       </logicalFolder>
       <itemPath>../../Include/GenericTypeDefs.h</itemPath>
-      <itemPath>../../Include/NVMem.h</itemPath>
       <itemPath>../../Include/Main.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
@@ -59,6 +60,7 @@
         <itemPath>../../Source/Controller/Controller.c</itemPath>
         <itemPath>../../Source/Controller/Animation.c</itemPath>
         <itemPath>../../Source/Controller/Fan.c</itemPath>
+        <itemPath>../../Source/Controller/Eeprom.c</itemPath>
       </logicalFolder>
       <logicalFolder name="TransportLayer"
                      displayName="TransportLayer"
@@ -84,6 +86,7 @@
     <Elem>../../Source/USB</Elem>
     <Elem>../../Source/Controller</Elem>
     <Elem>../../Include/Controller</Elem>
+    <Elem>../../Include/USB</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

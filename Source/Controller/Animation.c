@@ -77,7 +77,7 @@ void RotateColors(void)
         AnimationFrame = 0;
     }
     
-    //ClearLeds();
+    ClearLeds();
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
