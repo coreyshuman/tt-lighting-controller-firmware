@@ -9,7 +9,6 @@
             <file>file:/D:/Devel/thermaltake-controller/Project/linker_scripts/btl_32MX230F064D_generic.ld</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Fan.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Controller.h</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/HardwareProfile/HardwareProfile_PIC32MX_Thermaltake.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Lighting.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Lighting.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Eeprom.c</file>

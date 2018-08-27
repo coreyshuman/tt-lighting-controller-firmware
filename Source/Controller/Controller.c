@@ -42,16 +42,17 @@ static const UINT8 BootInfo[2] =
 };
 
 
-static T_FRAME RxBuff;
-static T_FRAME TxBuff;
+static T_FRAME RcvBuff;
+static T_FRAME TxmBuff;
 static BOOL RxFrameValid;
+static EEPROM_HANDLE eepromHandle;
 
 UINT16 CalculateCrc(UINT8 *data, UINT32 len);
 void HandleCommand(void);
 
 void ControllerInitialize(void) 
 {
-    EepromInit();
+    EepromInit(&eepromHandle, EE_I2C, 400000, 0xA0, FALSE);
     LightingInit();
     AnimationInit();
     FanInit();
@@ -98,60 +99,75 @@ void ControllerLoop(void)
 void HandleCommand(void)
 {
 	UINT8 Cmd;
-	DWORD_VAL Address;
-	UINT8 i;
-	DWORD_VAL Length;
-	UINT8 *DataPtr;
-	UINT Result;
-	WORD_VAL crc;
-	void* pFlash;
-	SetDeviceLedColor(3, 3, 0x00200000);
+    int ret;
 	// First byte of the data field is command.
-	Cmd = RxBuff.Data[0];
+	Cmd = RcvBuff.Data[0];
 	// Partially build response frame. First byte in the data field carries command.
-	TxBuff.Data[0] = RxBuff.Data[0];
+	TxmBuff.Data[0] = RcvBuff.Data[0];
 	
 	// Reset the response length to 0.
-	TxBuff.Len = 0;
+	TxmBuff.Len = 0;
 				
 	// Process the command.		
 	switch(Cmd)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
-			memcpy(&TxBuff.Data[1], BootInfo, 2);
+			memcpy(&TxmBuff.Data[1], &BootInfo, 2);
 			//Set the transmit frame length.
-			TxBuff.Len = 2 + 1; // Boot Info Fields	+ command
+			TxmBuff.Len = 2 + 1; // Boot Info Fields	+ command
 			break;
             
         case 0x35: // read fan speed
-            memcpy(&TxBuff.Data[1], &fan1speed, 2);
+            memcpy(&TxmBuff.Data[1], &fan1speed, 2);
 			//Set the transmit frame length.
-			TxBuff.Len = 2 + 1; // fan speed + command
-            SetDeviceLedColor(3, 4, 0x00200000);
+			TxmBuff.Len = 2 + 1; // fan speed + command
 			break;
 			
         case 0x38: // read eeprom, max 30 bytes at a time
-            if(RxBuff.Data[2] > 30) {
-                RxBuff.Data[2] = 30;
+            if(RcvBuff.Data[2] > 30) {
+                RcvBuff.Data[2] = 30;
             }
-            EepromRead(RxBuff.Data[1], &TxBuff.Data[2], RxBuff.Data[2]);
-            TxBuff.Data[1] = RxBuff.Data[2];
-            TxBuff.Len = RxBuff.Data[2] + 2;
+            eepromHandle.data = &TxmBuff.Data[2];
+            eepromHandle.len = RcvBuff.Data[2];
+            eepromHandle.address = RcvBuff.Data[1];
+            ret = 0;
+            while(ret == 0)
+            {
+                ret = EepromRead2(&eepromHandle);
+            }
+            if(ret == 1)
+            {
+                TxmBuff.Data[1] = RcvBuff.Data[2];
+                TxmBuff.Len = TxmBuff.Data[1] + 2;
+            }
+            else
+            {
+                TxmBuff.Data[1] = 0;
+                TxmBuff.Len = 2;
+            }
+            
             break;
             
         case 0x39: // write eeprom, max address is 255
-            if(RxBuff.Data[1] + RxBuff.Data[2] >= 256)
+            if(RcvBuff.Data[1] + RcvBuff.Data[2] >= 256)
             {
-                RxBuff.Data[2] = 256 - RxBuff.Data[1];
+                RcvBuff.Data[2] = 256 - RcvBuff.Data[1];
             }
-            EepromWrite(RxBuff.Data[1], &RxBuff.Data[3], RxBuff.Data[2]);
-            TxBuff.Data[1] = RxBuff.Data[2];
-            TxBuff.Len = 1 + 1; // cmd plus bytes written
+            eepromHandle.data = &RcvBuff.Data[3];
+            eepromHandle.len = RcvBuff.Data[2];
+            eepromHandle.address = RcvBuff.Data[1];
+            ret = 0;
+            while(ret == 0)
+            {
+                ret = EepromWrite2(&eepromHandle);
+            }
+            
+            TxmBuff.Data[1] = ret > 0 ? RcvBuff.Data[2] : 0;
+            TxmBuff.Len = 1 + 1; // cmd plus bytes written
             break;
             
 	    default:
 	    	// Nothing to do.
-            SetDeviceLedColor(3, 4, 0x00002000);
 	    	break;
 	}   
 	
@@ -179,42 +195,39 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 {
 	static BOOL Escape = FALSE;
 	WORD_VAL crc;
-	SetDeviceLedColor(3, 0, 0x00200000);
 	
 	while((RxLen > 0) && (!RxFrameValid)) // Loop till len = 0 or till frame is valid
 	{
 		RxLen--;
 		
-		if(RxBuff.Len >= sizeof(RxBuff.Data))
+		if(RcvBuff.Len >= sizeof(RcvBuff.Data))
 		{
-			RxBuff.Len = 0;
+			RcvBuff.Len = 0;
 		}	
 		
 		switch(*RxData)
 		{
 			
 			case SOH: //Start of header
-                SetDeviceLedColor(3, 1, 0x00200000);
 				if(Escape)
 				{
 					// Received byte is not SOH, but data.
-					RxBuff.Data[RxBuff.Len++] = *RxData;
+					RcvBuff.Data[RcvBuff.Len++] = *RxData;
 					// Reset Escape Flag.
 					Escape = FALSE;
 				}
 				else
 				{
 					// Received byte is indeed a SOH which indicates start of new frame.
-					RxBuff.Len = 0;				
+					RcvBuff.Len = 0;				
 				}		
 				break;
 				
 			case EOT: // End of transmission
-                SetDeviceLedColor(3, 1, 0x00202000);
 				if(Escape)
 				{
 					// Received byte is not EOT, but data.
-					RxBuff.Data[RxBuff.Len++] = *RxData;
+					RcvBuff.Data[RcvBuff.Len++] = *RxData;
 					// Reset Escape Flag.
 					Escape = FALSE;
 				}
@@ -222,11 +235,11 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 				{
 					// Received byte is indeed a EOT which indicates end of frame.
 					// Calculate CRC to check the validity of the frame.
-					if(RxBuff.Len > 1)
+					if(RcvBuff.Len > 1)
 					{
-						crc.byte.LB = RxBuff.Data[RxBuff.Len-2];
-						crc.byte.HB = RxBuff.Data[RxBuff.Len-1];
-						if((CalculateCrc(RxBuff.Data, (UINT32)(RxBuff.Len-2)) == crc.Val) && (RxBuff.Len > 2))
+						crc.byte.LB = RcvBuff.Data[RcvBuff.Len-2];
+						crc.byte.HB = RcvBuff.Data[RcvBuff.Len-1];
+						if((CalculateCrc(RcvBuff.Data, (UINT32)(RcvBuff.Len-2)) == crc.Val) && (RcvBuff.Len > 2))
 						{
 							// CRC matches and frame received is valid.
 							RxFrameValid = TRUE;
@@ -242,7 +255,7 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 				if(Escape)
 				{
 					// Received byte is not ESC but data.
-					RxBuff.Data[RxBuff.Len++] = *RxData;
+					RcvBuff.Data[RcvBuff.Len++] = *RxData;
 					// Reset Escape Flag.
 					Escape = FALSE;					
 				}
@@ -254,7 +267,7 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 				break;
 			
 			default: // Data field.
-			    RxBuff.Data[RxBuff.Len++] = *RxData;
+			    RcvBuff.Data[RcvBuff.Len++] = *RxData;
 			    // Reset Escape Flag.
 			    Escape = FALSE;
 				break;	
@@ -290,33 +303,33 @@ UINT ControllerGetTransmitFrame(UINT8* Buff)
 	WORD_VAL crc;
 	UINT8 i;
 	
-	if(TxBuff.Len) 
+	if(TxmBuff.Len) 
 	{
 		//There is something to transmit.
 		// Calculate CRC of the frame.
-		crc.Val = CalculateCrc(TxBuff.Data, (UINT32)TxBuff.Len);
-		TxBuff.Data[TxBuff.Len++] = crc.byte.LB;
-		TxBuff.Data[TxBuff.Len++] = crc.byte.HB; 	
+		crc.Val = CalculateCrc(TxmBuff.Data, (UINT32)TxmBuff.Len);
+		TxmBuff.Data[TxmBuff.Len++] = crc.byte.LB;
+		TxmBuff.Data[TxmBuff.Len++] = crc.byte.HB; 	
 		
 		// Insert SOH (Indicates beginning of the frame)	
 		Buff[BuffLen++] = SOH;
 		
 		// Insert Data Link Escape Character.
-		for(i = 0; i < TxBuff.Len; i++)
+		for(i = 0; i < TxmBuff.Len; i++)
 		{
-			if((TxBuff.Data[i] == EOT) || (TxBuff.Data[i] == SOH)
-				|| (TxBuff.Data[i] == DLE))
+			if((TxmBuff.Data[i] == EOT) || (TxmBuff.Data[i] == SOH)
+				|| (TxmBuff.Data[i] == DLE))
 			{
 				// EOT/SOH/DLE repeated in the data field, insert DLE.
 				Buff[BuffLen++] = DLE;			
 			}
-			Buff[BuffLen++] = TxBuff.Data[i];
+			Buff[BuffLen++] = TxmBuff.Data[i];
 		} 
 		
 		// Mark end of frame with EOT.
 		Buff[BuffLen++] = EOT;
 		
-		TxBuff.Len = 0; // Purge this buffer, no more required.
+		TxmBuff.Len = 0; // Purge this buffer, no more required.
 	}	
 	
 	return(BuffLen); // Return buffer length.

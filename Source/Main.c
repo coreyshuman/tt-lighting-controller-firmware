@@ -60,6 +60,10 @@ INT main(void)
     INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);
     INTEnableInterrupts();
     
+    ANSELA = 0;
+    ANSELB = 0;
+    ANSELC = 0;
+    
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
     

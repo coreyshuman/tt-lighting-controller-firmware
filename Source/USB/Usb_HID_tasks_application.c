@@ -109,7 +109,6 @@ void UsbTasks(void)
 
     if(USBGetDeviceState() == CONFIGURED_STATE)
 	{
-        SetDeviceLedColor(3, 6, 0x00101000);
     	// Check if bootloader has something to send out to PC. 
     	TxLen = ControllerGetTransmitFrame(UsbTxData);
     
@@ -146,7 +145,6 @@ void UsbTasks(void)
     		
     	if(UsbRxDataAvlbl())// Check if we have got any data from USB.	 		
         {   
-            SetDeviceLedColor(3, 5, 0x00101000);
     	    // Yes, we got a packet from HID End point.	    
     	    // Pass the buffer to frame work. Controller decodes the packet and executes command.
     		ControllerBuildRxFrame(UsbRxData, MaxUsbPacketSize);
@@ -445,7 +443,6 @@ BOOL USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
             break;
         case EVENT_CONFIGURED: 
             USBCBInitEP();
-            SetDeviceLedColor(3, 7, 0x00101000);
             break;
         case EVENT_SET_DESCRIPTOR:
             USBCBStdSetDscHandler();

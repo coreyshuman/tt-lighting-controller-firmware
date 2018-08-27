@@ -17,7 +17,6 @@ DWORD shiftAmount = 8;
 
 void LightingInit(void) 
 {
-    ANSELA = 0;
     TRISCCLR = 0x0384;
     TRISBCLR = 0x0100;
     
