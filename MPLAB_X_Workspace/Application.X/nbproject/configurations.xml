@@ -10,6 +10,8 @@
         <itemPath>../../Include/Controller/Animation.h</itemPath>
         <itemPath>../../Include/Controller/Fan.h</itemPath>
         <itemPath>../../Include/Controller/Eeprom.h</itemPath>
+        <itemPath>../../Include/Controller/Config.h</itemPath>
+        <itemPath>../../Include/Controller/Util.h</itemPath>
       </logicalFolder>
       <logicalFolder name="HardwareProfile"
                      displayName="HardwareProfile"
@@ -61,6 +63,8 @@
         <itemPath>../../Source/Controller/Animation.c</itemPath>
         <itemPath>../../Source/Controller/Fan.c</itemPath>
         <itemPath>../../Source/Controller/Eeprom.c</itemPath>
+        <itemPath>../../Source/Controller/Config.c</itemPath>
+        <itemPath>../../Source/Controller/Util.c</itemPath>
       </logicalFolder>
       <logicalFolder name="TransportLayer"
                      displayName="TransportLayer"

@@ -35,6 +35,8 @@ int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAdd
     handle->id = id;
     handle->deviceAddress = deviceAddress & 0xF7;
     handle->address16bit = address16bit;
+    handle->pageSize = 8;
+    handle->pageCount = 0;
     handle->retry = EE_RETRY;
     handle->resend = 0;
     *dataPtr = (WORD)0;
@@ -68,6 +70,7 @@ void EEStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
                 break;
             }
             handle->deviceState = EE_START;
+            handle->pageCount = 0;
             // fallthrough
         case EE_START:
             handle->I2CCON->SEN = 1;
@@ -161,10 +164,15 @@ void EESendWaitForCompletion(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
 
 void EESendIncrement(EEPROM_HANDLE *handle)
 {
-    handle->data++;
+    handle->data ++;
     handle->len --;
+    handle->pageCount ++;
     if(handle->len > 0) {
-        handle->deviceState = EE_SEND;
+        if(handle->pageCount >= handle->pageSize) {
+            handle->deviceState = EE_SEND_PAGE_BOUNDARY;
+        } else {
+            handle->deviceState = EE_SEND;
+        }
     } else {
         handle->deviceState = EE_STOP;
     }
@@ -286,6 +294,9 @@ int EepromWrite2(EEPROM_HANDLE *handle)
             break;
         case EE_SEND_INCREMENT:
             EESendIncrement(handle);
+            break;
+        case EE_SEND_PAGE_BOUNDARY:
+            EEStop(handle);
             break;
         case EE_STOP:
             ret = EEStop(handle);

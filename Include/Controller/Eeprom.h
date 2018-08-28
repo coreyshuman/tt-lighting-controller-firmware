@@ -24,6 +24,7 @@ typedef enum _EEPROM_STATE_MACHINE
     EE_SEND,
     EE_SEND_WAIT,
     EE_SEND_INCREMENT,
+    EE_SEND_PAGE_BOUNDARY,
     EE_RESEND
 } EEPROM_STATE_MACHINE;
 
@@ -39,6 +40,8 @@ typedef struct __EEPROM_HANDLE
     WORD deviceAddress;
     WORD retry;
     WORD resend;
+    WORD pageSize;
+    WORD pageCount;
     BYTE * I2CTRN;
     BYTE * I2CRCV;
     EEPROM_STATE_MACHINE deviceState;

@@ -1,4 +1,6 @@
+#include "Util.h"
 #include "Eeprom.h"
+#include "Config.h"
 #include "Fan.h"
 #include "Lighting.h"
 #include "Animation.h"
