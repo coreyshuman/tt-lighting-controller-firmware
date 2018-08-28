@@ -13,6 +13,10 @@
 #define EOT 04
 #define DLE 16
 
+enum _CONTROL_CMD {
+    CMD_READ_CONFIG = 0x30
+} CONTROL_CMD;
+
 #ifdef __cplusplus
 extern "C" {
 #endif

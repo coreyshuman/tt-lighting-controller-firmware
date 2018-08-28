@@ -3,35 +3,20 @@
 #include "Include\HardwareProfile\HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
+#include <string.h>
 #include "Lighting.h"
 #include "Animation.h"
+#include "Config.h"
 
-// LedWriteBuffer
-BYTE AnimationFrame;
-BOOL ReadyToUpdate;
 
-BYTE fanSpeed = 0;
-BYTE fanDir = 1;
+static BYTE AnimationFrame;
+static BOOL ReadyToUpdate;
+static BYTE fanSpeed = 0;
+static BYTE fanDir = 1;
 
-// 00 blue red green
-enum _colors {
-    PINK =      0x00808040,
-    WINE =      0x00208000,
-    RED =       0x00008000,
-    ORANGE =    0x00008040,
-    SUNSET =    0x00004080,
-    YELLOW =    0x00207080,
-    LIME =      0x00004080,
-    GREEN =     0x00000080,
-    TEAL =      0x00800080,
-    BLUE =      0x00800000,
-    INDIGO =    0x00802000,
-    VIOLET =    0x00804000,
-    WHITE =     0x00ffffff,
-    BLACK =     0x00000000
-} COLORS;
+static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZE];
 
-void AnimationInit(void)
+void AnimationInit(config_t* config)
 {
     T4CON = 0x0; // Stop any 16/32-bit Timer4 operation
     T5CON = 0x0; // Stop any 16-bit Timer5 operation
@@ -44,6 +29,8 @@ void AnimationInit(void)
     IPC5bits.T5IS = 1;
     IFS0CLR = _IFS0_T5IF_MASK; // Clear the timer interrupt status flag
     IEC0SET = _IEC0_T5IE_MASK; // Enable timer interrupts
+    
+    memcpy((void *)&AnimationBuffer, (const void*)&config->colors, sizeof(AnimationBuffer));
     
     AnimationFrame = 0;
     ReadyToUpdate = TRUE;
@@ -70,46 +57,30 @@ extern DWORD fan1period;
 void RotateColors(void)
 {
     BYTE i, y;
-    //DWORD colors[] = {PINK, WINE, RED, ORANGE, SUNSET, YELLOW, LIME, GREEN, TEAL, BLUE, INDIGO, VIOLET};
-    DWORD colors[] = {VIOLET, BLACK, BLACK, BLACK, BLACK, BLACK, LIME, BLACK, BLACK, BLACK, BLACK, BLACK};
+    
+    
     if(AnimationFrame >= 12)
     {
         AnimationFrame = 0;
     }
     
-    ClearLeds();
+    //ClearLeds();
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        BYTE idx = i + AnimationFrame;
-        if(idx >= 12)
+        BYTE idx = i*3 + AnimationFrame*3;
+        if(idx >= 36)
         {
-            idx -= 12;
+            idx -= 36;
         }
-        for(y = 0; y < DEVICECOUNT-2; y++)
+        for(y = 0; y < DEVICECOUNT; y++)
         {
-            SetDeviceLedColor(y, i, colors[idx]);
+            idx += y * DEVICESIZE;
+            SetDeviceLedColor(y, i, (DWORD)AnimationBuffer[idx] | (DWORD)AnimationBuffer[idx+1] << 8 | (DWORD)AnimationBuffer[idx+2] << 16);
         }
     }
-    // testing fan spin speed
-    SetDeviceLedColor(4, 0, 0x00101000);
-    if(fan1speed > 900)
-        SetDeviceLedColor(4, 1, 0x00101000);
-    if(fan1speed > 1200)
-        SetDeviceLedColor(4, 2, 0x00101000);
-    if(fan1speed > 1500)
-        SetDeviceLedColor(4, 3, 0x00101000);
-    if(fan1speed > 1800)
-        SetDeviceLedColor(4, 4, 0x00101000);
-    if(fan1speed > 2100)
-        SetDeviceLedColor(4, 5, 0x00101000);
-    if(fan1speed > 2400)
-        SetDeviceLedColor(4, 6, 0x00101000);
-    if(fan1speed > 2700)
-        SetDeviceLedColor(4, 7, 0x00101000);
- 
-    
-        if(fanSpeed == 0) {
+
+    if(fanSpeed == 0) {
         fanDir = 1;
     } 
     else if (fanSpeed == 100) {

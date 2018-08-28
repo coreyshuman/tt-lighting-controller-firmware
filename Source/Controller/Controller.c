@@ -45,6 +45,7 @@ static T_FRAME RcvBuff;
 static T_FRAME TxmBuff;
 static BOOL RxFrameValid;
 static EEPROM_HANDLE eepromHandle;
+static config_t* configHandle;
 
 
 void HandleCommand(void);
@@ -52,9 +53,9 @@ void HandleCommand(void);
 void ControllerInitialize(void) 
 {
     EepromInit(&eepromHandle, EE_I2C, 400000, 0xA0, FALSE);
-    ConfigInit();
+    configHandle = ConfigInit(&eepromHandle);
     LightingInit();
-    AnimationInit();
+    AnimationInit(configHandle);
     FanInit();
     
     AnimationSetInterval(500);
@@ -112,10 +113,14 @@ void HandleCommand(void)
 	switch(Cmd)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
-			memcpy(&TxmBuff.Data[1], &BootInfo, 2);
+			memcpy((void *)&TxmBuff.Data[1], (const void*)&BootInfo, 2);
 			//Set the transmit frame length.
 			TxmBuff.Len = 2 + 1; // Boot Info Fields	+ command
 			break;
+         case CMD_READ_CONFIG:
+            memcpy(&TxmBuff.Data[1], (const void*)configHandle, ConfigSize);
+            TxmBuff.Len = ConfigSize + 1;
+            break;
             
         case 0x35: // read fan speed
             memcpy(&TxmBuff.Data[1], &fan1speed, 2);
@@ -133,7 +138,7 @@ void HandleCommand(void)
             ret = 0;
             while(ret == 0)
             {
-                ret = EepromRead2(&eepromHandle);
+                ret = EepromRead(&eepromHandle);
             }
             if(ret == 1)
             {
@@ -159,7 +164,7 @@ void HandleCommand(void)
             ret = 0;
             while(ret == 0)
             {
-                ret = EepromWrite2(&eepromHandle);
+                ret = EepromWrite(&eepromHandle);
             }
             
             TxmBuff.Data[1] = ret > 0 ? RcvBuff.Data[2] : 0;

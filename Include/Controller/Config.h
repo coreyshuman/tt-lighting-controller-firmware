@@ -1,15 +1,18 @@
 #ifndef _CONFIG_H    /* Guard against multiple inclusion */
 #define _CONFIG_H
 
+#include "Eeprom.h"
+#include "Lighting.h"
+
 typedef struct __attribute__((__packed__)) _config_t {
     WORD crc;
     WORD length;
-    BYTE fanSpeed[5];
-    BYTE ledMode[5];
-    BYTE colors[5][36];
+    BYTE fanSpeed[DEVICECOUNT];
+    BYTE ledMode[DEVICECOUNT];
+    BYTE colors[DEVICECOUNT][DEVICESIZE];
 } config_t ;
 
-extern config_t Config;
+#define ConfigSize sizeof(config_t)
 
 /* Provide C++ Compatibility */
 #ifdef __cplusplus
@@ -18,7 +21,8 @@ extern "C" {
 
     
 
-    void ConfigInit(void);
+    config_t* ConfigInit(EEPROM_HANDLE *eepromHandle);
+    BOOL ConfigUpdate(void);
 
 
     /* Provide C++ Compatibility */

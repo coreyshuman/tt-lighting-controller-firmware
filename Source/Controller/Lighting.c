@@ -5,8 +5,8 @@
 #include <plib.h>
 #include "Include\Controller\Lighting.h"
 
-BYTE LedBufferA[5][36];
-BYTE LedBufferB[5][36];
+BYTE LedBufferA[DEVICECOUNT][DEVICESIZE];
+BYTE LedBufferB[DEVICECOUNT][DEVICESIZE];
 BYTE *LedDrawBuffer = (BYTE*)&LedBufferA;
 BYTE *LedWriteBuffer = (BYTE*)&LedBufferB;
 BOOL LedBusy = FALSE;

@@ -3,7 +3,15 @@
 
 #define EE_I2C I2C2
 #define EE_ADDR 0xA0
-#define EE_RETRY 1000;
+#define EE_RETRY_COUNT 1000
+#define EE_RESEND_COUNT 10
+#define EE_ACK_POLLING_COUNT 10000
+
+typedef enum _EEPROM_STATUS {
+    EEPROM_FAIL = -1,
+    EEPROM_IN_PROGRESS = 0,
+    EEPROM_SUCCESS = 1   
+} EEPROM_STATUS;
 
 typedef enum _EEPROM_STATE_MACHINE
 {
@@ -54,12 +62,8 @@ extern "C" {
 #endif
 
 int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAddress, BOOL address16bit);
-int EepromRead2(EEPROM_HANDLE *handle);
-int EepromWrite2(EEPROM_HANDLE *handle);
-void EepromRead(unsigned int ee_addr, unsigned char *buf, unsigned int len);
-void EepromWritePage(unsigned int ee_addr, unsigned char *buf, unsigned int len);
-void EepromWrite(unsigned int ee_addr, unsigned char *buf, unsigned int len);
-
+int EepromRead(EEPROM_HANDLE *handle);
+int EepromWrite(EEPROM_HANDLE *handle);
 
 #ifdef	__cplusplus
 }
