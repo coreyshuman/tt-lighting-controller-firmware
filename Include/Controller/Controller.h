@@ -34,8 +34,8 @@ extern WORD fan1speed;
 void ControllerInit(void);
 void ControllerLoop(void);
 
-void ControllerBuildRxFrames(UINT8 *data, INT16 dataLen);
-UINT ControllerGetTransmitFrame(UINT8 *data);
+void ControllerBuildRxFrame(UINT8 *data, INT16 dataLen);
+UINT ControllerGetTransmitFrames(UINT8 *data);
 #ifdef __cplusplus
 }
 #endif
