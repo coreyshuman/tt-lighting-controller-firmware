@@ -110,7 +110,7 @@ void UsbTasks(void)
     if(USBGetDeviceState() == CONFIGURED_STATE)
 	{
     	// Check if bootloader has something to send out to PC. 
-    	TxLen = ControllerGetTransmitFrame(UsbTxData);
+    	TxLen = ControllerGetTransmitFrames(UsbTxData);
     
     	// Initialize the transmit pointer.
     	TxPtr = &UsbTxData[0];
