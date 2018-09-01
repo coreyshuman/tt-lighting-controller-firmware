@@ -18,7 +18,7 @@ typedef enum
 typedef struct
 {
 	UINT8 Cmd;
-    UINT Len;
+    UINT16 Len;
 	UINT8 Data[CONTROLLER_BUFF_SIZE];
 	
 }T_FRAME;
@@ -63,6 +63,7 @@ void ControllerInitialize(void)
     
     AnimationUpdate();
     AnimationStart();
+    RxFrameValid = FALSE;
 }
 
 void ControllerLoop(void)
@@ -91,8 +92,9 @@ void SetResponseErrorOccured(CONTROL_ERROR_CODES errorCode)
 void SetReceiveErrorOccured(CONTROL_ERROR_CODES errorCode)
 {
     RcvBuff.Len = 1;
-    RcvBuff.Data[0] = 0x40;
-    RcvBuff.Data[1] = errorCode;
+    RcvBuff.Cmd = 0x40;
+    RcvBuff.Data[0] = errorCode;
+    RxFrameValid = TRUE;
 }
 
 // Setup send response to USB. Data is copied to TX buffer if data not NULL.
@@ -131,7 +133,7 @@ void HandleCommand(void)
     UINT8 length;
     EEPROM_STATUS eepromStatus;
 	// First byte of the data field is command.
-	cmd = RcvBuff.Data[0];
+	cmd = RcvBuff.Cmd;
 	// Partially build response frame. First byte in the data field carries command.
 	TxmBuff.Cmd = cmd;
 	
@@ -142,7 +144,7 @@ void HandleCommand(void)
 	switch(cmd)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
-			memcpy((void *)&TxmBuff.Data[1], (const void*)&BootInfo, 2);
+			memcpy((void *)&TxmBuff.Data[0], (const void*)&BootInfo, 2);
 			//Set the transmit frame length.
 			TxmBuff.Len = 2 + 1; // Boot Info Fields	+ command
 			break;
@@ -156,8 +158,8 @@ void HandleCommand(void)
 			
         case CMD_READ_EEPROM: // read eeprom, max 30 bytes at a time
             eepromHandle.data = &TxmBuff.Data[0];
-            eepromHandle.len = RcvBuff.Data[2];
-            eepromHandle.address = RcvBuff.Data[1];
+            eepromHandle.len = RcvBuff.Data[1];
+            eepromHandle.address = RcvBuff.Data[0];
             if(eepromHandle.len + eepromHandle.address >= 256) {
                 eepromHandle.len = 256 - eepromHandle.address;
             }
@@ -175,10 +177,10 @@ void HandleCommand(void)
             break;
             
         case CMD_WRITE_EEPROM: // write eeprom, max address is 255
-            eepromHandle.data = &RcvBuff.Data[3];
+            eepromHandle.data = &RcvBuff.Data[2];
             //eepromHandle.len = RcvBuff.Data[2];
-            eepromHandle.address = RcvBuff.Data[1];
-            length = RcvBuff.Data[2];
+            eepromHandle.address = RcvBuff.Data[0];
+            length = RcvBuff.Data[1];
             if(length + eepromHandle.address >= 256)
             {
                 length = 256 - eepromHandle.address;
@@ -198,14 +200,14 @@ void HandleCommand(void)
             break;
         
         case CMD_ERROR_OCCURED:
-            SetResponseErrorOccured(RcvBuff.Data[1]);
+            SetResponseErrorOccured(RcvBuff.Data[0]);
             break;
 	    default:
 	    	SetResponseErrorOccured(UNKNOWN_COMMAND);
 	    	break;
 	}   
 	
-
+    RcvBuff.Len = 0; // clear buffer
 		
 }
 
@@ -229,32 +231,37 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 {
 	WORD_VAL crc;
     BOOL multipacket = (RxData[1] & 0x80) == 0x80; // check multipacket flag
+    RxLen = RxData[1] & 0x3F; // Read length byte
     
     // if data already in buffer, we are in multipacket mode. Skip cmd and data
     if(RcvBuff.Len > 0) {
         if(RxFrameValid) {
+            // old packet still in buffer
             SetReceiveErrorOccured(USB_PACKET_OVERFLOW);
             return;
-        } else if(RcvBuff.Cmd == RxData[0]) {
-            RxLen = RxData[1] & 0x3F; // Read length byte
-            RxData += 2;
-        } else {
+        } else if(RcvBuff.Cmd != RxData[0]) {
             SetReceiveErrorOccured(INVALID_MULTIPACKET);
             return;
         }
     } else {
         RcvBuff.Cmd = RxData[0];
-        RxLen = RxData[1] & 0x3F + 2; // Read length byte, + 2 for CMD and LEN
     }
 	
-	while(RxLen > 0)
+    crc.Val = CalculateCrc(RxData, RxLen);
+    RxData += 2; // skip CMD and LEN
+    // verify received CRC
+    if(crc.byte.LB != *(RxData + RxLen - 2) || crc.byte.HB != *(RxData + RxLen - 1)) {
+        SetReceiveErrorOccured(CRC_INVALID);
+        return;
+    }
+    
+	while(RxLen > 2)
 	{
 		RxLen--;
 		
-		if(RcvBuff.Len >= sizeof(RcvBuff.Data))
+		if(RcvBuff.Len >= CONTROLLER_BUFF_SIZE)
 		{
 			SetReceiveErrorOccured(RECEIVE_TOO_LONG);
-            RxFrameValid = TRUE;
             return;
 		}	
         
@@ -262,18 +269,9 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 		RxData++;	
 	}
     
-    crc.byte.LB = RcvBuff.Data[RcvBuff.Len-2];
-    crc.byte.HB = RcvBuff.Data[RcvBuff.Len-1];
-    if((CalculateCrc(RcvBuff.Data, (UINT32)(RcvBuff.Len-2)) == crc.Val) && (RcvBuff.Len > 2)) {
-        // CRC matches and frame received is valid.
-        if(multipacket) {
-            RxFrameValid = TRUE;
-        }
-    } else {
-        RcvBuff.Cmd = 0;
-        RcvBuff.Len = 0;
+    if(!multipacket) {
+        RxFrameValid = TRUE;
     }
-	
 }	
 
 /********************************************************************
@@ -310,16 +308,17 @@ UINT ControllerGetTransmitFrames(UINT8* usbBuffer)
         
         usbBuffer[buffLen++] = TxmBuff.Cmd;
         // if greater than 60 bytes, flag for multibyte
-        usbBuffer[buffLen++] = (dataLen > 60 ? (62 | 0x80) : dataLen) + 2;
+        usbBuffer[buffLen++] = (dataLen > 60 ? (60 | 0x80) : dataLen) + 2;
         
         packetDataCount = 0;
 		while(dataLen > 0 && packetDataCount < 60)
 		{
 			usbBuffer[buffLen++] = TxmBuff.Data[packetIndex++];
             dataLen --;
+            packetDataCount++;
 		} 
         
-        crc = CalculateCrc(&usbBuffer[buffLen-packetDataCount-2], usbBuffer[buffLen-packetDataCount-1]);
+        crc.Val = CalculateCrc(&usbBuffer[buffLen-packetDataCount-2], usbBuffer[buffLen-packetDataCount-1] & 0x3F);
         
         // Add CRC
         usbBuffer[buffLen++] = crc.byte.LB;

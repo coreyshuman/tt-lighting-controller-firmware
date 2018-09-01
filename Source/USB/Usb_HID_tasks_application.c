@@ -130,7 +130,9 @@ void UsbTasks(void)
     			// Point to next 64bytes.
     			TxPtr += MaxUsbPacketSize;
     			// Probably a wait is needed here, otherwise PC app may miss frames.
-    			//Wait();			
+    			//Wait();	
+                volatile int wait = 0;
+                while(wait++ < 50000);
     		}	
     		else
     		{
