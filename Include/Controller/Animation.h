@@ -32,6 +32,7 @@ void AnimationInit(config_t* config);
 void AnimationSetInterval(WORD msec);
 void AnimationStart(void);
 void AnimationStop(void);
+void AnimationUpdateBuffer(void);
 
     /* Provide C++ Compatibility */
 #ifdef __cplusplus

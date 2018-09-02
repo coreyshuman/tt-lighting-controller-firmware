@@ -120,6 +120,7 @@ void HandleCommand(void)
 	UINT8 cmd;
     UINT16 length;
     EEPROM_STATUS eepromStatus;
+    BOOL status;
 	// First byte of the data field is command.
 	cmd = RcvBuff.Cmd;
 	// Partially build response frame. First byte in the data field carries command.
@@ -136,8 +137,15 @@ void HandleCommand(void)
 			//Set the transmit frame length.
 			TxmBuff.Len = 2 + 1; // Boot Info Fields	+ command
 			break;
-         case CMD_READ_CONFIG:
+        case CMD_READ_CONFIG:
             SetResponseSendData((const void*)configHandle, ConfigSize);
+            break;
+            
+        case CMD_WRITE_CONFIG:
+            memcpy((void*)configHandle, (const void*)&RcvBuff.Data[0], ConfigSize);
+            AnimationUpdateBuffer();
+            status = ConfigUpdate();
+            SetResponseSendData((const void*)&status, 1);
             break;
             
         case CMD_READ_FANSPEED: // read fan speed

@@ -93,6 +93,7 @@ config_t* ConfigInit(EEPROM_HANDLE *eepromHandle)
 
 BOOL ConfigUpdate(void)
 {
+    Config.length = ConfigSize;
     Config.crc = CalculateCrc(&Config+2, ConfigSize-2);
     return WriteConfig(configEepromHandle, &Config) == EEPROM_SUCCESS;
 }

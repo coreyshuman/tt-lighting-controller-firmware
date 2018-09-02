@@ -13,7 +13,7 @@ static BYTE AnimationFrame;
 static BOOL ReadyToUpdate;
 static BYTE fanSpeed = 0;
 static BYTE fanDir = 1;
-
+static config_t *animConfigPtr;
 static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZE];
 
 void AnimationInit(config_t* config)
@@ -30,7 +30,8 @@ void AnimationInit(config_t* config)
     IFS0CLR = _IFS0_T5IF_MASK; // Clear the timer interrupt status flag
     IEC0SET = _IEC0_T5IE_MASK; // Enable timer interrupts
     
-    memcpy((void *)&AnimationBuffer, (const void*)&config->colors, sizeof(AnimationBuffer));
+    animConfigPtr = config;
+    memcpy((void *)&AnimationBuffer, (const void*)&(config->colors), sizeof(AnimationBuffer));
     
     AnimationFrame = 0;
     ReadyToUpdate = TRUE;
@@ -52,59 +53,73 @@ void AnimationStop(void)
     T4CONCLR = 0x8000; // Stop 32-bit timer
 }
 
-extern DWORD fan1speed;
-extern DWORD fan1period;
-void RotateColors(void)
+void AnimationUpdateBuffer(void)
 {
-    BYTE i, y;
-    
-    
-    if(AnimationFrame >= 12)
+    memcpy((void *)&AnimationBuffer, (const void*)&(animConfigPtr->colors), sizeof(AnimationBuffer));
+}
+
+void AnimOff(BYTE deviceIdx)
+{
+    int i;
+    for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        AnimationFrame = 0;
+        SetDeviceLedColor(deviceIdx, i, BLACK);
     }
-    
-    //ClearLeds();
+}
+
+void AnimSteady(BYTE deviceIdx)
+{
+    BYTE i;
+    BYTE buffIdx = deviceIdx * DEVICESIZE;
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        BYTE idx = i*3 + AnimationFrame*3;
-        if(idx >= 36)
-        {
-            idx -= 36;
-        }
-        for(y = 0; y < DEVICECOUNT; y++)
-        {
-            idx += y * DEVICESIZE;
-            SetDeviceLedColor(y, i, (DWORD)AnimationBuffer[idx] | (DWORD)AnimationBuffer[idx+1] << 8 | (DWORD)AnimationBuffer[idx+2] << 16);
-        }
+        SetDeviceLedColor(deviceIdx, i, (DWORD)AnimationBuffer[buffIdx] | (DWORD)AnimationBuffer[buffIdx+1] << 8 | (DWORD)AnimationBuffer[buffIdx+2] << 16);
     }
+}
 
-    if(fanSpeed == 0) {
-        fanDir = 1;
-    } 
-    else if (fanSpeed == 100) {
-        fanDir = 0;
-    }
-    if(fanDir > 0)
+void AnimRotate(BYTE deviceIdx)
+{
+    BYTE i;
+    BYTE frame = AnimationFrame % 12;
+    BYTE buffIdx = deviceIdx * DEVICESIZE;
+    
+    for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        fanSpeed += 5;
+        BYTE idxOffset = i*3 + frame*3;
+        if(idxOffset >= 36)
+        {
+            idxOffset -= 36;
+        }
+        buffIdx += idxOffset;
+        SetDeviceLedColor(deviceIdx, i, (DWORD)AnimationBuffer[buffIdx] | (DWORD)AnimationBuffer[buffIdx+1] << 8 | (DWORD)AnimationBuffer[buffIdx+2] << 16);
     }
-    else
-    {
-        fanSpeed -= 5;
-    }
-    FanSetSpeed(0, fanSpeed);
 }
 
 // setup next frame
 void AnimationUpdate(void)
 {
+    int i;
     if(ReadyToUpdate)
     {
         AnimationFrame++;
-        RotateColors();
         ReadyToUpdate = FALSE;
+        
+        for(i=0; i<DEVICECOUNT; i++) {
+            switch(animConfigPtr->ledMode[i]) {
+                case OFF:
+                    AnimOff(i);
+                    break;
+                    
+                case STEADY:
+                    AnimSteady(i);
+                    break;
+                    
+                case ROTATE:
+                    AnimRotate(i);
+                    break;
+            }
+        }
     }
 }
 
