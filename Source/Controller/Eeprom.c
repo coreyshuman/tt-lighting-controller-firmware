@@ -4,6 +4,30 @@
 #include <plib.h>
 #include "Controller/Eeprom.h"
 
+static char eepromDebug[960];
+static int eepromDebugLen;
+static EEPROM_STATE_MACHINE eepromDebugLastState = 0xFF;
+
+void putDebug(char d) {
+    if(eepromDebugLen >= 960) {
+        return;
+    }
+    eepromDebug[eepromDebugLen++] = d;
+}
+
+void resetDebug() {
+    eepromDebugLen = 0;
+    eepromDebugLastState = 0xFF;
+}
+
+int getDebug(char *d) {
+    int i;
+    for(i=0; i < eepromDebugLen; i++) {
+        d[i] = eepromDebug[i];
+    }
+    return eepromDebugLen;
+}
+
 int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAddress, BOOL address16bit)
 {
     WORD *dataPtr;
@@ -43,6 +67,8 @@ int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAdd
     handle->clock = I2CSetFrequency(id, GetPeripheralClock(), clock);
     *dataPtr = (WORD)I2C_ENABLE_HIGH_SPEED;
     *dataPtr = *dataPtr | (WORD)0x8000;
+    
+    resetDebug();
     return 1;
 }
 
@@ -51,17 +77,9 @@ BOOL I2CIdle(EEPROM_HANDLE *handle)
     return (!handle->I2CCON->SEN && !handle->I2CCON->PEN && !handle->I2CSTAT->TRSTAT && !handle->I2CCON->ACKEN);
 }
 
-BOOL CheckRetry(EEPROM_HANDLE *handle) {
-    if(handle->retry <= 0 || handle->resend <= 0) {
-        handle->deviceState = EE_INIT;
-        handle->retry = EE_RETRY_COUNT;
-        return TRUE;
-    }
-    return FALSE;
-}
-
 void EEStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
 {
+    volatile int wait;
     switch(handle->deviceState)
     {
         case EE_INIT:
@@ -90,9 +108,11 @@ void EEStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
             handle->resend --;
             handle->retry = EE_RETRY_COUNT;
             handle->deviceState = EE_START_WAIT;
+            wait = 8000;
+            while(wait-- > 0); // wait ~1ms so we don't spam the eeprom
             break;
         default:
-            handle->deviceState = EE_INIT;
+            handle->deviceState = EE_ERROR;
     }
 }
 
@@ -118,7 +138,9 @@ void EEReStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
             handle->retry = EE_RETRY_COUNT;
             break;
         default:
-            handle->deviceState = EE_INIT;
+            handle->deviceState = EE_ERROR;
+            putDebug('$');
+            break;
     }
 }
 
@@ -146,16 +168,23 @@ void EESend(EEPROM_HANDLE *handle, BYTE data, EEPROM_STATE_MACHINE next)
 
 }
 
-void EESendWaitForCompletion(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
+// Wait for slave to ack data. If polling enabled, master will retry if no
+//  ack was received.
+void EESendWaitForCompletion(EEPROM_HANDLE *handle, BOOL polling, EEPROM_STATE_MACHINE next)
 {
     // wait for transmit completion
     if(handle->I2CSTAT->TRSTAT) {
         handle->retry --;
         return;
     }
-    // if no ack, restart transaction
+    // if no ack, error out
     if(handle->I2CSTAT->ACKSTAT) {
-        handle->deviceState = EE_RESEND;
+        if(polling) {
+            handle->deviceState = EE_RESEND;
+        } else {
+            handle->deviceState = EE_ERROR;
+            putDebug('%');
+        }
         return;
     }
     handle->deviceState = next;
@@ -171,6 +200,7 @@ void EESendIncrement(EEPROM_HANDLE *handle)
         if(handle->pageCount >= handle->pageSize) {
             handle->address += handle->pageSize;
             handle->resend = EE_ACK_POLLING_COUNT;
+            handle->retry = EE_RETRY_COUNT;
             handle->deviceState = EE_SEND_PAGE_BOUNDARY;
         } else {
             handle->deviceState = EE_SEND;
@@ -186,6 +216,7 @@ void EERead(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
         handle->retry --;
         return;
     }
+    handle->retry = EE_RETRY_COUNT;
     handle->I2CCON->RCEN = 1;
     handle->deviceState = next;
 }
@@ -207,12 +238,27 @@ void EEReadWait(EEPROM_HANDLE *handle)
         handle->deviceState = EE_STOP;
     }
     handle->I2CCON->ACKEN = 1;
+    handle->retry = EE_RETRY_COUNT;
+}
+
+BOOL CheckRetry(EEPROM_HANDLE *handle) {
+    if(handle->retry <= 0 || handle->resend <= 0 || handle->deviceState == EE_ERROR) {
+        EEStop(handle);
+        putDebug('!');
+        return TRUE;
+    }
+    return FALSE;
 }
 
 int EepromRead(EEPROM_HANDLE *handle)
 {
+    // cts debug
+    if(handle->deviceState != eepromDebugLastState) {
+        eepromDebugLastState = handle->deviceState;
+        putDebug(handle->deviceState);
+    }
     int ret = 0;
-    if(CheckRetry(handle)) return -1;
+    if(CheckRetry(handle)) return EEPROM_FAIL;
     
     switch(handle->deviceState)
     {
@@ -226,13 +272,13 @@ int EepromRead(EEPROM_HANDLE *handle)
             EESend(handle, handle->deviceAddress | I2C_WRITE, EE_DEVICE_WAIT);
             break;
         case EE_DEVICE_WAIT:
-            EESendWaitForCompletion(handle, EE_SEND_ADDRESS);
+            EESendWaitForCompletion(handle, TRUE, EE_SEND_ADDRESS);
             break;
         case EE_SEND_ADDRESS:
             EESend(handle, handle->address, EE_SEND_ADDRESS_WAIT);
             break;
         case EE_SEND_ADDRESS_WAIT:
-            EESendWaitForCompletion(handle, EE_RESTART);
+            EESendWaitForCompletion(handle, FALSE, EE_RESTART);
             break;
         case EE_RESTART:
         case EE_RESTART_WAIT:
@@ -242,7 +288,7 @@ int EepromRead(EEPROM_HANDLE *handle)
             EESend(handle, handle->deviceAddress | I2C_READ, EE_READ_BEGIN_WAIT);
             break;
         case EE_READ_BEGIN_WAIT:
-            EESendWaitForCompletion(handle, EE_RECEIVE);
+            EESendWaitForCompletion(handle, FALSE, EE_RECEIVE);
             break;
         case EE_RECEIVE:
             EERead(handle, EE_RECEIVE_WAIT);
@@ -254,8 +300,8 @@ int EepromRead(EEPROM_HANDLE *handle)
             ret = EEStop(handle);
             break;
         default:
-            handle->deviceState = EE_INIT;
-            ret = -1;
+            handle->deviceState = EE_ERROR;
+            putDebug('"');
             break;
     }
     
@@ -265,8 +311,14 @@ int EepromRead(EEPROM_HANDLE *handle)
 
 int EepromWrite(EEPROM_HANDLE *handle)
 {
+    // cts debug
+    if(handle->deviceState != eepromDebugLastState) {
+        eepromDebugLastState = handle->deviceState;
+        putDebug(handle->deviceState);
+    }
+    
     int ret = 0;
-    if(CheckRetry(handle)) return -1;
+    if(CheckRetry(handle)) return EEPROM_FAIL;
     
     switch(handle->deviceState)
     {
@@ -280,19 +332,19 @@ int EepromWrite(EEPROM_HANDLE *handle)
             EESend(handle, handle->deviceAddress | I2C_WRITE, EE_DEVICE_WAIT);
             break;
         case EE_DEVICE_WAIT:
-            EESendWaitForCompletion(handle, EE_SEND_ADDRESS);
+            EESendWaitForCompletion(handle, TRUE, EE_SEND_ADDRESS);
             break;
         case EE_SEND_ADDRESS:
             EESend(handle, handle->address, EE_SEND_ADDRESS_WAIT);
             break;
         case EE_SEND_ADDRESS_WAIT:
-            EESendWaitForCompletion(handle, EE_SEND);
+            EESendWaitForCompletion(handle, FALSE, EE_SEND);
             break;
         case EE_SEND:
             EESend(handle, *(handle->data), EE_SEND_WAIT);
             break;
         case EE_SEND_WAIT:
-            EESendWaitForCompletion(handle, EE_SEND_INCREMENT);
+            EESendWaitForCompletion(handle, FALSE, EE_SEND_INCREMENT);
             break;
         case EE_SEND_INCREMENT:
             EESendIncrement(handle);
@@ -304,8 +356,8 @@ int EepromWrite(EEPROM_HANDLE *handle)
             ret = EEStop(handle);
             break;
         default:
-            handle->deviceState = EE_INIT;
-            ret = -1;
+            handle->deviceState = EE_ERROR;
+            putDebug('#');
             break;
     }
     

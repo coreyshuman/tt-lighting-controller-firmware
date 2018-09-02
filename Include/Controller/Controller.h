@@ -5,7 +5,12 @@
 #include "Lighting.h"
 #include "Animation.h"
 
-#define CONTROLLER_BUFF_SIZE 512        // should be multiple of 64
+// Each USB packet can hold 60 bytes of data, plus 4 bytes of overhead.
+// Each USB packet MUST be 64 bytes in length (USB interrupt spec.)
+// The numbers below allow for 16 packets of data to be stored at once.
+// N = 16 keeps both buffers multiples of 64.
+#define CONTROLLER_BUFF_SIZE 960        // (60 * N), N = 16
+#define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 #define MAJOR_VERSION        1
 #define MINOR_VERSION        3
 
@@ -20,6 +25,7 @@ typedef enum _CONTROL_ERROR_CODES {
 } CONTROL_ERROR_CODES;
 
 enum _CONTROL_CMD {
+    CMD_READ_EE_DEBUG = 0x10,
     CMD_READ_CONFIG = 0x30,
     CMD_READ_FANSPEED = 0x35,
     CMD_READ_EEPROM = 0x38,

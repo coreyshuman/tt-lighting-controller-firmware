@@ -23,18 +23,6 @@ typedef struct
 	
 }T_FRAME;
 
-typedef struct 
-{
-	UINT8 RecDataLen;
-	DWORD_VAL Address;
-	UINT8 RecType;
-	UINT8* Data;
-	UINT8 CheckSum;	
-	DWORD_VAL ExtSegAddress;
-	DWORD_VAL ExtLinAddress;
-}T_HEX_RECORD;	
-
-
 static const UINT8 BootInfo[2] =
 {
     MAJOR_VERSION,
@@ -98,7 +86,7 @@ void SetReceiveErrorOccured(CONTROL_ERROR_CODES errorCode)
 }
 
 // Setup send response to USB. Data is copied to TX buffer if data not NULL.
-void SetResponseSendData(const void* data, UINT8 len)
+void SetResponseSendData(const void* data, UINT16 len)
 {
     if(len > CONTROLLER_BUFF_SIZE) {
         SetResponseErrorOccured(RESPONSE_TOO_LONG);
@@ -130,7 +118,7 @@ void SetResponseSendData(const void* data, UINT8 len)
 void HandleCommand(void)
 {
 	UINT8 cmd;
-    UINT8 length;
+    UINT16 length;
     EEPROM_STATUS eepromStatus;
 	// First byte of the data field is command.
 	cmd = RcvBuff.Cmd;
@@ -155,8 +143,14 @@ void HandleCommand(void)
         case CMD_READ_FANSPEED: // read fan speed
             SetResponseSendData((const void*)&fan1speed, 2);
 			break;
+            
+        case CMD_READ_EE_DEBUG: // cts debug
+            length = getDebug((char *)&TxmBuff.Data[0]);
+            SetResponseSendData(NULL, length);
+            break;
 			
         case CMD_READ_EEPROM: // read eeprom, max 30 bytes at a time
+            resetDebug(); // cts debug
             eepromHandle.data = &TxmBuff.Data[0];
             eepromHandle.len = RcvBuff.Data[1];
             eepromHandle.address = RcvBuff.Data[0];
@@ -177,8 +171,8 @@ void HandleCommand(void)
             break;
             
         case CMD_WRITE_EEPROM: // write eeprom, max address is 255
+            resetDebug(); // cts debug
             eepromHandle.data = &RcvBuff.Data[2];
-            //eepromHandle.len = RcvBuff.Data[2];
             eepromHandle.address = RcvBuff.Data[0];
             length = RcvBuff.Data[1];
             if(length + eepromHandle.address >= 256)
@@ -292,15 +286,15 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 ********************************************************************/
 UINT ControllerGetTransmitFrames(UINT8* usbBuffer)
 {
-	INT buffLen = 0;
-    INT dataLen = TxmBuff.Len;
-	WORD_VAL crc;
-	UINT8 packetDataCount;
-    UINT8 packetIndex = 0;
+	UINT16 buffLen = 0;
+    UINT16 dataLen = TxmBuff.Len;
+	UINT16 packetDataCount;
+    UINT16 packetIndex = 0;
+    WORD_VAL crc;
     
 	while(dataLen) 
 	{
-        if(buffLen >= CONTROLLER_BUFF_SIZE)
+        if(buffLen >= USB_BUFFER_SIZE)
 		{
 			SetResponseErrorOccured(RESPONSE_TOO_LONG);
             return 0;

@@ -21,7 +21,7 @@ BOOL VerifyConfig(EEPROM_HANDLE *eeHandle, config_t *config)
     EEPROM_STATUS eepromStatus = ReadConfig(eeHandle, config);
     
     if(eepromStatus == EEPROM_SUCCESS) {
-        UINT16 crc = CalculateCrc(&config+2, ConfigSize-2);
+        UINT16 crc = CalculateCrc(((UINT8 *)config)+2, ConfigSize-2);
         if(crc == config->crc) {
             // future - check length for possible config updates
             return TRUE;
@@ -47,7 +47,7 @@ void SetDefaultConfig(config_t *config)
             config->colors[i][j] = *color;
         }
     }
-    config->crc = CalculateCrc(&config+2, ConfigSize-2);
+    config->crc = CalculateCrc(((UINT8 *)config)+2, ConfigSize-2);
 }
 
 EEPROM_STATUS ReadConfig(EEPROM_HANDLE *eeHandle, config_t *config)

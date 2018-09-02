@@ -20,7 +20,7 @@
 
 
 static UINT8 UsbRxData[MaxUsbPacketSize];
-static UINT8 UsbTxData[CONTROLLER_BUFF_SIZE];
+static UINT8 UsbTxData[USB_BUFFER_SIZE];
 
 
 
