@@ -34,18 +34,18 @@ int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAdd
     switch(id)
     {
         case I2C1:
-            handle->I2CCON = &I2C1CON;
-            handle->I2CSTAT = &I2C1STAT;
-            handle->I2CTRN = &I2C1TRN;
-            handle->I2CRCV = &I2C1RCV;
+            handle->I2CCON = (__I2C1ACONbits_t *)&I2C1CON;
+            handle->I2CSTAT = (__I2C1STATbits_t *)&I2C1STAT;
+            handle->I2CTRN = (BYTE*)&I2C1TRN;
+            handle->I2CRCV = (BYTE*)&I2C1RCV;
             TRISBbits.TRISB8 = 0;
             TRISBbits.TRISB9 = 0;
             break;
         case I2C2:
-            handle->I2CCON = &I2C2CON;
-            handle->I2CSTAT = &I2C2STAT;
-            handle->I2CTRN = &I2C2TRN;
-            handle->I2CRCV = &I2C2RCV;
+            handle->I2CCON = (__I2C1ACONbits_t *)&I2C2CON;
+            handle->I2CSTAT = (__I2C1STATbits_t *)&I2C2STAT;
+            handle->I2CTRN = (BYTE*)&I2C2TRN;
+            handle->I2CRCV = (BYTE*)&I2C2RCV;
             TRISBbits.TRISB2 = 0;
             TRISBbits.TRISB3 = 0;
             ANSELBbits.ANSB2 = 0;
@@ -54,7 +54,7 @@ int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAdd
         default:
             return 0;
     }
-    dataPtr = handle->I2CCON;
+    dataPtr = (WORD*)handle->I2CCON;
     handle->deviceState = EE_INIT;
     handle->id = id;
     handle->deviceAddress = deviceAddress & 0xF7;

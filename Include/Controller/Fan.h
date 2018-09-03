@@ -13,6 +13,7 @@ extern "C" {
     void FanInit(void);
     void FanLoop(void);
     void FanSetSpeed(BYTE fanIdx, BYTE speed);
+    void FanSetSpeeds(BYTE speeds[]);
     
 
     /* Provide C++ Compatibility */

@@ -1,9 +1,9 @@
-
 #include "Include\GenericTypeDefs.h"
 #include "Include\HardwareProfile\HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
 #include <string.h>
+#include "Config.h"
 #include "Lighting.h"
 #include "Animation.h"
 #include "Config.h"
@@ -14,7 +14,7 @@ static BOOL ReadyToUpdate;
 static BYTE fanSpeed = 0;
 static BYTE fanDir = 1;
 static config_t *animConfigPtr;
-static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZE];
+static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZEBYTES];
 
 void AnimationInit(config_t* config)
 {
@@ -31,7 +31,7 @@ void AnimationInit(config_t* config)
     IEC0SET = _IEC0_T5IE_MASK; // Enable timer interrupts
     
     animConfigPtr = config;
-    memcpy((void *)&AnimationBuffer, (const void*)&(config->colors), sizeof(AnimationBuffer));
+    memcpy((void *)&AnimationBuffer[0][0], (const void*)&(config->colors[0][0]), DEVICECOUNT*DEVICESIZEBYTES);
     
     AnimationFrame = 0;
     ReadyToUpdate = TRUE;
@@ -55,7 +55,7 @@ void AnimationStop(void)
 
 void AnimationUpdateBuffer(void)
 {
-    memcpy((void *)&AnimationBuffer, (const void*)&(animConfigPtr->colors), sizeof(AnimationBuffer));
+    memcpy((void *)&AnimationBuffer[0][0], (const void*)&(animConfigPtr->colors[0][0]), DEVICECOUNT*DEVICESIZEBYTES);
 }
 
 void AnimOff(BYTE deviceIdx)
@@ -63,18 +63,18 @@ void AnimOff(BYTE deviceIdx)
     int i;
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        SetDeviceLedColor(deviceIdx, i, BLACK);
+        SetDeviceLedColorDW(deviceIdx, i, BLACK);
     }
 }
 
 void AnimSteady(BYTE deviceIdx)
 {
     BYTE i;
-    BYTE buffIdx = deviceIdx * DEVICESIZE;
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        SetDeviceLedColor(deviceIdx, i, (DWORD)AnimationBuffer[buffIdx] | (DWORD)AnimationBuffer[buffIdx+1] << 8 | (DWORD)AnimationBuffer[buffIdx+2] << 16);
+        BYTE* colorPtr = &AnimationBuffer[deviceIdx][i*3];
+        SetDeviceLedColor(deviceIdx, i, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     }
 }
 
@@ -82,7 +82,6 @@ void AnimRotate(BYTE deviceIdx)
 {
     BYTE i;
     BYTE frame = AnimationFrame % 12;
-    BYTE buffIdx = deviceIdx * DEVICESIZE;
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
@@ -91,8 +90,9 @@ void AnimRotate(BYTE deviceIdx)
         {
             idxOffset -= 36;
         }
-        buffIdx += idxOffset;
-        SetDeviceLedColor(deviceIdx, i, (DWORD)AnimationBuffer[buffIdx] | (DWORD)AnimationBuffer[buffIdx+1] << 8 | (DWORD)AnimationBuffer[buffIdx+2] << 16);
+        idxOffset;
+        BYTE* colorPtr = &AnimationBuffer[deviceIdx][idxOffset];
+        SetDeviceLedColor(deviceIdx, i, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     }
 }
 

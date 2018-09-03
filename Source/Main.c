@@ -64,6 +64,14 @@ INT main(void)
     ANSELB = 0;
     ANSELC = 0;
     
+    TRISCCLR = 0x0384;
+    TRISBCLR = 0x0100;
+    TRISCbits.TRISC1 = 0;
+    TRISAbits.TRISA8 = 0;
+    TRISBbits.TRISB4 = 0;
+    TRISCbits.TRISC3 = 0;
+    TRISCbits.TRISC4 = 0;
+    
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
     

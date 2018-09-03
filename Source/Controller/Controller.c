@@ -2,6 +2,8 @@
 #include "Include\HardwareProfile\HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
+#include <string.h>
+#include "Config.h"
 #include "Controller.h"
 
 typedef enum
@@ -41,16 +43,19 @@ void HandleCommand(void);
 
 void ControllerInitialize(void) 
 {
-    EepromInit(&eepromHandle, EE_I2C, 400000, 0xA0, FALSE);
+    EepromInit(&eepromHandle, EE_I2C, 400000, EE_ADDR, FALSE);
     configHandle = ConfigInit(&eepromHandle);
     LightingInit();
     AnimationInit(configHandle);
     FanInit();
+    FanSetSpeeds(configHandle->fanSpeed);
     
     AnimationSetInterval(500);
     
-    AnimationUpdate();
+    //AnimationUpdate();
+    
     AnimationStart();
+    AnimationUpdateBuffer();
     RxFrameValid = FALSE;
 }
 
@@ -144,6 +149,7 @@ void HandleCommand(void)
         case CMD_WRITE_CONFIG:
             memcpy((void*)configHandle, (const void*)&RcvBuff.Data[0], ConfigSize);
             AnimationUpdateBuffer();
+            FanSetSpeeds(configHandle->fanSpeed);
             status = ConfigUpdate();
             SetResponseSendData((const void*)&status, 1);
             break;

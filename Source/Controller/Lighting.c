@@ -3,10 +3,11 @@
 #include "Include\HardwareProfile\HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
+#include "Config.h"
 #include "Include\Controller\Lighting.h"
 
-BYTE LedBufferA[DEVICECOUNT][DEVICESIZE];
-BYTE LedBufferB[DEVICECOUNT][DEVICESIZE];
+BYTE LedBufferA[DEVICECOUNT][DEVICESIZEBYTES];
+BYTE LedBufferB[DEVICECOUNT][DEVICESIZEBYTES];
 BYTE *LedDrawBuffer = (BYTE*)&LedBufferA;
 BYTE *LedWriteBuffer = (BYTE*)&LedBufferB;
 BOOL LedBusy = FALSE;
@@ -17,9 +18,6 @@ DWORD shiftAmount = 8;
 
 void LightingInit(void) 
 {
-    TRISCCLR = 0x0384;
-    TRISBCLR = 0x0100;
-    
     T1CON = 0x0; // Stop the timer and clear the control register,
     // prescaler at 1:1,internal clock source
     TMR1 = 0x0; // Clear the timer register
@@ -59,15 +57,24 @@ void ClearLeds(void)
 {
     int i = 0;
     BYTE *ledWrite = LedWriteBuffer;
-    for(i=0; i<DEVICESIZE*DEVICECOUNT; i++)
+    for(i=0; i<DEVICESIZEBYTES*DEVICECOUNT; i++)
     {
         *ledWrite++ = 0x00;
     }
 }
 
-void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, DWORD color)
+void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, BYTE green, BYTE red, BYTE blue)
 {
-    WORD offset = devIndex*DEVICESIZE + ledIndex * LEDSIZE;
+    WORD offset = devIndex*DEVICESIZEBYTES + ledIndex * LEDSIZE;
+    BYTE * ledWrite = LedWriteBuffer + offset;
+    *ledWrite++ = green;
+    *ledWrite++ = red;
+    *ledWrite++ = blue;
+}
+
+void SetDeviceLedColorDW(BYTE devIndex, BYTE ledIndex, DWORD color)
+{
+    WORD offset = devIndex*DEVICESIZEBYTES + ledIndex * LEDSIZE;
     BYTE * ledWrite = LedWriteBuffer + offset;
     *ledWrite++ = color & 0xFF;
     *ledWrite++ = color >> 8 & 0xFF;
@@ -77,9 +84,9 @@ void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, DWORD color)
 void SetDeviceSolidColor(BYTE devIndex, DWORD color)
 {
     BYTE i;
-    for(i = 0; i < DEVICESIZE; i++) 
+    for(i = 0; i < DEVICESIZEBYTES; i++) 
     {
-        SetDeviceLedColor(devIndex, i, color);
+        SetDeviceLedColorDW(devIndex, i, color);
     }
 }
 

@@ -5,8 +5,8 @@
 #include "Include\Controller\Config.h"
 #include "Animation.h"
 
-//static DWORD DefaultColors[] = {PINK, WINE, RED, ORANGE, SUNSET, YELLOW, LIME, GREEN, TEAL, BLUE, INDIGO, VIOLET};
-static DWORD DefaultColors[] = {BLACK, WINE, BLACK, BLACK, BLACK, BLACK, LIME, BLACK, BLACK, BLACK, BLACK, BLACK};
+static DWORD DefaultColors[] = {PINK, WINE, RED, ORANGE, SUNSET, YELLOW, LIME, GREEN, TEAL, BLUE, INDIGO, VIOLET};
+//static DWORD DefaultColors[] = {BLACK, WINE, BLACK, BLACK, BLACK, BLACK, LIME, BLACK, BLACK, BLACK, BLACK, BLACK};
 
 static config_t Config;
 static EEPROM_HANDLE *configEepromHandle;
@@ -39,11 +39,11 @@ void SetDefaultConfig(config_t *config)
     config->length = ConfigSize;
     for(i=0; i<DEVICECOUNT; i++) {
         config->fanSpeed[i] = 50;
-        config->ledMode[i] = 1;
-        for(j=0; j<DEVICESIZE; j++) {
+        config->ledMode[i] = 2;
+        for(j=0; j<DEVICESIZEBYTES; j++) {
             BYTE ledIdx = j / 3;
             BYTE colorIdx = j % 3;
-            BYTE *color = (BYTE*)DefaultColors + (ledIdx*sizeof(DWORD)) + colorIdx;
+            BYTE *color = (BYTE*)&DefaultColors[0] + (ledIdx*sizeof(DWORD)) + colorIdx;
             config->colors[i][j] = *color;
         }
     }
@@ -94,6 +94,6 @@ config_t* ConfigInit(EEPROM_HANDLE *eepromHandle)
 BOOL ConfigUpdate(void)
 {
     Config.length = ConfigSize;
-    Config.crc = CalculateCrc(&Config+2, ConfigSize-2);
+    Config.crc = CalculateCrc(((UINT8 *)&Config)+2, ConfigSize-2);
     return WriteConfig(configEepromHandle, &Config) == EEPROM_SUCCESS;
 }

@@ -2,14 +2,18 @@
 #define _CONFIG_H
 
 #include "Eeprom.h"
-#include "Lighting.h"
+
+#define DEVICESIZEBYTES      36      // bytes
+#define DEVICELEDCOUNT  12
+#define DEVICECOUNT     5       
+#define LEDSIZE         3       // bytes
 
 typedef struct __attribute__((__packed__)) _config_t {
     WORD crc;
     WORD length;
     BYTE fanSpeed[DEVICECOUNT];
     BYTE ledMode[DEVICECOUNT];
-    BYTE colors[DEVICECOUNT][DEVICESIZE];
+    BYTE colors[DEVICECOUNT][DEVICESIZEBYTES];
 } config_t ;
 
 #define ConfigSize sizeof(config_t)
