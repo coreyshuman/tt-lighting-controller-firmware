@@ -92,6 +92,7 @@ void SetDeviceSolidColor(BYTE devIndex, DWORD color)
 
 void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
 {
+    INTDisableInterrupts();
     IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
     
     asm volatile (
@@ -175,4 +176,5 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
         }
         shiftAmount = 8;
     }
+    INTEnableInterrupts();
 }

@@ -14,6 +14,8 @@ extern "C" {
     void FanLoop(void);
     void FanSetSpeed(BYTE fanIdx, BYTE speed);
     void FanSetSpeeds(BYTE speeds[]);
+    void FanCaptureEnable();
+    void FanCaptureDisable();
     
 
     /* Provide C++ Compatibility */

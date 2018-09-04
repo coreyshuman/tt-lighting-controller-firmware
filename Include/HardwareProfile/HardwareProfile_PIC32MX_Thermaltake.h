@@ -28,8 +28,6 @@
 #define TIMER_2_FREQ    187500u
 #define TIMER_3_FREQ    25000u
 				
-	
-	#define ReadSwitchStatus() (PORTReadBits(IOPORT_B, BIT_1) & BIT_1)
    // Error indication.	
 	#define Error()   do{LATBbits.LATB4 = 0; LATAbits.LATA8 = 1;} while(0);
 

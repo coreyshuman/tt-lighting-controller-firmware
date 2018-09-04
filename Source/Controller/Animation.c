@@ -9,15 +9,18 @@
 #include "Config.h"
 
 
-static BYTE AnimationFrame = 0;
 static BOOL ReadyToUpdate = 0;
 static BYTE fanSpeed = 0;
 static BYTE fanDir = 1;
 static config_t *animConfigPtr = 0;
 static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZEBYTES];
+static BYTE AnimationSpeedCounter[DEVICECOUNT];
+static BYTE AnimationFrame[DEVICECOUNT];
 
 void AnimationInit(config_t* config)
 {
+    int i;
+    
     T4CON = 0x0; // Stop any 16/32-bit Timer4 operation
     T5CON = 0x0; // Stop any 16-bit Timer5 operation
     T4CONSET = 0x0018; // 32-bit mode, internal clock, 1:2 prescale
@@ -31,10 +34,13 @@ void AnimationInit(config_t* config)
     IEC0SET = _IEC0_T5IE_MASK; // Enable timer interrupts
     
     animConfigPtr = config;
-    //memcpy((void *)&AnimationBuffer[0][0], (const void*)&(config->colors[0][0]), DEVICECOUNT*DEVICESIZEBYTES);
     AnimationUpdateBuffer();
     
-    AnimationFrame = 0;
+    for(i=0; i<DEVICECOUNT; i++) {
+        AnimationSpeedCounter[i] = animConfigPtr->ledSpeed[i];  
+        AnimationFrame[i] = 0;
+    }
+    
     ReadyToUpdate = TRUE;
 }
 
@@ -87,7 +93,8 @@ void AnimSteady(BYTE deviceIdx)
 void AnimRotate(BYTE deviceIdx)
 {
     BYTE i;
-    BYTE frame = AnimationFrame % 12;
+    BYTE frame = AnimationFrame[deviceIdx] % 12;
+    
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
@@ -108,23 +115,29 @@ void AnimationUpdate(void)
     int i;
     if(ReadyToUpdate)
     {
-        AnimationFrame++;
         ReadyToUpdate = FALSE;
         
         for(i=0; i<DEVICECOUNT; i++) {
+            if(-- AnimationSpeedCounter[i] <= 0) {
+                AnimationSpeedCounter[i] = animConfigPtr->ledSpeed[i];    
+                if(++AnimationFrame[i] >= MAX_ANIMATION_FRAMES) {
+                    AnimationFrame[i] = 0;
+                }
+            }
+            
             switch(animConfigPtr->ledMode[i]) {
                 case OFF:
                     AnimOff(i);
                     break;
-                    
+
                 case STEADY:
                     AnimSteady(i);
                     break;
-                    
+
                 case ROTATE:
                     AnimRotate(i);
                     break;
-            }
+            }                
         }
     }
 }

@@ -60,17 +60,49 @@ INT main(void)
     INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);
     INTEnableInterrupts();
     
+    // no analog inputs
     ANSELA = 0;
     ANSELB = 0;
     ANSELC = 0;
     
+    // Dip switch inputs
+    TRISAbits.TRISA0 = 1;
+    TRISAbits.TRISA1 = 1;
+    TRISBbits.TRISB0 = 1;
+    TRISBbits.TRISB1 = 1;
+    
+    // set LED output pins:
+    //  led 1 - rc9
+    //  led 2 - rc2
+    //  led 3 - rb8
+    //  led 4 - rc7
+    //  led 5 - rc8
     TRISCCLR = 0x0384;
     TRISBCLR = 0x0100;
+    
+    // set OC output pins: 
+    //  fan1 - oc5 - rc1
+    //  fan2 - oc2 - ra8
+    //  fan3 - oc1 - rb4
+    //  fan4 - oc4 - rc3
+    //  fan5 - oc3 - rc4
     TRISCbits.TRISC1 = 0;
     TRISAbits.TRISA8 = 0;
     TRISBbits.TRISB4 = 0;
     TRISCbits.TRISC3 = 0;
     TRISCbits.TRISC4 = 0;
+    
+    // set IC output pins: 
+    //  fan1 - ic3 - ra9
+    //  fan2 - ic1 - ra4
+    //  fan3 - ic4 - rb7
+    //  fan4 - ic2 - rb9
+    //  fan5 - ic5 - rc6
+    TRISAbits.TRISA9 = 1;
+    TRISAbits.TRISA4 = 1;
+    TRISBbits.TRISB7 = 1;
+    TRISBbits.TRISB9 = 1;
+    TRISCbits.TRISC6 = 1;
     
     // Initialize USB
     TRANS_LAYER_Init(pbClk);

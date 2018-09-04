@@ -3,6 +3,9 @@
 
 #include "Config.h"
 
+#define ANIMATION_INTERVAL      100 // ms
+#define MAX_ANIMATION_FRAMES    60
+
 // 00 blue red green
 enum _colors {
     PINK =      0x00408000,

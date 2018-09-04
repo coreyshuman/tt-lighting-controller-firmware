@@ -6,17 +6,6 @@
 #include "Config.h"
 #include "Controller.h"
 
-typedef enum
-{
-	READ_BOOT_INFO = 1,
-	ERASE_FLASH, 
-	PROGRAM_FLASH,
-	READ_CRC,
-	JMP_TO_APP
-	
-}T_COMMANDS;	
-
-
 typedef struct
 {
 	UINT8 Cmd;
@@ -31,13 +20,19 @@ static const UINT8 BootInfo[2] =
     MINOR_VERSION
 };
 
+static const UINT8 FirmwareInfo[2] =
+{
+    MAJOR_VERSION,
+    MINOR_VERSION
+};
+
 
 static T_FRAME RcvBuff;
 static T_FRAME TxmBuff;
 static BOOL RxFrameValid;
 static EEPROM_HANDLE eepromHandle;
 static config_t* configHandle;
-
+static BYTE ControllerAddress = 0;
 
 void HandleCommand(void);
 
@@ -51,12 +46,15 @@ void ControllerInitialize(void)
     
     FanInit();
     FanSetSpeeds(configHandle->fanSpeed);
+    FanCaptureEnable();
     
-    AnimationSetInterval(500);
+    AnimationSetInterval(ANIMATION_INTERVAL);
     AnimationUpdate();
     AnimationStart();
     
     RxFrameValid = FALSE;
+    
+    ControllerAddress = PORTA & 0x03 | ((PORTB & 0x03) << 2);
 }
 
 void ControllerLoop(void)
@@ -91,14 +89,18 @@ void SetReceiveErrorOccured(CONTROL_ERROR_CODES errorCode)
 }
 
 // Setup send response to USB. Data is copied to TX buffer if data not NULL.
-void SetResponseSendData(const void* data, UINT16 len)
+void SetResponseSendData(BYTE* data, UINT16 len)
 {
     if(len > CONTROLLER_BUFF_SIZE) {
         SetResponseErrorOccured(RESPONSE_TOO_LONG);
         return;
     }
     if(data != NULL) {
-        memcpy(&TxmBuff.Data[0], data, len);
+        //memcpy(&TxmBuff.Data[0], data, len);
+        int i;
+        for(i=0; i<len; i++) {
+            TxmBuff.Data[i] = *data++;
+        }
     }
     TxmBuff.Len = len;
 }
@@ -137,25 +139,34 @@ void HandleCommand(void)
 	// Process the command.		
 	switch(cmd)
 	{
-		case READ_BOOT_INFO: // Read boot loader version info.
-			memcpy((void *)&TxmBuff.Data[0], (const void*)&BootInfo, 2);
-			//Set the transmit frame length.
-			TxmBuff.Len = 2 + 1; // Boot Info Fields	+ command
+		case CMD_READ_BOOT_INFO: // Read bootloader version info.
+			SetResponseSendData((void*)&BootInfo, 2);
 			break;
+            
+        case CMD_READ_FIRMWARE_INFO: // Read firmware version info.
+			SetResponseSendData((void*)&FirmwareInfo, 2);
+			break;
+            
+        case CMD_READ_CONTROLLER_ADDRESS:
+            //TxmBuff.Data[0] = PORTA & 0x03 | ((PORTB & 0x03) << 2);
+            SetResponseSendData((BYTE*)&ControllerAddress, 1);
+            SetResponseSendData(NULL, 1);
+            break;
+            
         case CMD_READ_CONFIG:
-            SetResponseSendData((const void*)configHandle, ConfigSize);
+            SetResponseSendData((void*)configHandle, ConfigSize);
             break;
             
         case CMD_WRITE_CONFIG:
-            memcpy((void*)configHandle, (const void*)&RcvBuff.Data[0], ConfigSize);
+            memcpy((void*)configHandle, (void*)&RcvBuff.Data[0], ConfigSize);
             AnimationUpdateBuffer();
             FanSetSpeeds(configHandle->fanSpeed);
             status = ConfigUpdate();
-            SetResponseSendData((const void*)&status, 1);
+            SetResponseSendData((void*)&status, 1);
             break;
             
         case CMD_READ_FANSPEED: // read fan speed
-            SetResponseSendData((const void*)&fan1speed, 2);
+            SetResponseSendData((BYTE*)&FanSpeed, 10);
 			break;
             
         case CMD_READ_EE_DEBUG: // cts debug

@@ -12,7 +12,7 @@
 #define CONTROLLER_BUFF_SIZE 960        // (60 * N), N = 16
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 #define MAJOR_VERSION        1
-#define MINOR_VERSION        3
+#define MINOR_VERSION        4
 
 typedef enum _CONTROL_ERROR_CODES {
     RESPONSE_TOO_LONG = 0x01,
@@ -25,6 +25,9 @@ typedef enum _CONTROL_ERROR_CODES {
 } CONTROL_ERROR_CODES;
 
 enum _CONTROL_CMD {
+    CMD_READ_BOOT_INFO = 0x01,
+    CMD_READ_FIRMWARE_INFO = 0x02,
+    CMD_READ_CONTROLLER_ADDRESS = 0x0A,
     CMD_READ_EE_DEBUG = 0x10,
     CMD_READ_CONFIG = 0x30,
     CMD_WRITE_CONFIG = 0x31,
@@ -37,7 +40,7 @@ enum _CONTROL_CMD {
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern WORD fan1speed;
+extern WORD FanSpeed[];
     
 void ControllerInit(void);
 void ControllerLoop(void);
