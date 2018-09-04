@@ -9,11 +9,11 @@
 #include "Config.h"
 
 
-static BYTE AnimationFrame;
-static BOOL ReadyToUpdate;
+static BYTE AnimationFrame = 0;
+static BOOL ReadyToUpdate = 0;
 static BYTE fanSpeed = 0;
 static BYTE fanDir = 1;
-static config_t *animConfigPtr;
+static config_t *animConfigPtr = 0;
 static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZEBYTES];
 
 void AnimationInit(config_t* config)
@@ -31,7 +31,8 @@ void AnimationInit(config_t* config)
     IEC0SET = _IEC0_T5IE_MASK; // Enable timer interrupts
     
     animConfigPtr = config;
-    memcpy((void *)&AnimationBuffer[0][0], (const void*)&(config->colors[0][0]), DEVICECOUNT*DEVICESIZEBYTES);
+    //memcpy((void *)&AnimationBuffer[0][0], (const void*)&(config->colors[0][0]), DEVICECOUNT*DEVICESIZEBYTES);
+    AnimationUpdateBuffer();
     
     AnimationFrame = 0;
     ReadyToUpdate = TRUE;
@@ -55,7 +56,12 @@ void AnimationStop(void)
 
 void AnimationUpdateBuffer(void)
 {
-    memcpy((void *)&AnimationBuffer[0][0], (const void*)&(animConfigPtr->colors[0][0]), DEVICECOUNT*DEVICESIZEBYTES);
+    int i;
+    BYTE *animPtr = (BYTE*)&AnimationBuffer[0][0];
+    BYTE *colorPtr = (BYTE*)&(animConfigPtr->colors[0][0]);
+    for(i = 0; i < DEVICECOUNT*DEVICESIZEBYTES; i++) {
+        *animPtr++ = *colorPtr++;
+    }
 }
 
 void AnimOff(BYTE deviceIdx)

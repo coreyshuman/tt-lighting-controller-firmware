@@ -21,8 +21,8 @@ BOOL VerifyConfig(EEPROM_HANDLE *eeHandle, config_t *config)
     EEPROM_STATUS eepromStatus = ReadConfig(eeHandle, config);
     
     if(eepromStatus == EEPROM_SUCCESS) {
-        UINT16 crc = CalculateCrc(((UINT8 *)config)+2, ConfigSize-2);
-        if(crc == config->crc) {
+        UINT16 crc = CalculateCrc(((UINT8 *)config)+2, config->length - 2);
+        if(crc == config->crc && config->length == ConfigSize) {
             // future - check length for possible config updates
             return TRUE;
         } else {
@@ -40,10 +40,12 @@ void SetDefaultConfig(config_t *config)
     for(i=0; i<DEVICECOUNT; i++) {
         config->fanSpeed[i] = 50;
         config->ledMode[i] = 2;
+        config->ledSpeed[i] = 5;
+        config->unused1 = 0;
         for(j=0; j<DEVICESIZEBYTES; j++) {
             BYTE ledIdx = j / 3;
             BYTE colorIdx = j % 3;
-            BYTE *color = (BYTE*)&DefaultColors[0] + (ledIdx*sizeof(DWORD)) + colorIdx;
+            BYTE *color = (BYTE*)(&DefaultColors[0]) + (ledIdx*sizeof(BLACK)) + colorIdx;
             config->colors[i][j] = *color;
         }
     }

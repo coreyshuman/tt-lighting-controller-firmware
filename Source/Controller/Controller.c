@@ -45,17 +45,17 @@ void ControllerInitialize(void)
 {
     EepromInit(&eepromHandle, EE_I2C, 400000, EE_ADDR, FALSE);
     configHandle = ConfigInit(&eepromHandle);
+    
     LightingInit();
     AnimationInit(configHandle);
+    
     FanInit();
     FanSetSpeeds(configHandle->fanSpeed);
     
     AnimationSetInterval(500);
-    
-    //AnimationUpdate();
-    
+    AnimationUpdate();
     AnimationStart();
-    AnimationUpdateBuffer();
+    
     RxFrameValid = FALSE;
 }
 

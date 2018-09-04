@@ -11,9 +11,11 @@
 typedef struct __attribute__((__packed__)) _config_t {
     WORD crc;
     WORD length;
-    BYTE fanSpeed[DEVICECOUNT];
-    BYTE ledMode[DEVICECOUNT];
-    BYTE colors[DEVICECOUNT][DEVICESIZEBYTES];
+    BYTE fanSpeed[DEVICECOUNT]; // 4 - 8
+    BYTE ledMode[DEVICECOUNT];  // 9 - 13
+    BYTE ledSpeed[DEVICECOUNT]; // 14 - 18
+    BYTE unused1;               // 19
+    BYTE colors[DEVICECOUNT][DEVICESIZEBYTES]; // 20 - 200
 } config_t ;
 
 #define ConfigSize sizeof(config_t)
