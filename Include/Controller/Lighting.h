@@ -6,7 +6,8 @@
 typedef enum _ANIMATION_MODE {
     OFF = 0,
     STEADY,
-    ROTATE
+    ROTATE,
+    BREATH
 } ANIMATION_MODE;
 
 extern BYTE *LedDrawBuffer;

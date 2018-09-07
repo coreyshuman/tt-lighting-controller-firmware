@@ -29,6 +29,7 @@ extern "C" {
 
     config_t* ConfigInit(EEPROM_HANDLE *eepromHandle);
     BOOL ConfigUpdate(void);
+    void ConfigDefault(void);
 
 
     /* Provide C++ Compatibility */

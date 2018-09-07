@@ -35,7 +35,9 @@ static config_t* configHandle;
 static BYTE ControllerAddress = 0;
 
 void HandleCommand(void);
-void ControlUpdateConfig(void);
+BOOL ControlUpdateConfig(void);
+void ControlDefaultConfig(void);
+
 
 void ControllerInitialize(void) 
 {
@@ -159,7 +161,12 @@ void HandleCommand(void)
             break;
             
         case CMD_UPDATE_CONFIG:
-            ControlUpdateConfig();
+            status = ControlUpdateConfig();
+            SetResponseSendData((void*)&status, 1);
+            break;
+            
+        case CMD_DEFAULT_CONFIG:
+            ControlDefaultConfig();
             status = 1;
             SetResponseSendData((void*)&status, 1);
             break;
@@ -234,9 +241,20 @@ void HandleCommand(void)
 		
 }
 
-void ControlUpdateConfig(void)
+BOOL ControlUpdateConfig(void)
 {
+    if(configHandle->length != (RcvBuff.Data[2] + (RcvBuff.Data[3] << 8))) {
+        return 0;
+    }
     memcpy((void*)configHandle, (void*)&RcvBuff.Data[0], ConfigSize);
+    AnimationUpdateBuffer();
+    FanSetSpeeds(configHandle->fanSpeed);
+    return 1;
+}
+
+void ControlDefaultConfig(void)
+{
+    ConfigDefault();
     AnimationUpdateBuffer();
     FanSetSpeeds(configHandle->fanSpeed);
 }

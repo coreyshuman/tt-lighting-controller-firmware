@@ -99,3 +99,8 @@ BOOL ConfigUpdate(void)
     Config.crc = CalculateCrc(((UINT8 *)&Config)+2, ConfigSize-2);
     return WriteConfig(configEepromHandle, &Config) == EEPROM_SUCCESS;
 }
+
+void ConfigDefault(void)
+{
+    SetDefaultConfig(&Config);
+}

@@ -109,6 +109,25 @@ void AnimRotate(BYTE deviceIdx)
     }
 }
 
+void AnimBreath(BYTE deviceIdx) {
+    BYTE i;
+    BYTE frame = AnimationFrame[deviceIdx] % 12;
+    BYTE dir = (AnimationFrame[deviceIdx] % 24) < 12;
+    
+    if(AnimationFrame[deviceIdx] == 48) {
+        AnimationFrame[deviceIdx] = 0;
+    }
+    
+    
+    for(i = 0; i < DEVICELEDCOUNT; i++)
+    {
+        BYTE div = dir ? frame : 12 - frame;
+        div += 1;
+        BYTE* colorPtr = &AnimationBuffer[deviceIdx][i*3];
+        SetDeviceLedColor(deviceIdx, i, *colorPtr / div, *(colorPtr+1) / div, *(colorPtr+2) / div);
+    }
+}
+
 // setup next frame
 void AnimationUpdate(void)
 {
@@ -136,6 +155,10 @@ void AnimationUpdate(void)
 
                 case ROTATE:
                     AnimRotate(i);
+                    break;
+                    
+                case BREATH:
+                    AnimBreath(i);
                     break;
             }                
         }
