@@ -41,16 +41,6 @@
 #pragma config FUSBIDIO =   OFF
 #pragma config FVBUSONIO =  OFF
 
-#define SWITCH_PRESSED 0
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
 INT main(void)
 {
 	UINT pbClk;

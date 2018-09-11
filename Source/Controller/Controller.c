@@ -14,13 +14,7 @@ typedef struct
 	
 }T_FRAME;
 
-static const UINT8 BootInfo[2] =
-{
-    MAJOR_VERSION,
-    MINOR_VERSION
-};
-
-static const UINT8 FirmwareInfo[2] =
+static const UINT8 FirmwareInfo[2] __attribute__((section("app_vars"), address(0x9FC00920))) =
 {
     MAJOR_VERSION,
     MINOR_VERSION
@@ -33,6 +27,9 @@ static BOOL RxFrameValid;
 static EEPROM_HANDLE eepromHandle;
 static config_t* configHandle;
 static BYTE ControllerAddress = 0;
+
+
+
 
 void HandleCommand(void);
 BOOL ControlUpdateConfig(void);
@@ -143,7 +140,7 @@ void HandleCommand(void)
 	switch(cmd)
 	{
 		case CMD_READ_BOOT_INFO: // Read bootloader version info.
-			SetResponseSendData((void*)&BootInfo, 2);
+			SetResponseSendData((void*)BOOTLOADER_VERSION_ADDRESS, 2);
 			break;
             
         case CMD_READ_FIRMWARE_INFO: // Read firmware version info.

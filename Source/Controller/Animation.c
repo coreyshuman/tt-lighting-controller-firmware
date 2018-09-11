@@ -145,19 +145,19 @@ void AnimationUpdate(void)
             }
             
             switch(animConfigPtr->ledMode[i]) {
-                case OFF:
+                case ANIM_OFF:
                     AnimOff(i);
                     break;
 
-                case STEADY:
+                case ANIM_STEADY:
                     AnimSteady(i);
                     break;
 
-                case ROTATE:
+                case ANIM_ROTATE:
                     AnimRotate(i);
                     break;
                     
-                case BREATH:
+                case ANIM_BREATH:
                     AnimBreath(i);
                     break;
             }                

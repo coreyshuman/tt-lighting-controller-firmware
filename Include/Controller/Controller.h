@@ -12,7 +12,9 @@
 #define CONTROLLER_BUFF_SIZE 960        // (60 * N), N = 16
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 #define MAJOR_VERSION        1
-#define MINOR_VERSION        4
+#define MINOR_VERSION        5
+
+#define BOOTLOADER_VERSION_ADDRESS      0x9FC00490
 
 typedef enum _CONTROL_ERROR_CODES {
     RESPONSE_TOO_LONG = 0x01,

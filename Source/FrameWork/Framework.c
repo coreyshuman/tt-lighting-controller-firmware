@@ -39,7 +39,7 @@
 
 #include "GenericTypeDefs.h"
 #include "HardwareProfile.h"
-#include "Include\main.h"
+#include "Include\bootloader.h"
 #include "Include\Framework\Framework.h"
 #include "Include\NVMem.h"
 #include  <string.h>

@@ -80,7 +80,7 @@
 #pragma config FVBUSONIO =  OFF
 
 #define SWITCH_PRESSED 0
-
+#define ReadSwitchStatus() PORTBbits.RB0
 
 #ifdef __cplusplus
 extern "C" {
@@ -116,7 +116,7 @@ INT main(void)
 	// Setup configuration
 	pbClk = SYSTEMConfig(SYS_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
 	
-	InitLED();
+	//InitLED();
     
 	//while(1);
 	// Enter firmware upgrade mode if there is a trigger or if the application is not valid
@@ -132,7 +132,7 @@ INT main(void)
 			TRANS_LAYER_Task(); // Run Transport layer tasks
 			FRAMEWORK_FrameWorkTask(); // Run frame work related tasks (Handling Rx frame, process frame and so on)
 			// Blink LED (Indicates the user that bootloader is running).
-			BlinkLED();	
+			//BlinkLED();	
 		}
 		// Close transport layer.
 		TRANS_LAYER_Close();

@@ -4,10 +4,10 @@
 #define INNERBITDELAY   0x72
 
 typedef enum _ANIMATION_MODE {
-    OFF = 0,
-    STEADY,
-    ROTATE,
-    BREATH
+    ANIM_OFF = 0,
+    ANIM_STEADY,
+    ANIM_ROTATE,
+    ANIM_BREATH
 } ANIMATION_MODE;
 
 extern BYTE *LedDrawBuffer;
