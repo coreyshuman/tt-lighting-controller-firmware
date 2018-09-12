@@ -60,7 +60,7 @@
 #pragma config OSCIOFNC =   OFF
 #pragma config FPBDIV =     DIV_1
 #pragma config FCKSM =      CSDCMD
-#pragma config WDTPS =      PS1048576
+#pragma config WDTPS =      PS4096
 #pragma config FWDTEN =     OFF
 #pragma config WINDIS =     OFF
 #pragma config FWDTWINSZ =  WINSZ_50
@@ -79,13 +79,14 @@
 #pragma config FUSBIDIO =   OFF
 #pragma config FVBUSONIO =  OFF
 
-#define SWITCH_PRESSED 0
-#define ReadSwitchStatus() PORTBbits.RB0
+
+// Byte data address set outside of bootloader, by main application
+BYTE BootloaderModeFlag __attribute__((persistent, address(BOOTLOADER_MODE_ADDRESS)));
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-BOOL CheckTrigger(void);
+BOOL CheckSoftwareResetToBootloader(void);
 void JumpToApp(void);
 BOOL ValidAppPresent(void);
 #ifdef __cplusplus
@@ -116,13 +117,10 @@ INT main(void)
 	// Setup configuration
 	pbClk = SYSTEMConfig(SYS_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
 	
-	//InitLED();
-    
-	//while(1);
 	// Enter firmware upgrade mode if there is a trigger or if the application is not valid
-	if(CheckTrigger() || !ValidAppPresent())
+	if(CheckSoftwareResetToBootloader() || !ValidAppPresent())
 	{
-		// Initialize the transport layer - UART/USB/Ethernet
+		// Initialize the USB transport layer
 		TRANS_LAYER_Init(pbClk);
 		
 		while(!FRAMEWORK_ExitFirmwareUpgradeMode()) // Be in loop till framework receives "run application" command from PC
@@ -130,12 +128,15 @@ INT main(void)
 			// Enter firmware upgrade mode.
 			// Be in loop, looking for commands from PC
 			TRANS_LAYER_Task(); // Run Transport layer tasks
-			FRAMEWORK_FrameWorkTask(); // Run frame work related tasks (Handling Rx frame, process frame and so on)
-			// Blink LED (Indicates the user that bootloader is running).
-			//BlinkLED();	
+			FRAMEWORK_FrameWorkTask(); // Run frame work related tasks (Handling Rx frame, process frame and so on)	
 		}
 		// Close transport layer.
 		TRANS_LAYER_Close();
+        
+        // Do soft reset here. On reboot, if app present bootloader will jump
+        // straight to the app.
+        SoftReset();
+        while(1);
 	}
 
 	
@@ -147,13 +148,13 @@ INT main(void)
 
 
 /********************************************************************
-* Function: 	CheckTrigger()
+* Function: 	CheckSoftwareResetToBootloader()
 *
 * Precondition: 
 *
 * Input: 		None.
 *
-* Output:		TRUE: If triggered
+* Output:		TRUE: If bootloader mode triggered
 				FALSE: No trigger
 *
 * Side Effects:	None.
@@ -164,18 +165,15 @@ INT main(void)
 *			
 * Note:		 	None.
 ********************************************************************/
-BOOL  CheckTrigger(void)
+BOOL  CheckSoftwareResetToBootloader(void)
 {
-	UINT SwitchStatus;
-	SwitchStatus = ReadSwitchStatus();
-	if(SwitchStatus == SWITCH_PRESSED)
+	if(BootloaderModeFlag == BOOTLOADER_MODE_FLAG)
 	{
-		// Switch is pressed
+		BootloaderModeFlag = 0;
 		return TRUE;		
 	}	
 	else
 	{
-		// Switch is not pressed.
 		return FALSE;	
 	}	
 }	

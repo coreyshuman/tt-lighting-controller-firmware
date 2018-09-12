@@ -11,10 +11,14 @@
 // N = 16 keeps both buffers multiples of 64.
 #define CONTROLLER_BUFF_SIZE 960        // (60 * N), N = 16
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
-#define MAJOR_VERSION        1
-#define MINOR_VERSION        5
 
-#define BOOTLOADER_VERSION_ADDRESS      0x9FC00490
+#define MAJOR_VERSION        1
+#define MINOR_VERSION        6
+
+#define BOOTLOADER_MODE_ADDRESS         0xA0003FF0
+#define BOOTLOADER_MODE_FLAG            0x33
+#define BOOTLOADER_VERSION_ADDRESS      0x9FC00500
+#define APP_VERSION_ADDRESS             0x9D00EFF0
 
 typedef enum _CONTROL_ERROR_CODES {
     RESPONSE_TOO_LONG = 0x01,
@@ -29,6 +33,8 @@ typedef enum _CONTROL_ERROR_CODES {
 enum _CONTROL_CMD {
     CMD_READ_BOOT_INFO = 0x01,
     CMD_READ_FIRMWARE_INFO = 0x02,
+    CMD_RESET_TO_BOOTLOADER = 0x03,
+    CMD_READ_BOOT_STATUS = 0x04,
     CMD_READ_CONTROLLER_ADDRESS = 0x0A,
     CMD_READ_EE_DEBUG = 0x10,
     CMD_READ_CONFIG = 0x30,

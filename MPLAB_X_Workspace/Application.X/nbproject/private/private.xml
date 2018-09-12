@@ -12,6 +12,7 @@
             <file>file:/D:/Devel/thermaltake-controller/Project/linker_scripts/app_32MX230F064D.ld</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Eeprom.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/linker_scripts/btl_32MX230F064D_generic.ld</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Main.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Config.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Config.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Controller.h</file>

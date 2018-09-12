@@ -14,12 +14,13 @@ typedef struct
 	
 }T_FRAME;
 
-static const UINT8 FirmwareInfo[2] __attribute__((section("app_vars"), address(0x9FC00920))) =
+static const UINT8 FirmwareInfo[2] __attribute__((section("app_vars"), address(APP_VERSION_ADDRESS))) =
 {
     MAJOR_VERSION,
     MINOR_VERSION
 };
 
+BYTE BootloaderModeFlag __attribute__((address(BOOTLOADER_MODE_ADDRESS))) = 0;
 
 static T_FRAME RcvBuff;
 static T_FRAME TxmBuff;
@@ -27,7 +28,7 @@ static BOOL RxFrameValid;
 static EEPROM_HANDLE eepromHandle;
 static config_t* configHandle;
 static BYTE ControllerAddress = 0;
-
+static DWORD LastResetStatus =  0;
 
 
 
@@ -55,6 +56,9 @@ void ControllerInitialize(void)
     RxFrameValid = FALSE;
     
     ControllerAddress = PORTA & 0x03 | ((PORTB & 0x03) << 2);
+    
+    LastResetStatus = RCON;
+    RCONCLR = 0xFFFFFFFF;
 }
 
 void ControllerLoop(void)
@@ -86,6 +90,13 @@ void SetReceiveErrorOccured(CONTROL_ERROR_CODES errorCode)
     RcvBuff.Cmd = 0x40;
     RcvBuff.Data[0] = errorCode;
     RxFrameValid = TRUE;
+}
+
+void ResetToBootloader()
+{
+    BootloaderModeFlag = BOOTLOADER_MODE_FLAG;
+    SoftReset();
+    while(1);
 }
 
 // Setup send response to USB. Data is copied to TX buffer if data not NULL.
@@ -145,6 +156,14 @@ void HandleCommand(void)
             
         case CMD_READ_FIRMWARE_INFO: // Read firmware version info.
 			SetResponseSendData((void*)&FirmwareInfo, 2);
+			break;
+            
+        case CMD_RESET_TO_BOOTLOADER: 
+			ResetToBootloader();
+			break;
+            
+        case CMD_READ_BOOT_STATUS:
+			SetResponseSendData((void*)&LastResetStatus, 4);
 			break;
             
         case CMD_READ_CONTROLLER_ADDRESS:

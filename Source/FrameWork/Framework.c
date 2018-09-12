@@ -100,7 +100,7 @@ typedef struct
 }T_HEX_RECORD;	
 
 
-static const UINT8 BootInfo[2] =
+static const UINT8 BootloaderInfo[2] __attribute__((section("boot_vars"), address(BOOTLOADER_VERSION_ADDRESS))) =
 {
     MAJOR_VERSION,
     MINOR_VERSION
@@ -198,7 +198,7 @@ void HandleCommand(void)
 	switch(Cmd)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
-			memcpy(&TxBuff.Data[1], BootInfo, 2);
+			memcpy(&TxBuff.Data[1], BootloaderInfo, 2);
 			//Set the transmit frame length.
 			TxBuff.Len = 2 + 1; // Boot Info Fields	+ command
 			break;

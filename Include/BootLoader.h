@@ -29,9 +29,12 @@
 
 
 //-------User configurable macros begin---------
-#define MAJOR_VERSION 2
-#define MINOR_VERSION 0
-
+#define MAJOR_VERSION 3
+#define MINOR_VERSION 3
+#define BOOTLOADER_MODE_FLAG            0x33
+#define BOOTLOADER_MODE_ADDRESS         0xA0003FF0
+#define BOOTLOADER_VERSION_ADDRESS      0x9FC00500
+#define APP_VERSION_ADDRESS             0x9FC0FFF0
 
 /* APP_FLASH_BASE_ADDRESS and APP_FLASH_END_ADDRESS reserves program Flash for the application*/ 
 /* Rule: 

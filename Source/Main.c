@@ -22,7 +22,7 @@
 #pragma config OSCIOFNC =   OFF
 #pragma config FPBDIV =     DIV_1
 #pragma config FCKSM =      CSDCMD
-#pragma config WDTPS =      PS1048576
+#pragma config WDTPS =      PS4096
 #pragma config FWDTEN =     OFF
 #pragma config WINDIS =     OFF
 #pragma config FWDTWINSZ =  WINSZ_50
@@ -94,6 +94,8 @@ INT main(void)
     TRISBbits.TRISB9 = 1;
     TRISCbits.TRISC6 = 1;
     
+    EnableWDT();
+    
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
     
@@ -103,6 +105,7 @@ INT main(void)
     {
         TRANS_LAYER_Task(); // Run Transport layer tasks
         ControllerLoop();
+        ClearWDT(); 
     }
 
     // Close transport layer.
