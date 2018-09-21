@@ -199,8 +199,9 @@ void HandleCommand(void)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
 			memcpy(&TxBuff.Data[1], BootloaderInfo, 2);
+            memcpy(&TxBuff.Data[3], APP_VERSION_ADDRESS, 2);
 			//Set the transmit frame length.
-			TxBuff.Len = 2 + 1; // Boot Info Fields	+ command
+			TxBuff.Len = 4 + 1; // Boot Info Fields	+ command
 			break;
 			
 		case ERASE_FLASH:

@@ -175,7 +175,6 @@ void UsbTasks(void)
 {
 	UINT TxLen;
 	UINT8 *TxPtr;
-	volatile test;
 	
 	
 	 #if defined(USB_POLLING)		
