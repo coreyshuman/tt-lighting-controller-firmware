@@ -114,6 +114,9 @@ static BOOL TriggerBaudChange;
 static DWORD_VAL NewBaud;
 static BOOL RunApplication = FALSE;
 
+DWORD LastResetStatus = 0;
+BYTE ControllerAddress = 0;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -147,7 +150,6 @@ UINT16 CalculateCrc(UINT8 *data, UINT32 len);
 ********************************************************************/
 void FrameWorkTask(void)
 {
-
 	if(RxFrameValid)
 	{
 		// Valid frame received, process the command.
@@ -193,15 +195,17 @@ void HandleCommand(void)
 	
 	// Reset the response length to 0.
 	TxBuff.Len = 0;
-				
+	
 	// Process the command.		
 	switch(Cmd)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
 			memcpy(&TxBuff.Data[1], BootloaderInfo, 2);
             memcpy(&TxBuff.Data[3], APP_VERSION_ADDRESS, 2);
+            memcpy(&TxBuff.Data[5], (void*)&LastResetStatus, 4); // boot status
+            memcpy(&TxBuff.Data[9], (void*)&ControllerAddress, 1); // address
 			//Set the transmit frame length.
-			TxBuff.Len = 4 + 1; // Boot Info Fields	+ command
+			TxBuff.Len = 9 + 1; // Boot Info Fields	+ command
 			break;
 			
 		case ERASE_FLASH:

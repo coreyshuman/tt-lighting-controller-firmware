@@ -83,6 +83,7 @@
 // Byte data address set outside of bootloader, by main application
 BYTE BootloaderModeFlag __attribute__((persistent, address(BOOTLOADER_MODE_ADDRESS)));
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -116,6 +117,17 @@ INT main(void)
 
 	// Setup configuration
 	pbClk = SYSTEMConfig(SYS_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
+    
+    // no analog inputs
+    ANSELA = 0;
+    ANSELB = 0;
+    ANSELC = 0;
+    LATASET = 0x3;
+    LATBSET = 0x3;
+    ControllerAddress = PORTA & 0x03 | ((PORTB & 0x03) << 2);
+    
+    LastResetStatus = RCON;
+    RCONCLR = 0xFFFFFFFF;
 	
 	// Enter firmware upgrade mode if there is a trigger or if the application is not valid
 	if(CheckSoftwareResetToBootloader() || !ValidAppPresent())

@@ -30,12 +30,13 @@
 
 #define FRAMEWORK_BUFF_SIZE					1000
 
-#define APP_VERSION_ADDRESS             0x9D00EFF0
-
 #define FRAMEWORK_FrameWorkTask 			FrameWorkTask
 #define FRAMEWORK_BuildRxFrame  			BuildRxFrame
 #define FRAMEWORK_GetTransmitFrame 			GetTransmitFrame
 #define FRAMEWORK_ExitFirmwareUpgradeMode 	ExitFirmwareUpgradeMode
+
+extern DWORD LastResetStatus;
+extern BYTE ControllerAddress;
 
 // Exported functions
 #ifdef __cplusplus
