@@ -3,7 +3,7 @@
  Dependencies:	See INCLUDES section
  Processor:		PIC18 or PIC24 USB Microcontrollers
  Hardware:		The code is natively intended to be used on the following
- 				hardware platforms: PICDEM™ FS USB Demo Board, 
+ 				hardware platforms: PICDEMï¿½ FS USB Demo Board, 
  				PIC18F87J50 FS USB Plug-In Module, or
  				Explorer 16 + PIC24 USB PIM.  The firmware may be
  				modified for use on other USB platforms by editing the
@@ -14,8 +14,8 @@
  Software License Agreement:
 
  The software supplied herewith by Microchip Technology Incorporated
- (the “Company”) for its PIC® Microcontroller is intended and
- supplied to you, the Company’s customer, for use solely and
+ (the ï¿½Companyï¿½) for its PICï¿½ Microcontroller is intended and
+ supplied to you, the Companyï¿½s customer, for use solely and
  exclusively on Microchip PIC Microcontroller products. The
  software is owned by the Company and/or its supplier, and is
  protected under applicable copyright laws. All rights are reserved.
@@ -24,7 +24,7 @@
  civil liability for the breach of the terms and conditions of this
  license.
 
- THIS SOFTWARE IS PROVIDED IN AN “AS IS” CONDITION. NO WARRANTIES,
+ THIS SOFTWARE IS PROVIDED IN AN ï¿½AS ISï¿½ CONDITION. NO WARRANTIES,
  WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED
  TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
  PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. THE COMPANY SHALL NOT,
@@ -163,7 +163,7 @@ state according to the definition in the USB specification.
 #endif
 
 #define USB_VENDOR_ID 0x04D8
-#define USB_PRODUCT_ID 0x003C
+#define USB_PRODUCT_ID 0x3033
 
 /* Device Descriptor */
 ROM USB_DEVICE_DESCRIPTOR device_dsc=
@@ -242,15 +242,15 @@ sizeof(sd000),USB_DESCRIPTOR_STRING,{0x0409
 //Manufacturer string descriptor
 ROM struct{BYTE bLength;BYTE bDscType;WORD string[25];}sd001={
 sizeof(sd001),USB_DESCRIPTOR_STRING,
-{'M','i','c','r','o','c','h','i','p',' ',
-'T','e','c','h','n','o','l','o','g','y',' ','I','n','c','.'
+{'V','e','l','d','t',' ','R','o','b','o',
+'t','i','c','s',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '
 }};
 
 //Product string descriptor
-ROM struct{BYTE bLength;BYTE bDscType;WORD string[18];}sd002={
+ROM struct{BYTE bLength;BYTE bDscType;WORD string[21];}sd002={
 sizeof(sd002),USB_DESCRIPTOR_STRING,
-{'U','S','B',' ','H','I','D',' ','B','o','o',
-'t','l','o','a','d','e','r'
+{'T','h','e','r','m','a','l','t','a','k','e',
+'B','o','0','t','l','o','a','d','e','r'
 }};
 
 //Class specific descriptor - HID 

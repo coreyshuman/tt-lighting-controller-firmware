@@ -66,11 +66,6 @@ int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAdd
 int EepromRead(EEPROM_HANDLE *handle);
 int EepromWrite(EEPROM_HANDLE *handle);
 
-
-// cts debug
-void resetDebug();
-int getDebug(char *d);
-
 #ifdef	__cplusplus
 }
 #endif

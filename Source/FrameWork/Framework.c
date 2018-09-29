@@ -184,7 +184,7 @@ void HandleCommand(void)
 	UINT8 i;
 	DWORD_VAL Length;
 	UINT8 *DataPtr;
-	UINT Result;
+	volatile UINT Result;
 	WORD_VAL crc;
 	void* pFlash;
 	
@@ -212,11 +212,9 @@ void HandleCommand(void)
 			pFlash = (void*)APP_FLASH_BASE_ADDRESS;									
 			for( i = 0; i < ((APP_FLASH_END_ADDRESS - APP_FLASH_BASE_ADDRESS + 1)/FLASH_PAGE_SIZE); i++ )
 			{
-				
 				Result = NVMemErasePage( pFlash + (i*FLASH_PAGE_SIZE) );
 				// Assert on NV error. This must be caught during debug phase.
 				ASSERT(Result==0);
-			
 			}		           
             //Set the transmit frame length.
             TxBuff.Len = 1; // Command

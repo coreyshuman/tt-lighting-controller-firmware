@@ -201,12 +201,12 @@ void HandleCommand(void)
             SetResponseSendData(NULL, length);
             break;
 			
-        case CMD_READ_EEPROM: // read eeprom, max 30 bytes at a time
+        case CMD_READ_EEPROM: // read eeprom (up to 256 bytes)
             resetDebug(); // cts debug
             eepromHandle.data = &TxmBuff.Data[0];
-            eepromHandle.len = RcvBuff.Data[1];
+            eepromHandle.len = RcvBuff.Data[1] + (RcvBuff.Data[2] << 8);
             eepromHandle.address = RcvBuff.Data[0];
-            if(eepromHandle.len + eepromHandle.address >= 256) {
+            if(eepromHandle.len + eepromHandle.address > 256) {
                 eepromHandle.len = 256 - eepromHandle.address;
             }
             length = eepromHandle.len;

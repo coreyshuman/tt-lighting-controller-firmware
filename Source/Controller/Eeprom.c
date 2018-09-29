@@ -4,30 +4,6 @@
 #include <plib.h>
 #include "Controller/Eeprom.h"
 
-static char eepromDebug[960];
-static int eepromDebugLen;
-static EEPROM_STATE_MACHINE eepromDebugLastState = 0xFF;
-
-void putDebug(char d) {
-    if(eepromDebugLen >= 960) {
-        return;
-    }
-    eepromDebug[eepromDebugLen++] = d;
-}
-
-void resetDebug() {
-    eepromDebugLen = 0;
-    eepromDebugLastState = 0xFF;
-}
-
-int getDebug(char *d) {
-    int i;
-    for(i=0; i < eepromDebugLen; i++) {
-        d[i] = eepromDebug[i];
-    }
-    return eepromDebugLen;
-}
-
 int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAddress, BOOL address16bit)
 {
     WORD *dataPtr;
@@ -139,7 +115,6 @@ void EEReStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
             break;
         default:
             handle->deviceState = EE_ERROR;
-            putDebug('$');
             break;
     }
 }
@@ -183,7 +158,6 @@ void EESendWaitForCompletion(EEPROM_HANDLE *handle, BOOL polling, EEPROM_STATE_M
             handle->deviceState = EE_RESEND;
         } else {
             handle->deviceState = EE_ERROR;
-            putDebug('%');
         }
         return;
     }
@@ -244,7 +218,6 @@ void EEReadWait(EEPROM_HANDLE *handle)
 BOOL CheckRetry(EEPROM_HANDLE *handle) {
     if(handle->retry <= 0 || handle->resend <= 0 || handle->deviceState == EE_ERROR) {
         EEStop(handle);
-        putDebug('!');
         return TRUE;
     }
     return FALSE;
@@ -252,11 +225,6 @@ BOOL CheckRetry(EEPROM_HANDLE *handle) {
 
 int EepromRead(EEPROM_HANDLE *handle)
 {
-    // cts debug
-    if(handle->deviceState != eepromDebugLastState) {
-        eepromDebugLastState = handle->deviceState;
-        putDebug(handle->deviceState);
-    }
     int ret = 0;
     if(CheckRetry(handle)) return EEPROM_FAIL;
     
@@ -301,7 +269,6 @@ int EepromRead(EEPROM_HANDLE *handle)
             break;
         default:
             handle->deviceState = EE_ERROR;
-            putDebug('"');
             break;
     }
     
@@ -310,13 +277,7 @@ int EepromRead(EEPROM_HANDLE *handle)
 }
 
 int EepromWrite(EEPROM_HANDLE *handle)
-{
-    // cts debug
-    if(handle->deviceState != eepromDebugLastState) {
-        eepromDebugLastState = handle->deviceState;
-        putDebug(handle->deviceState);
-    }
-    
+{   
     int ret = 0;
     if(CheckRetry(handle)) return EEPROM_FAIL;
     
@@ -357,7 +318,6 @@ int EepromWrite(EEPROM_HANDLE *handle)
             break;
         default:
             handle->deviceState = EE_ERROR;
-            putDebug('#');
             break;
     }
     

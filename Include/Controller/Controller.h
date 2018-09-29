@@ -13,7 +13,7 @@
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 
 #define MAJOR_VERSION        1
-#define MINOR_VERSION        6
+#define MINOR_VERSION        8
 
 #define BOOTLOADER_MODE_ADDRESS         0xA0003FF0
 #define BOOTLOADER_MODE_FLAG            0x33

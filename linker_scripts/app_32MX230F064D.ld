@@ -43,8 +43,8 @@ _ebase_address =  0x9D006000;
 _RESET_ADDR              = (0x9D006000 + 0x1000);
 _BEV_EXCPT_ADDR          = ((0x9D006000 + 0x1000) + 0x380);
 _DBG_EXCPT_ADDR          = ((0x9D006000 + 0x1000) + 0x480);
-_DBG_CODE_ADDR           = 0x9FC00490;
-_DBG_CODE_SIZE           = 0x760     ;
+_DBG_CODE_ADDR           = 0x9FC00600;
+_DBG_CODE_SIZE           = (0xBFF - 0x600);
 _GEN_EXCPT_ADDR          = _ebase_address + 0x180;
 
 /*************************************************************************
@@ -58,10 +58,10 @@ MEMORY
 {
   kseg0_program_mem    (rx)  : ORIGIN = (0x9D006000 + 0x1000 + 0x490 + 0x10), LENGTH = 0x10000 - (0x6000 + 0x1000 + 0x490 + 0x10) /* All C Files will be located here */ 
   exception_mem              : ORIGIN = 0x9D006000, LENGTH = 0x1000 /* Interrupt vector table */
-  debug_exec_mem             : ORIGIN = 0x9FC00490, LENGTH = 0x760
+  debug_exec_mem             : ORIGIN = 0x9FC00600, LENGTH = (0xBFF - 0x600)
   kseg0_boot_mem             : ORIGIN = 0x9D006000, LENGTH = 0x0 /* This memory region is dummy */ 
   kseg1_boot_mem             : ORIGIN = (0x9D006000 + 0x1000), LENGTH = 0x490 /* C Startup code */
-  boot_vars                  : ORIGIN = 0x9FC00490, LENGTH = 0x10
+  boot_vars                  : ORIGIN = 0x9FC00500, LENGTH = 0x10
   app_vars             (r!x) : ORIGIN = (0x9D006000 + 0x1000 + 0x490), LENGTH = 0x10
   config3                    : ORIGIN = 0xBFC00BF0, LENGTH = 0x4
   config2                    : ORIGIN = 0xBFC00BF4, LENGTH = 0x4

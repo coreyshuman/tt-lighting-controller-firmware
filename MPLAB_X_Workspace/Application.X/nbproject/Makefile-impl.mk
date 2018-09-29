@@ -27,11 +27,11 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=Application.X
 
 # Active Configuration
-DEFAULTCONF=default
+DEFAULTCONF=default__bootloaded_
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=default 
+ALLCONFS=default__bootloaded_ standalone 
 
 
 # build
@@ -45,13 +45,15 @@ ALLCONFS=default
 
 # clobber
 .clobber-impl: .clobber-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default__bootloaded_ clean
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=standalone clean
 
 
 
 # all
 .all-impl: .all-pre .depcheck-impl
-	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=default__bootloaded_ build
+	    ${MAKE} SUBPROJECTS=${SUBPROJECTS} CONF=standalone build
 
 
 

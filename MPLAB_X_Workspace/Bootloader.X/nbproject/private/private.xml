@@ -5,23 +5,21 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Controller.c</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Source/NVMem.c</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Fan.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/USB/usb_descriptors.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/FrameWork/Framework.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Lighting.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Eeprom.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Animation.c</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Source/Main.c</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Util.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/linker_scripts/app_32MX230F064D.ld</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/USB/usb_descriptors_app.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Eeprom.h</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/linker_scripts/btl_32MX230F064D_generic.ld</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Framework/Framework.h</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Config.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Debug.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Config.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Controller.h</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Lighting.h</file>
+            <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Debug.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/BootLoader.h</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Source/BootLoader.c</file>
-            <file>file:/D:/Devel/thermaltake-controller/Project/Source/Controller/Fan.c</file>
             <file>file:/D:/Devel/thermaltake-controller/Project/Include/Controller/Animation.h</file>
         </group>
     </open-files>

@@ -163,7 +163,7 @@ state according to the definition in the USB specification.
 #endif
 
 #define USB_VENDOR_ID 0x04D8
-#define USB_PRODUCT_ID 0x0033
+#define USB_PRODUCT_ID 0x3034
 
 /* Device Descriptor */
 ROM USB_DEVICE_DESCRIPTOR device_dsc=

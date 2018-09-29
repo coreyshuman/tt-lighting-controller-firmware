@@ -3,8 +3,8 @@
 
 #include "Config.h"
 
-#define ANIMATION_INTERVAL      100 // ms
-#define MAX_ANIMATION_FRAMES    60
+#define ANIMATION_INTERVAL      50 // ms
+#define MAX_ANIMATION_FRAMES    120
 
 // 00 blue red green
 enum _colors {

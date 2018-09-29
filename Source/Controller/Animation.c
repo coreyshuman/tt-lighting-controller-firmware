@@ -7,6 +7,7 @@
 #include "Lighting.h"
 #include "Animation.h"
 #include "Config.h"
+#include "Debug.h"
 
 
 static BOOL ReadyToUpdate = 0;
@@ -109,22 +110,30 @@ void AnimRotate(BYTE deviceIdx)
     }
 }
 
+static float BreathBrightnessSteps[24] = {
+  1.00f, 0.99f, 0.98f, 0.97f, 0.96f, 0.95f,
+  0.92f, 0.90f, 0.88f, 0.86f, 0.83f, 0.79f,
+  0.75f, 0.71f, 0.68f, 0.63f, 0.58f, 0.53f,
+  0.47f, 0.40f, 0.30f, 0.20f, 0.10f, 0.05f  
+};
 void AnimBreath(BYTE deviceIdx) {
     BYTE i;
-    BYTE frame = AnimationFrame[deviceIdx] % 12;
-    BYTE dir = (AnimationFrame[deviceIdx] % 24) < 12;
+    BYTE frame = AnimationFrame[deviceIdx] % 24;
+    BOOL dir = (AnimationFrame[deviceIdx] % 48) < 24;
+    BYTE step = dir ? frame : 23 - frame;
     
     if(AnimationFrame[deviceIdx] == 48) {
         AnimationFrame[deviceIdx] = 0;
     }
     
+    putDebug(step);
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
-        BYTE div = dir ? frame : 12 - frame;
-        div += 1;
         BYTE* colorPtr = &AnimationBuffer[deviceIdx][i*3];
-        SetDeviceLedColor(deviceIdx, i, *colorPtr / div, *(colorPtr+1) / div, *(colorPtr+2) / div);
+        SetDeviceLedColor(deviceIdx, i, (BYTE)((*colorPtr) * BreathBrightnessSteps[step]),
+                (BYTE)((*(colorPtr+1)) * BreathBrightnessSteps[step]),
+                (BYTE)((*(colorPtr+2)) * BreathBrightnessSteps[step]));
     }
 }
 
