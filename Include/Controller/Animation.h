@@ -4,7 +4,7 @@
 #include "Config.h"
 
 #define ANIMATION_INTERVAL      50 // ms
-#define MAX_ANIMATION_FRAMES    120
+#define MAX_ANIMATION_FRAMES    144
 
 // 00 blue red green
 enum _colors {
@@ -24,7 +24,13 @@ enum _colors {
     BLACK =     0x00000000
 } COLORS;
 
-
+typedef enum _ANIMATION_MODE {
+    ANIM_OFF = 0,
+    ANIM_STEADY,
+    ANIM_ROTATE,
+    ANIM_BREATH,
+    ANIM_RIPPLE
+} ANIMATION_MODE;
 
 /* Provide C++ Compatibility */
 #ifdef __cplusplus

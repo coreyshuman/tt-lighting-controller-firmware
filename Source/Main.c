@@ -1,10 +1,10 @@
 
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "./GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
 #include "Main.h"
-#include "Include\Controller\Controller.h"
+#include "./Controller/Controller.h"
 
 /*** DEVCFG0 ***/
 #pragma config DEBUG =      ON

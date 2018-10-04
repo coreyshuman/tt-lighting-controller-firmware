@@ -126,8 +126,6 @@ void AnimBreath(BYTE deviceIdx) {
         AnimationFrame[deviceIdx] = 0;
     }
     
-    putDebug(step);
-    
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
         BYTE* colorPtr = &AnimationBuffer[deviceIdx][i*3];
@@ -136,6 +134,34 @@ void AnimBreath(BYTE deviceIdx) {
                 (BYTE)((*(colorPtr+2)) * BreathBrightnessSteps[step]));
     }
 }
+
+void AnimRipple(BYTE deviceIdx) {
+    int i;
+    BYTE location = AnimationFrame[deviceIdx] % 12;
+    BYTE colorIdx = (BYTE)(AnimationFrame[deviceIdx] / 12);
+    
+    if(AnimationFrame[deviceIdx] == 144) {
+        AnimationFrame[deviceIdx] = 0;
+    }
+    
+    for(i = location; i > location - 4; i--)
+    {
+        BYTE idx = i;
+        if(idx < 0) {
+            idx += 12;
+            colorIdx -= 1;
+            if(colorIdx < 0) {
+                colorIdx += 12;
+            }
+        }
+        BYTE* colorPtr = &AnimationBuffer[deviceIdx][colorIdx*3];
+        int divisor = location - i + 1;
+        SetDeviceLedColor(deviceIdx, idx, (BYTE)((*colorPtr) / divisor),
+                    (BYTE)((*(colorPtr+1)) / divisor),
+                    (BYTE)((*(colorPtr+2)) / divisor));
+    }
+}
+
 
 // setup next frame
 void AnimationUpdate(void)
@@ -168,6 +194,10 @@ void AnimationUpdate(void)
                     
                 case ANIM_BREATH:
                     AnimBreath(i);
+                    break;
+                    
+                case ANIM_RIPPLE:
+                    AnimRipple(i);
                     break;
             }                
         }
