@@ -1,4 +1,4 @@
-#include "Controller/Debug.h"
+#include "./Controller/Debug.h"
 
 static char Debug[960];
 static int DebugLen;

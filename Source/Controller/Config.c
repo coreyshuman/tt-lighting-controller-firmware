@@ -1,9 +1,9 @@
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "Include\Controller\Config.h"
-#include "Animation.h"
+#include "./Controller/Config.h"
+#include "./Controller/Animation.h"
 
 static DWORD DefaultColors[] = {PINK, WINE, RED, ORANGE, SUNSET, YELLOW, LIME, GREEN, TEAL, BLUE, INDIGO, VIOLET};
 //static DWORD DefaultColors[] = {BLACK, WINE, BLACK, BLACK, BLACK, BLACK, LIME, BLACK, BLACK, BLACK, BLACK, BLACK};

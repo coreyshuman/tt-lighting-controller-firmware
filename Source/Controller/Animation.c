@@ -1,13 +1,13 @@
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
 #include <string.h>
-#include "Config.h"
-#include "Lighting.h"
-#include "Animation.h"
-#include "Config.h"
-#include "Debug.h"
+#include "./Controller/Config.h"
+#include "./Controller/Lighting.h"
+#include "./Controller/Animation.h"
+#include "./Controller/Config.h"
+#include "./Controller/Debug.h"
 
 
 static BOOL ReadyToUpdate = 0;

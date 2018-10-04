@@ -1,8 +1,8 @@
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "Controller/Util.h"
+#include "./Controller/Util.h"
 
 /**
  * Static table used for the table_driven implementation.

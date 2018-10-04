@@ -39,14 +39,11 @@
 #include <p32xxxx.h>
 #include <stdlib.h>
 #include <plib.h>
-
-
 #include "./USB/usb.h"
-#include "HardwareProfile.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include "./USB/usb_function_hid.h"
-
-#include "Include\main.h"
-#include "Include\Framework\Framework.h"
+//#include "Main.h"
+#include "./Framework/Framework.h"
 
 
 #define UsbTxBusy() 		(USBHandleBusy(USBInHandle))

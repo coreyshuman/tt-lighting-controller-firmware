@@ -1,8 +1,8 @@
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "Controller/Eeprom.h"
+#include "./Controller/Eeprom.h"
 
 int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAddress, BOOL address16bit)
 {

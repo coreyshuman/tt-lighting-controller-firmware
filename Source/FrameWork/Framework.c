@@ -38,11 +38,11 @@
  **********************************************************************/
 
 #include "GenericTypeDefs.h"
-#include "HardwareProfile.h"
-#include "Include\bootloader.h"
-#include "Include\Framework\Framework.h"
-#include "Include\NVMem.h"
-#include  <string.h>
+#include "./HardwareProfile/HardwareProfile.h"
+#include "./Bootloader.h"
+#include "./Framework/Framework.h"
+#include "./NVMem.h"
+#include <string.h>
 #include <plib.h>
 
 

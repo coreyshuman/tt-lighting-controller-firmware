@@ -1,9 +1,9 @@
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "Config.h"
-#include "Fan.h"
+#include "./Controller/Config.h"
+#include "./Controller/Fan.h"
 
 
 #define FAN_SPEED_NUM       (TIMER_2_FREQ * 60u / 2u)

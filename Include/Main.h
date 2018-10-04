@@ -27,25 +27,6 @@
 
 
 //-------User configurable macros end-----------
+#include "Include\Usb\Usb_Tasks.h"
 
-
-
-#if defined(TRANSPORT_LAYER_UART)
-	#include "Include\Uart\Uart.h"
-#elif defined(TRANSPORT_LAYER_USB)
-	#include "Include\Usb\Usb_Tasks.h"
-#elif defined(TRANSPORT_LAYER_ETH)
-	#include "Include\Ethernet\EthernetTasks.h"
-#elif defined(TRANSPORT_LAYER_SD_CARD)
-	// Add SD card bootloader specific header files
-#elif defined(TRANSPORT_LAYER_USB_HOST)
-    // Add USB Host specific header files.
-#else
-	/* Note ****: User has to define TANSPORT_LAYER . 
-	To do this, in the MPLAB IDE navigate to menu Project->Build Options->Project.
-	Select "MPLAB PIC32 C Compiler" tab. Select categories as "General" from the dropdown list box.
-	Click Add button and define the TANSPORT_LAYER under "Preprocessor Macros".*/
-
-	#error ("TRANSPORT_LAYER is either not defined or not defined properly");
-#endif
 #endif

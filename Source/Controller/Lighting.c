@@ -1,10 +1,9 @@
-
-#include "Include\GenericTypeDefs.h"
-#include "Include\HardwareProfile\HardwareProfile.h"
+#include "GenericTypeDefs.h"
+#include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "Config.h"
-#include "Include\Controller\Lighting.h"
+#include "./Controller/Config.h"
+#include "./Controller/Lighting.h"
 
 BYTE LedBufferA[DEVICECOUNT][DEVICESIZEBYTES];
 BYTE LedBufferB[DEVICECOUNT][DEVICESIZEBYTES];
