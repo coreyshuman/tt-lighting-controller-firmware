@@ -11,8 +11,6 @@
                      displayName="HardwareProfile"
                      projectFiles="true">
         <itemPath>../../Include/HardwareProfile/HardwareProfile.h</itemPath>
-        <itemPath>../../Include/HardwareProfile/HardwareProfile_PIC32MX_PIM_Explorer_16.h</itemPath>
-        <itemPath>../../Include/HardwareProfile/HardwareProfile_PIC32MX_USB_StarterKit.h</itemPath>
         <itemPath>../../Include/HardwareProfile/HardwareProfile_PIC32MX_Thermaltake.h</itemPath>
       </logicalFolder>
       <logicalFolder name="TransportLayer"
@@ -34,6 +32,7 @@
       <itemPath>../../Include/GenericTypeDefs.h</itemPath>
       <itemPath>../../Include/NVMem.h</itemPath>
       <itemPath>../../Include/BootLoader.h</itemPath>
+      <itemPath>../../Include/Common.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -66,6 +65,7 @@
       </logicalFolder>
       <itemPath>../../Source/NVMem.c</itemPath>
       <itemPath>../../Source/BootLoader.c</itemPath>
+      <itemPath>../../Source/Exception.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -136,7 +136,7 @@
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros"
-                  value="_SUPPRESS_PLIB_WARNING;_DISABLE_OPENADC10_CONFIGPORT_WARNING"/>
+                  value="_SUPPRESS_PLIB_WARNING;_DISABLE_OPENADC10_CONFIGPORT_WARNING;_BOOTLOADER"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
         <property key="toplevel-reordering" value=""/>

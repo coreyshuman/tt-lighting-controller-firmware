@@ -43,7 +43,7 @@ _ebase_address =  0x9D000000;
 _RESET_ADDR              = 0xBFC00000;
 _BEV_EXCPT_ADDR          = (0xBFC00000 + 0x380);
 _DBG_EXCPT_ADDR          = (0xBFC00000 + 0x480);
-_DBG_CODE_ADDR          = 0x9FC00600;
+_DBG_CODE_ADDR           = 0x9FC00600;
 _DBG_CODE_SIZE           = (0xBFF - 0x600);
 _GEN_EXCPT_ADDR          = _ebase_address + 0x180;
 

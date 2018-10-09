@@ -38,7 +38,8 @@
         <itemPath>../../Include/USB/usb_config_device.h</itemPath>
       </logicalFolder>
       <itemPath>../../Include/GenericTypeDefs.h</itemPath>
-      <itemPath>../../Include/Main.h</itemPath>
+      <itemPath>../../Include/Common.h</itemPath>
+      <itemPath>../../Include/Exception.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -78,6 +79,7 @@
         <itemPath>../../Source/USB/usb_function_hid.c</itemPath>
       </logicalFolder>
       <itemPath>../../Source/Main.c</itemPath>
+      <itemPath>../../Source/Exception.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -86,12 +88,7 @@
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>../../Include/HardwareProfile</Elem>
     <Elem>../../linker_scripts</Elem>
-    <Elem>../../Source/USB</Elem>
-    <Elem>../../Source/Controller</Elem>
-    <Elem>../../Include/Controller</Elem>
-    <Elem>../../Include/USB</Elem>
     <Elem>../..</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
@@ -373,7 +370,6 @@
       <compileType>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../../../../microchip/harmony/v2_06/bin/framework/peripheral/PIC32MX230F064D_peripherals.a</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
         <archiverTool>
@@ -419,12 +415,12 @@
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
-        <property key="extra-include-directories" value=""/>
+        <property key="extra-include-directories" value="..\..\Include"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="false"/>
         <property key="make-warnings-into-errors" value="false"/>
-        <property key="optimization-level" value="-O1"/>
+        <property key="optimization-level" value=""/>
         <property key="place-data-into-section" value="false"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
@@ -579,6 +575,7 @@
         <property key="UART2" value="true"/>
         <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

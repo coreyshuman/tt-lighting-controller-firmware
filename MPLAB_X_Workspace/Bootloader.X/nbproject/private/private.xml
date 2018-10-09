@@ -3,11 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/HardwareProfile/HardwareProfile.h</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/HardwareProfile/HardwareProfile_PIC32MX_Thermaltake.h</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/Controller/Controller.c</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/USB/Usb_HID_tasks_application.c</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -5,6 +5,7 @@
 #include <string.h>
 #include "./Controller/Config.h"
 #include "./Controller/Controller.h"
+#include "./Common.h"
 
 typedef struct
 {

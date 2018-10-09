@@ -3,8 +3,9 @@
 #include "./HardwareProfile/HardwareProfile.h"
 #include <stdlib.h>
 #include <plib.h>
-#include "Main.h"
+#include "Common.h"
 #include "./Controller/Controller.h"
+#include "./USB/Usb_Tasks.h"
 
 /*** DEVCFG0 ***/
 #pragma config DEBUG =      ON

@@ -7,8 +7,7 @@
 #include "./USB/usb.h"
 #include "./HardwareProfile/HardwareProfile.h"
 #include "./USB/usb_function_hid.h"
-
-#include "Main.h"
+#include "./USB/Usb_Tasks.h"
 #include "./Controller/Controller.h"
 
 

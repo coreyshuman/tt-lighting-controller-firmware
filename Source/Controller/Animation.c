@@ -137,25 +137,32 @@ void AnimBreath(BYTE deviceIdx) {
 
 void AnimRipple(BYTE deviceIdx) {
     int i;
-    BYTE location = AnimationFrame[deviceIdx] % 12;
-    BYTE colorIdx = (BYTE)(AnimationFrame[deviceIdx] / 12);
     
-    if(AnimationFrame[deviceIdx] == 144) {
+    if(AnimationFrame[deviceIdx] == DEVICELEDCOUNT*DEVICELEDCOUNT) {
         AnimationFrame[deviceIdx] = 0;
     }
     
-    for(i = location; i > location - 4; i--)
+    BYTE location = AnimationFrame[deviceIdx] % DEVICELEDCOUNT;
+    int colorIdx = (AnimationFrame[deviceIdx] / DEVICELEDCOUNT);
+    BOOL colorWrapped = FALSE;
+    
+    ClearLedsForDevice(deviceIdx);
+    for(i = location; i > location - 5; i--)
     {
-        BYTE idx = i;
+        int idx = i;
         if(idx < 0) {
-            idx += 12;
-            colorIdx -= 1;
-            if(colorIdx < 0) {
-                colorIdx += 12;
+            idx += DEVICELEDCOUNT;
+            if(!colorWrapped) {
+                colorIdx -= 1;
+                if(colorIdx < 0) {
+                    colorIdx += DEVICELEDCOUNT;
+                }
+                colorWrapped = TRUE;
             }
         }
         BYTE* colorPtr = &AnimationBuffer[deviceIdx][colorIdx*3];
-        int divisor = location - i + 1;
+        int divisor = (location - i + 1);
+        divisor *= divisor;
         SetDeviceLedColor(deviceIdx, idx, (BYTE)((*colorPtr) / divisor),
                     (BYTE)((*(colorPtr+1)) / divisor),
                     (BYTE)((*(colorPtr+2)) / divisor));

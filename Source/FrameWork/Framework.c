@@ -42,6 +42,8 @@
 #include "./Bootloader.h"
 #include "./Framework/Framework.h"
 #include "./NVMem.h"
+#include "./Common.h"
+#include "./Exception.h"
 #include <string.h>
 #include <plib.h>
 
@@ -116,6 +118,11 @@ static BOOL RunApplication = FALSE;
 
 DWORD LastResetStatus = 0;
 BYTE ControllerAddress = 0;
+
+// exception variables
+//extern unsigned int _epc_code;
+//extern unsigned int _excep_addr;
+//extern unsigned int _excep_status;
 
 #ifdef __cplusplus
 extern "C" {
@@ -201,11 +208,12 @@ void HandleCommand(void)
 	{
 		case READ_BOOT_INFO: // Read boot loader version info.
 			memcpy(&TxBuff.Data[1], BootloaderInfo, 2);
-            memcpy(&TxBuff.Data[3], APP_VERSION_ADDRESS, 2);
+            memcpy(&TxBuff.Data[3], (void*)APP_VERSION_ADDRESS, 2);
             memcpy(&TxBuff.Data[5], (void*)&LastResetStatus, 4); // boot status
             memcpy(&TxBuff.Data[9], (void*)&ControllerAddress, 1); // address
+            memcpy(&TxBuff.Data[10], (void*)&_exception_result, 12);  
 			//Set the transmit frame length.
-			TxBuff.Len = 9 + 1; // Boot Info Fields	+ command
+			TxBuff.Len = 21 + 1; // Boot Info Fields	+ command
 			break;
 			
 		case ERASE_FLASH:
@@ -269,7 +277,7 @@ void HandleCommand(void)
 *
 *			
 * Note:		 	None.
-********************************************************************/
+*****************************************                            ***************************/
 void BuildRxFrame(UINT8 *RxData, INT16 RxLen)
 {
 	static BOOL Escape = FALSE;

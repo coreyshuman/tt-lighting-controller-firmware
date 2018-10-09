@@ -62,6 +62,17 @@ void ClearLeds(void)
     }
 }
 
+// Use DWord Ptr for improved performance
+void ClearLedsForDevice(BYTE devIndex)
+{
+    int i = 0;
+    DWORD *ledWrite = (DWORD*)(LedWriteBuffer + (devIndex * DEVICESIZEBYTES));
+    for(i=0; i<DEVICESIZEBYTES / sizeof(DWORD); i++)
+    {
+        *ledWrite++ = 0x00000000;
+    }
+}
+
 void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, BYTE green, BYTE red, BYTE blue)
 {
     WORD offset = devIndex*DEVICESIZEBYTES + ledIndex * LEDSIZE;

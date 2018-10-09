@@ -42,6 +42,8 @@
 #include "./FrameWork/Framework.h"
 #include <stdlib.h>
 #include <plib.h>
+#include "./Common.h"
+#include "./Exception.h"
 
 
 /*** DEVCFG0 ***/
@@ -82,7 +84,6 @@
 
 // Byte data address set outside of bootloader, by main application
 BYTE BootloaderModeFlag __attribute__((persistent, address(BOOTLOADER_MODE_ADDRESS)));
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -179,7 +180,8 @@ INT main(void)
 ********************************************************************/
 BOOL  CheckSoftwareResetToBootloader(void)
 {
-	if(BootloaderModeFlag == BOOTLOADER_MODE_FLAG)
+    DWORD stat = _exception_result.status;
+	if(BootloaderModeFlag == BOOTLOADER_MODE_FLAG || stat == APP_EXCEPTION || stat == BOOT_EXCEPTION  )
 	{
 		BootloaderModeFlag = 0;
 		return TRUE;		

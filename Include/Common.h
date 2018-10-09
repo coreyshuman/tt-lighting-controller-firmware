@@ -1,0 +1,11 @@
+#ifndef __MAIN_H__
+#define __MAIN_H__
+
+#define BOOTLOADER_MODE_FLAG            0x33
+#define BOOTLOADER_MODE_ADDRESS         0xA0003FF0
+#define BOOTLOADER_VERSION_ADDRESS      0x9FC00500
+#define APP_VERSION_ADDRESS             0x9D00EFF0
+
+#define EXCEPTION_DATA_ADDRESS          0xA0003FE0
+
+#endif
