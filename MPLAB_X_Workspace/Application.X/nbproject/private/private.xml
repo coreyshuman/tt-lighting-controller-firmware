@@ -4,16 +4,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/Exception.h</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/BootLoader.h</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/FrameWork/Framework.c</file>
+            <file>file:/D:/Devel/tt-lighting-controller-firmware/linker_scripts/app_32MX230F064D.ld</file>
             <file>file:/D:/Devel/tt-lighting-controller-firmware/linker_scripts/btl_32MX230F064D_generic.ld</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/Common.h</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/BootLoader.c</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/Framework/Framework.h</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/Exception.c</file>
-            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/Controller/Controller.h</file>
             <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/Controller/Controller.c</file>
+            <file>file:/D:/Devel/tt-lighting-controller-firmware/Include/Controller/Controller.h</file>
+            <file>file:/D:/Devel/tt-lighting-controller-firmware/Source/Controller/Animation.c</file>
         </group>
     </open-files>
 </project-private>

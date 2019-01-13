@@ -140,6 +140,7 @@ void HandleCommand(void)
     UINT16 length;
     EEPROM_STATUS eepromStatus;
     BOOL status;
+    int i;
 	// First byte of the data field is command.
 	cmd = RcvBuff.Cmd;
 	// Partially build response frame. First byte in the data field carries command.
@@ -196,6 +197,24 @@ void HandleCommand(void)
         case CMD_READ_FANSPEED: // read fan speed
             SetResponseSendData((BYTE*)&FanSpeed, 10);
 			break;
+        
+        case CMD_WRITE_FANSPEED:
+            // todo: validate rx count
+            for(i=0; i < DEVICECOUNT; i++) {
+                if(RcvBuff.Data[i] == 0xFF) {
+                    RcvBuff.Data[i] = configHandle->fanSpeed[i];
+                }
+            }
+            FanSetSpeeds(RcvBuff.Data);
+            status = 1;
+            SetResponseSendData((void*)&status, 1);
+            break;
+            
+        case CMD_WRITE_LED_FRAME:
+            // todo: validate rx count
+            
+            SetResponseSendData((void*)&status, 0);
+            break;
             
         case CMD_READ_EE_DEBUG: // cts debug
             length = getDebug((char *)&TxmBuff.Data[0]);
