@@ -12,6 +12,7 @@ extern "C" {
 #endif
 
 UINT16 CalculateCrc(UINT8 *data, UINT32 len);
+void DelayMs(UINT32 msecs);
 
     /* Provide C++ Compatibility */
 #ifdef __cplusplus

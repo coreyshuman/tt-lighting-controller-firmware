@@ -4,8 +4,9 @@
 #define EE_I2C I2C2
 #define EE_ADDR 0xA0
 #define EE_RETRY_COUNT 1000
-#define EE_RESEND_COUNT 10
-#define EE_ACK_POLLING_COUNT 10000
+#define EE_RESEND_COUNT 10              // retries when polling enabled on first page
+#define EE_ACK_POLLING_COUNT 10000      // retries when polling enabled on subsequent pages
+                                        // allows for long eeprom write times
 
 typedef enum _EEPROM_STATUS {
     EEPROM_FAIL = -1,

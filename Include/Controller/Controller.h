@@ -13,12 +13,13 @@
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 
 #define MAJOR_VERSION        1
-#define MINOR_VERSION        11
+#define MINOR_VERSION        13
 
 typedef enum _CONTROL_ERROR_CODES {
     RESPONSE_TOO_LONG = 0x01,
     RECEIVE_TOO_LONG,
     EEPROM_FAILED,
+    INVALID_PAYLOAD_LENGTH,
     USB_PACKET_OVERFLOW = 0xF0, // still processing last request
     INVALID_MULTIPACKET,
     CRC_INVALID,
@@ -39,6 +40,7 @@ enum _CONTROL_CMD {
     CMD_DEFAULT_CONFIG = 0x33,
     CMD_READ_FANSPEED = 0x35,
     CMD_WRITE_FANSPEED = 0x36,
+    CMD_SET_TIME = 0x37,
     CMD_READ_EEPROM = 0x38,
     CMD_WRITE_EEPROM = 0x39,
     CMD_ERROR_OCCURED = 0x40

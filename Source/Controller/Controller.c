@@ -78,14 +78,17 @@ void ControllerLoop(void)
 	}      
 }
 
-void SetResponseErrorOccured(CONTROL_ERROR_CODES errorCode)
+// Send error code response to the master.
+void SetResponseErrorOccurred(CONTROL_ERROR_CODES errorCode)
 {
     TxmBuff.Cmd = 0x40;
     TxmBuff.Len = 1;
     TxmBuff.Data[0] = errorCode;
 }
 
-void SetReceiveErrorOccured(CONTROL_ERROR_CODES errorCode)
+// Error occurred during RX processing. This will be forwarded to the
+// packet parser, which will send the error code response.
+void SetReceiveErrorOccurred(CONTROL_ERROR_CODES errorCode)
 {
     RcvBuff.Len = 1;
     RcvBuff.Cmd = 0x40;
@@ -104,7 +107,7 @@ void ResetToBootloader()
 void SetResponseSendData(BYTE* data, UINT16 len)
 {
     if(len > CONTROLLER_BUFF_SIZE) {
-        SetResponseErrorOccured(RESPONSE_TOO_LONG);
+        SetResponseErrorOccurred(RESPONSE_TOO_LONG);
         return;
     }
     if(data != NULL) {
@@ -194,12 +197,18 @@ void HandleCommand(void)
             SetResponseSendData((void*)&status, 1);
             break;
             
-        case CMD_READ_FANSPEED: // read fan speed
+        case CMD_READ_FANSPEED: // send metric values and read fan speed
+            if(RcvBuff.Len != DEVICECOUNT) {
+                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
+            AnimationSetMetrics(RcvBuff.Data);
             SetResponseSendData((BYTE*)&FanSpeed, 10);
 			break;
         
         case CMD_WRITE_FANSPEED:
-            // todo: validate rx count
+            if(RcvBuff.Len != DEVICECOUNT) {
+                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
             for(i=0; i < DEVICECOUNT; i++) {
                 if(RcvBuff.Data[i] == 0xFF) {
                     RcvBuff.Data[i] = configHandle->fanSpeed[i];
@@ -209,20 +218,40 @@ void HandleCommand(void)
             status = 1;
             SetResponseSendData((void*)&status, 1);
             break;
+/*            
+        case CMD_WRITE_METRIC:
+            if(RcvBuff.Len != DEVICECOUNT) {
+                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
+            AnimationSetMetrics(RcvBuff.Data);
+            status = 1;
+            SetResponseSendData((void*)&status, 1);
+            break;
+*/            
+        case CMD_SET_TIME:
+            if(RcvBuff.Len != 3) {
+                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
+            AnimationSetTime(RcvBuff.Data);
+            status = 1;
+            SetResponseSendData((void*)&status, 1);
+            break;
             
         case CMD_WRITE_LED_FRAME:
-            // todo: validate rx count
-            
+            if(RcvBuff.Len != DEVICECOUNT*DEVICESIZEBYTES) {
+                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
+            AnimationWriteCustomFrame((BYTE *)&RcvBuff.Data[0]);
+            status = 1;
             SetResponseSendData((void*)&status, 0);
             break;
             
-        case CMD_READ_EE_DEBUG: // cts debug
+        case CMD_READ_EE_DEBUG: 
             length = getDebug((char *)&TxmBuff.Data[0]);
             SetResponseSendData(NULL, length);
             break;
 			
         case CMD_READ_EEPROM: // read eeprom (up to 256 bytes)
-            resetDebug(); // cts debug
             eepromHandle.data = &TxmBuff.Data[0];
             eepromHandle.len = RcvBuff.Data[1] + (RcvBuff.Data[2] << 8);
             eepromHandle.address = RcvBuff.Data[0];
@@ -238,12 +267,11 @@ void HandleCommand(void)
             if(eepromStatus == EEPROM_SUCCESS) {
                 SetResponseSendData(NULL, length);
             } else {
-                SetResponseErrorOccured(EEPROM_FAILED);
+                SetResponseErrorOccurred(EEPROM_FAILED);
             }
             break;
             
         case CMD_WRITE_EEPROM: // write eeprom, max address is 255
-            resetDebug(); // cts debug
             eepromHandle.data = &RcvBuff.Data[2];
             eepromHandle.address = RcvBuff.Data[0];
             length = RcvBuff.Data[1];
@@ -261,15 +289,15 @@ void HandleCommand(void)
             if(eepromStatus == EEPROM_SUCCESS) {
                 SetResponseSendData(NULL, length);
             } else {
-                SetResponseErrorOccured(EEPROM_FAILED);
+                SetResponseErrorOccurred(EEPROM_FAILED);
             }
             break;
         
         case CMD_ERROR_OCCURED:
-            SetResponseErrorOccured(RcvBuff.Data[0]);
+            SetResponseErrorOccurred(RcvBuff.Data[0]);
             break;
 	    default:
-	    	SetResponseErrorOccured(UNKNOWN_COMMAND);
+	    	SetResponseErrorOccurred(UNKNOWN_COMMAND);
 	    	break;
 	}   
 	
@@ -283,7 +311,7 @@ BOOL ControlUpdateConfig(void)
         return 0;
     }
     memcpy((void*)configHandle, (void*)&RcvBuff.Data[0], ConfigSize);
-    AnimationUpdateBuffer();
+    AnimationUpdateBuffer(NULL);
     FanSetSpeeds(configHandle->fanSpeed);
     return 1;
 }
@@ -291,7 +319,7 @@ BOOL ControlUpdateConfig(void)
 void ControlDefaultConfig(void)
 {
     ConfigDefault();
-    AnimationUpdateBuffer();
+    AnimationUpdateBuffer(NULL);
     FanSetSpeeds(configHandle->fanSpeed);
 }
 
@@ -321,10 +349,10 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
     if(RcvBuff.Len > 0) {
         if(RxFrameValid) {
             // old packet still in buffer
-            SetReceiveErrorOccured(USB_PACKET_OVERFLOW);
+            SetReceiveErrorOccurred(USB_PACKET_OVERFLOW);
             return;
         } else if(RcvBuff.Cmd != RxData[0]) {
-            SetReceiveErrorOccured(INVALID_MULTIPACKET);
+            SetReceiveErrorOccurred(INVALID_MULTIPACKET);
             return;
         }
     } else {
@@ -335,7 +363,7 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
     RxData += 2; // skip CMD and LEN
     // verify received CRC
     if(crc.byte.LB != *(RxData + RxLen - 2) || crc.byte.HB != *(RxData + RxLen - 1)) {
-        SetReceiveErrorOccured(CRC_INVALID);
+        SetReceiveErrorOccurred(CRC_INVALID);
         return;
     }
     
@@ -345,7 +373,7 @@ void ControllerBuildRxFrame(UINT8 *RxData, INT16 RxLen)
 		
 		if(RcvBuff.Len >= CONTROLLER_BUFF_SIZE)
 		{
-			SetReceiveErrorOccured(RECEIVE_TOO_LONG);
+			SetReceiveErrorOccurred(RECEIVE_TOO_LONG);
             return;
 		}	
         
@@ -386,7 +414,7 @@ UINT ControllerGetTransmitFrames(UINT8* usbBuffer)
 	{
         if(buffLen >= USB_BUFFER_SIZE)
 		{
-			SetResponseErrorOccured(RESPONSE_TOO_LONG);
+			SetResponseErrorOccurred(RESPONSE_TOO_LONG);
             return 0;
 		}	
         

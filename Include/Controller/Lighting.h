@@ -15,5 +15,6 @@ void ClearLedsForDevice(BYTE devIndex);
 void SetDeviceLedColor(BYTE devIndex, BYTE ledIndex, BYTE green, BYTE red, BYTE blue);
 void SetDeviceLedColorDW(BYTE devIndex, BYTE ledIndex, DWORD color);
 void SetDeviceSolidColor(BYTE devIndex, DWORD color);
+void LightingCopyBuffer(BYTE* buf);
 
 #endif

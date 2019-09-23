@@ -45,3 +45,26 @@ UINT16 CalculateCrc(UINT8 *data, UINT32 len)
 
     return (crc & 0xFFFF);
 }
+
+/********************************************************************
+* Function: 	DelayMs()
+*
+* Precondition: 
+*
+* Input: 		Length of delay in ms
+*
+* Output:		None
+*
+* Side Effects:	None.
+*
+* Overview:     Executes while loop for given duration.
+*
+*			
+* Note:		 	None.
+********************************************************************/	
+void DelayMs(UINT32 msecs)
+{
+    volatile UINT32 start = ReadCoreTimer();
+    UINT32 delayTicks = ((GetSystemClock()/2) / 1000) * msecs;
+    while ((UINT32)(ReadCoreTimer() - start) < delayTicks);
+}

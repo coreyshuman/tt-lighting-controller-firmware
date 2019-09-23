@@ -68,13 +68,20 @@ EEPROM_STATUS WriteConfig(EEPROM_HANDLE *eeHandle, config_t *config)
 EEPROM_STATUS ReadWriteEepromConfig(EEPROM_HANDLE *eeHandle, config_t *config, BOOL write)
 {
     EEPROM_STATUS eepromStatus = EEPROM_IN_PROGRESS;
+    BYTE retry = 3;
     
     eeHandle->address = 0;
     eeHandle->len = ConfigSize;
     eeHandle->data = (unsigned char *)config;
     
-    while(eepromStatus == EEPROM_IN_PROGRESS) {
-        eepromStatus = write ? EepromWrite(eeHandle) : EepromRead(eeHandle);
+    while(retry-- > 0) {
+        while(eepromStatus == EEPROM_IN_PROGRESS) {
+            eepromStatus = write ? EepromWrite(eeHandle) : EepromRead(eeHandle);
+        }
+        if(eepromStatus != EEPROM_FAIL) {
+            DelayMs(20);
+            break;
+        }
     }
     
     return eepromStatus;

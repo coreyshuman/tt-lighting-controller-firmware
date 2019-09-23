@@ -44,7 +44,6 @@ int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAdd
     *dataPtr = (WORD)I2C_ENABLE_HIGH_SPEED;
     *dataPtr = *dataPtr | (WORD)0x8000;
     
-    resetDebug();
     return 1;
 }
 
@@ -84,8 +83,7 @@ void EEStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
             handle->resend --;
             handle->retry = EE_RETRY_COUNT;
             handle->deviceState = EE_START_WAIT;
-            wait = 8000;
-            while(wait-- > 0); // wait ~1ms so we don't spam the eeprom
+            DelayMs(1); // wait ~1ms so we don't spam the eeprom
             break;
         default:
             handle->deviceState = EE_ERROR;
@@ -128,6 +126,7 @@ BOOL EEStop(EEPROM_HANDLE *handle)
     handle->I2CCON->PEN = 1;
     handle->deviceState = EE_INIT;
     handle->retry = EE_RETRY_COUNT;
+    handle->resend = EE_RESEND_COUNT;
     return TRUE;
 }
 
@@ -215,9 +214,12 @@ void EEReadWait(EEPROM_HANDLE *handle)
     handle->retry = EE_RETRY_COUNT;
 }
 
-BOOL CheckRetry(EEPROM_HANDLE *handle) {
+BOOL IsEepromFailed(EEPROM_HANDLE *handle) {
     if(handle->retry <= 0 || handle->resend <= 0 || handle->deviceState == EE_ERROR) {
         EEStop(handle);
+        handle->deviceState = EE_INIT;
+        handle->retry = EE_RETRY_COUNT;
+        handle->resend = EE_RESEND_COUNT;
         return TRUE;
     }
     return FALSE;
@@ -226,7 +228,7 @@ BOOL CheckRetry(EEPROM_HANDLE *handle) {
 int EepromRead(EEPROM_HANDLE *handle)
 {
     int ret = 0;
-    if(CheckRetry(handle)) return EEPROM_FAIL;
+    if(IsEepromFailed(handle)) return EEPROM_FAIL;
     
     switch(handle->deviceState)
     {
@@ -279,7 +281,7 @@ int EepromRead(EEPROM_HANDLE *handle)
 int EepromWrite(EEPROM_HANDLE *handle)
 {   
     int ret = 0;
-    if(CheckRetry(handle)) return EEPROM_FAIL;
+    if(IsEepromFailed(handle)) return EEPROM_FAIL;
     
     switch(handle->deviceState)
     {

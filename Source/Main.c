@@ -99,8 +99,8 @@ INT main(void)
     
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
-    
     ControllerInitialize();
+    DelayMs(10);
 
     while(1) // main loop
     {

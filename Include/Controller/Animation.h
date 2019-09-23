@@ -29,7 +29,25 @@ typedef enum _ANIMATION_MODE {
     ANIM_STEADY,
     ANIM_ROTATE,
     ANIM_BREATH,
-    ANIM_RIPPLE
+    ANIM_RIPPLE,
+    ANIM_ROTATE_REV,
+    ANIM_RIPPLE_REV,
+    ANIM_RIPPLE_SPECTRUM,
+    ANIM_RIPPLE_SPECTRUM_REV,
+    ANIM_CYCLE,
+    ANIM_BLINK,
+    ANIM_WIPE,
+    ANIM_WIPE_REV,
+    ANIM_METRIC_SPECTRUM,
+    ANIM_METRIC_BAR,
+    ANIM_METRIC_BAR_REV,
+    ANIM_HEARTBEAT,
+    ANIM_RAIN,
+    ANIM_STACK,
+    ANIM_STACK_REVERSE,
+    ANIM_CLOCK,
+    ANIM_FLICKER
+            
 } ANIMATION_MODE;
 
 /* Provide C++ Compatibility */
@@ -39,9 +57,12 @@ extern "C" {
     
 void AnimationInit(config_t* config);
 void AnimationSetInterval(WORD msec);
+void AnimationSetMetrics(BYTE metrics[]);
 void AnimationStart(void);
 void AnimationStop(void);
-void AnimationUpdateBuffer(void);
+void AnimationUpdateBuffer(BYTE *frameData);
+void AnimationWriteCustomFrame(BYTE *frameData);
+void AnimationSetTime(BYTE time[]);
 
     /* Provide C++ Compatibility */
 #ifdef __cplusplus

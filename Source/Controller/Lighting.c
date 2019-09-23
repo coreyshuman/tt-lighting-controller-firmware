@@ -100,6 +100,15 @@ void SetDeviceSolidColor(BYTE devIndex, DWORD color)
     }
 }
 
+void LightingCopyBuffer(BYTE* buf) 
+{
+    int i;
+    BYTE * ledWrite = LedWriteBuffer;
+    for(i = 0; i < DEVICECOUNT * DEVICESIZEBYTES; i++) {
+        *ledWrite++ = *buf++;
+    }
+}
+
 void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
 {
     INTDisableInterrupts();
