@@ -9,10 +9,15 @@
 #include "./Controller/Config.h"
 #include "./Controller/Debug.h"
 
+// todo:
+//   clock min/hour getting flipped sometimes?
+//   flicker working great on left res, colors swapping on right?
+//   general signal integrity issues?
+
 // shared variables
+static short AnimationFrame[DEVICECOUNT];
 static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZEBYTES];
 static BYTE AnimationSpeedCounter[DEVICECOUNT];
-static BYTE AnimationFrame[DEVICECOUNT];
 static BYTE AnimationMetric[DEVICECOUNT];
 static BYTE ClockSecond;
 static BYTE ClockMinute;
@@ -25,6 +30,9 @@ static BYTE fanSpeed = 0;
 static BYTE fanDir = 1;
 static config_t *animConfigPtr = 0;
 static WORD animIntervalMsec = 0;
+
+#define GetAnimationSpeed(x) animConfigPtr->ledSpeed[x]
+#define GetAnimationMode(x) animConfigPtr->ledMode[i]
 
 void AnimationInit(config_t* config)
 {
@@ -298,7 +306,7 @@ void AnimCycle(BYTE deviceIdx)
     BYTE i;
     BYTE frame = AnimationFrame[deviceIdx] % 12;
     
-    BYTE* colorPtr = &AnimationBuffer[deviceIdx][frame];
+    BYTE* colorPtr = &AnimationBuffer[deviceIdx][frame * LEDSIZE];
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
@@ -316,7 +324,7 @@ void AnimBlink(BYTE deviceIdx)
     if(on) {
         for(i = 0; i < DEVICELEDCOUNT; i++)
         {
-            BYTE* colorPtr = &AnimationBuffer[deviceIdx][frame/2];
+            BYTE* colorPtr = &AnimationBuffer[deviceIdx][(frame/2) * LEDSIZE];
             SetDeviceLedColor(deviceIdx, i, *colorPtr, *(colorPtr+1), *(colorPtr+2));
         }
     } else {
@@ -325,6 +333,7 @@ void AnimBlink(BYTE deviceIdx)
 }
 
 // fill ring with next color one led at a time, overwriting previous color
+// todo: reverse doesn't work correctly
 void AnimWipe(BYTE deviceIdx, BYTE dir) {
     int i;
     
@@ -334,16 +343,15 @@ void AnimWipe(BYTE deviceIdx, BYTE dir) {
     
     BYTE location = AnimationFrame[deviceIdx] % DEVICELEDCOUNT;
     int colorIdx = (AnimationFrame[deviceIdx] / DEVICELEDCOUNT);
-    BOOL colorWrapped = FALSE;
     
     ClearLedsForDevice(deviceIdx);
     
     BYTE* colorPtr = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE];
-    for(i = location; i > 0; i--) {      
+    for(i = location; i >= 0; i--) {      
         SetDeviceLedColor(deviceIdx, i, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     }
     
-    colorIdx = colorIdx + (dir == 1) ? -1 : 1;
+    (dir == 1) ? colorIdx-- : colorIdx++;
     if(colorIdx < 0) {
         colorIdx += DEVICELEDCOUNT;
     }
@@ -357,6 +365,7 @@ void AnimWipe(BYTE deviceIdx, BYTE dir) {
 }
 
 // fill ring with next color based on metric range from 0 - 132
+// todo: issues with blend
 void AnimMetricSpectrum(BYTE deviceIdx) {
     int i;
     
@@ -364,7 +373,7 @@ void AnimMetricSpectrum(BYTE deviceIdx) {
     BYTE colorIdx = AnimationMetric[deviceIdx] / 12;
     BYTE colorBlend = AnimationMetric[deviceIdx] % 12;
     BYTE* colorPtr1 = &AnimationBuffer[deviceIdx][colorIdx];
-    BYTE* colorPtr2 = &AnimationBuffer[deviceIdx][colorIdx+1];
+    BYTE* colorPtr2 = &AnimationBuffer[deviceIdx][colorIdx+LEDSIZE];
     
     for(i = 0; i < 3; i++) {
         color[i] = (BYTE)(((double)*(colorPtr1+i) * (double)(12 - colorBlend)) / 12.0f);
@@ -373,7 +382,7 @@ void AnimMetricSpectrum(BYTE deviceIdx) {
         }
     }
  
-    for(i = 0; i > DEVICELEDCOUNT; i++) {      
+    for(i = 0; i < DEVICELEDCOUNT; i++) {      
         SetDeviceLedColor(deviceIdx, i, color[0], color[1], color[2]);
     }
 }
@@ -398,49 +407,48 @@ void AnimMetricBar(BYTE deviceIdx, BYTE dir) {
     }
 }
 
-static float HeartbeatBrightnessSteps[24] = {
+static float HeartbeatBrightnessSteps[14] = {
   1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f,
-  1.00f, 1.00f, 1.00f, 1.00f, 1.00f, 1.00f,
-  0.90f, 0.80f, 0.70f, 0.60f, 0.50f, 0.40f,
-  0.30f, 0.20f, 0.10f, 0.05f, 0.00f, 0.05f  
+  0.90f, 0.70f, 0.50f, 0.30f, 0.10f, 0.00f,
+  0.30f, 0.70f
 };
 void AnimHeartbeat(BYTE deviceIdx) {
     BYTE i;
-    BYTE frame = AnimationFrame[deviceIdx] % 24;
-    BOOL dir = (AnimationFrame[deviceIdx] % 48) < 24;
-    BYTE step = dir ? frame : 23 - frame;
+    BYTE frame = AnimationFrame[deviceIdx] % 14;
     
-    if(AnimationFrame[deviceIdx] >= 48) {
+    if(AnimationFrame[deviceIdx] >= 14) {
         AnimationFrame[deviceIdx] = 0;
     }
     
     for(i = 0; i < DEVICELEDCOUNT; i++)
     {
         BYTE* colorPtr = &AnimationBuffer[deviceIdx][i*LEDSIZE];
-        SetDeviceLedColor(deviceIdx, i, (BYTE)((*colorPtr) * HeartbeatBrightnessSteps[step]),
-                (BYTE)((*(colorPtr+1)) * HeartbeatBrightnessSteps[step]),
-                (BYTE)((*(colorPtr+2)) * HeartbeatBrightnessSteps[step]));
+        SetDeviceLedColor(deviceIdx, i, (BYTE)((*colorPtr) * HeartbeatBrightnessSteps[frame]),
+                (BYTE)((*(colorPtr+1)) * HeartbeatBrightnessSteps[frame]),
+                (BYTE)((*(colorPtr+2)) * HeartbeatBrightnessSteps[frame]));
     }
 }
 
-static BYTE RainMemory[DEVICECOUNT][DEVICELEDCOUNT];
+static BYTE RainBrightnessMemory[DEVICECOUNT][DEVICELEDCOUNT];
+static BYTE RainColorMemory[DEVICECOUNT][DEVICELEDCOUNT];
 // random rain effect. LEDs randomly choose a color and brightnesses then fade 
 void AnimRain(BYTE deviceIdx) {
     BYTE i;
     
     for(i = 0; i < DEVICELEDCOUNT; i++) {
-        if(RainMemory[deviceIdx][i] == 0) {
-            if(rand() % 20 > 15) {
-                RainMemory[deviceIdx][i] = (rand() % 100) * 2;
+        if(RainBrightnessMemory[deviceIdx][i] == 0) {
+            if(rand() % 20 >= (15 + (GetAnimationSpeed(deviceIdx) % 4))) {
+                RainBrightnessMemory[deviceIdx][i] = (rand() % 100) * 2;
+                RainColorMemory[deviceIdx][i] = rand() % DEVICELEDCOUNT;
             }
-        } else if(RainMemory[deviceIdx][i] > 10) {
-            RainMemory[deviceIdx][i] = RainMemory[deviceIdx][i] - 10;
+        } else if(RainBrightnessMemory[deviceIdx][i] > GetAnimationSpeed(deviceIdx)) {
+            RainBrightnessMemory[deviceIdx][i] = RainBrightnessMemory[deviceIdx][i] - GetAnimationSpeed(deviceIdx);
         } else {
-            RainMemory[deviceIdx][i] = 0;
+            RainBrightnessMemory[deviceIdx][i] = 0;
         }
         
-        float brightness = (float)RainMemory[deviceIdx][i] / 200.0f;
-        BYTE* colorPtr = &AnimationBuffer[deviceIdx][(rand()%DEVICELEDCOUNT)*LEDSIZE];
+        float brightness = (float)RainBrightnessMemory[deviceIdx][i] / 200.0f;
+        BYTE* colorPtr = &AnimationBuffer[deviceIdx][RainColorMemory[deviceIdx][i]*LEDSIZE];
         SetDeviceLedColor(deviceIdx, i, (BYTE)((*colorPtr) * brightness),
                 (BYTE)((*(colorPtr+1)) * brightness),
                 (BYTE)((*(colorPtr+2)) * brightness));
@@ -453,7 +461,7 @@ void AnimStack(BYTE deviceIdx, BYTE dir) {
     int i;
     BYTE currentFrame = AnimationFrame[deviceIdx];
     BYTE frameCounter = 0;
-    BYTE colorIdx = -1;
+    char colorIdx = -1;
     BYTE location = 0;
     BYTE increment = DEVICELEDCOUNT;
     
@@ -476,14 +484,14 @@ void AnimStack(BYTE deviceIdx, BYTE dir) {
     ClearLedsForDevice(deviceIdx);
     
     // draw falling brick
-    BYTE drawLocation = (dir == 1) ? i : DEVICELEDCOUNT-i;
+    BYTE drawLocation = (dir == 1) ? location : DEVICELEDCOUNT - 1 - location;
     BYTE* colorPtr = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE];
     SetDeviceLedColor(deviceIdx, drawLocation, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     
     // draw existing stack
     for(i = 0; i < colorIdx; i++) {
-        drawLocation = (dir == 1) ? DEVICELEDCOUNT-i : i;
-        colorPtr = &AnimationBuffer[deviceIdx][drawLocation*LEDSIZE];
+        drawLocation = (dir == 1) ? DEVICELEDCOUNT - 1 - i : i;
+        colorPtr = &AnimationBuffer[deviceIdx][i*LEDSIZE];
         SetDeviceLedColor(deviceIdx, drawLocation, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     }
 }
@@ -491,27 +499,29 @@ void AnimStack(BYTE deviceIdx, BYTE dir) {
 // display an analog clock!
 static UINT32 ClockTick;
 static float ClockPulse;
-
+static float ClockSecondAdjusted = (GetSystemClock()/2) * 1.166667f;
 void AnimClock(BYTE deviceIdx) {
     int i;
     // use speed selection to offset (rotate) the clock
-    BYTE offset = AnimationSpeedCounter[deviceIdx];
+    BYTE offset = GetAnimationSpeed(deviceIdx);
     if(offset >= DEVICELEDCOUNT) {
         offset -= DEVICELEDCOUNT;
     }
     
     // check if 1 second has passed
-    if(ReadCoreTimer() - ClockTick > (GetSystemClock()/2)) {
+    if(ReadCoreTimer() - ClockTick > (UINT32)(ClockSecondAdjusted)) {
         ClockTick = ReadCoreTimer();
         if(++ClockSecond >= 60) {
+            ClockSecond = 0;
             if(++ClockMinute >= 60) {
+                ClockMinute = 0;
                 if(++ClockHour >= 12) {
                     ClockHour = 0;
                 }
             }
         }
-        ClockPulse = 100.0f;
-    } else if(ClockPulse > 0.5f) {
+        ClockPulse = 0.40f;
+    } else if(ClockPulse > 0.10f) {
         ClockPulse -= 0.01f;
     }
     
@@ -521,11 +531,11 @@ void AnimClock(BYTE deviceIdx) {
     for(i = 0; i < DEVICELEDCOUNT; i++) {
         float brightness;
         if(i == 0) {
-            brightness = 1.0f;
+            brightness = ClockPulse + 0.4f;
         } else if (i % 3 == 0) {
-            brightness = 0.5f;
+            brightness = ClockPulse + 0.25f;
         } else {
-            brightness = 0.25f;
+            brightness = ClockPulse;
         }
         
         SetDeviceLedColor(deviceIdx, drawLocation, (BYTE)(*colorPtr * brightness), 
@@ -537,7 +547,7 @@ void AnimClock(BYTE deviceIdx) {
     }
     
     // draw second
-    BYTE timeDrawLocation = ClockSecond / 5;
+    BYTE timeDrawLocation = (DEVICELEDCOUNT - 1) - (ClockSecond / 5);
     timeDrawLocation += offset;
     if(timeDrawLocation >= DEVICELEDCOUNT) {
         timeDrawLocation -= DEVICELEDCOUNT;
@@ -546,7 +556,7 @@ void AnimClock(BYTE deviceIdx) {
     SetDeviceLedColor(deviceIdx, timeDrawLocation, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     
     // draw minute
-    timeDrawLocation = ClockMinute / 5;
+    timeDrawLocation = (DEVICELEDCOUNT - 1) - (ClockMinute / 5);
     timeDrawLocation += offset;
     if(timeDrawLocation >= DEVICELEDCOUNT) {
         timeDrawLocation -= DEVICELEDCOUNT;
@@ -555,7 +565,7 @@ void AnimClock(BYTE deviceIdx) {
     SetDeviceLedColor(deviceIdx, timeDrawLocation, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     
     // draw hour
-    timeDrawLocation = ClockHour;
+    timeDrawLocation = (DEVICELEDCOUNT - 1) - ClockHour;
     timeDrawLocation += offset;
     if(timeDrawLocation >= DEVICELEDCOUNT) {
         timeDrawLocation -= DEVICELEDCOUNT;
@@ -569,17 +579,18 @@ static float FlickerBrightness[DEVICECOUNT];
 void AnimFlicker(BYTE deviceIdx) {
     BYTE i;
     
-    if(rand() % 2 == 0) {
-        FlickerBrightness[deviceIdx] += ((float)(rand() % 7) / 100.0f);
-    } else {
-        FlickerBrightness[deviceIdx] -= ((float)(rand() % 7) / 100.0f);
+    if(rand() % 20 >= GetAnimationSpeed(deviceIdx)) {
+        if(rand() % 2 == 0) {
+            FlickerBrightness[deviceIdx] += ((float)(rand() % 7) / 100.0f);
+        } else {
+            FlickerBrightness[deviceIdx] -= ((float)(rand() % 7) / 100.0f);
+        }
+        if(FlickerBrightness[deviceIdx] < 0.10f) {
+            FlickerBrightness[deviceIdx] = 0.30f;
+        } else if(FlickerBrightness[deviceIdx] > 0.95f) {
+            FlickerBrightness[deviceIdx] = 0.70f;
+        }
     }
-    if(FlickerBrightness[deviceIdx] < 0.25f) {
-        FlickerBrightness[deviceIdx] = 0.4f;
-    } else if(FlickerBrightness[deviceIdx] > 0.9f) {
-        FlickerBrightness[deviceIdx] = 0.7f;
-    }
-    
     
     float brightness = FlickerBrightness[deviceIdx];
     for(i = 0; i < DEVICELEDCOUNT; i++) {
@@ -588,6 +599,14 @@ void AnimFlicker(BYTE deviceIdx) {
                 (BYTE)((*(colorPtr+1)) * brightness),
                 (BYTE)((*(colorPtr+2)) * brightness));
     }
+}
+
+void AnimationResetFrames() {
+    int i;
+     for(i=0; i<DEVICECOUNT; i++) {
+        AnimationSpeedCounter[i] = animConfigPtr->ledSpeed[i];    
+        AnimationFrame[i] = 0;
+     }
 }
 
 void AnimationWriteCustomFrame(BYTE *frameData)
@@ -604,14 +623,6 @@ void AnimationWriteCustomFrame(BYTE *frameData)
     TMR4 = 0;
 }
 
-void AnimationResetFrames() {
-    int i;
-     for(i=0; i<DEVICECOUNT; i++) {
-        AnimationSpeedCounter[i] = animConfigPtr->ledSpeed[i];    
-        AnimationFrame[i] = 0;
-     }
-}
-
 // setup next frame
 void AnimationUpdate(void)
 {
@@ -621,9 +632,9 @@ void AnimationUpdate(void)
         frameBusy = TRUE;
         
         for(i=0; i<DEVICECOUNT; i++) {
-            BYTE ledMode = animConfigPtr->ledMode[i];
+            BYTE ledMode = GetAnimationMode(i);
             if(-- AnimationSpeedCounter[i] <= 0) {
-                AnimationSpeedCounter[i] = animConfigPtr->ledSpeed[i];
+                AnimationSpeedCounter[i] = GetAnimationSpeed(i);
                 if( ledMode == ANIM_ROTATE_REV ||
                     ledMode == ANIM_RIPPLE_REV ||
                     ledMode == ANIM_RIPPLE_SPECTRUM_REV ||
