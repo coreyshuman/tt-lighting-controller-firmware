@@ -13,7 +13,7 @@
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 
 #define MAJOR_VERSION        1
-#define MINOR_VERSION        18
+#define MINOR_VERSION        21
 
 typedef enum _CONTROL_ERROR_CODES {
     RESPONSE_TOO_LONG = 0x01,

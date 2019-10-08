@@ -34,6 +34,14 @@ static WORD animIntervalMsec = 0;
 #define GetAnimationSpeed(x) animConfigPtr->ledSpeed[x]
 #define GetAnimationMode(x) animConfigPtr->ledMode[i]
 
+static unsigned long int randStore = 1;
+
+int rand_cts(void) // RAND_MAX assumed to be 32767
+{
+    randStore = randStore * 1103515245 + 12345;
+    return (unsigned int)(randStore/65536) % 32768;
+}
+
 void AnimationInit(config_t* config)
 {
     int i;
@@ -437,9 +445,9 @@ void AnimRain(BYTE deviceIdx) {
     
     for(i = 0; i < DEVICELEDCOUNT; i++) {
         if(RainBrightnessMemory[deviceIdx][i] == 0) {
-            if(rand() % 20 >= (15 + (GetAnimationSpeed(deviceIdx) % 4))) {
-                RainBrightnessMemory[deviceIdx][i] = (rand() % 100) * 2;
-                RainColorMemory[deviceIdx][i] = rand() % DEVICELEDCOUNT;
+            if(rand_cts() % 20 >= (15 + (GetAnimationSpeed(deviceIdx) % 4))) {
+                RainBrightnessMemory[deviceIdx][i] = (rand_cts() % 100) * 2;
+                RainColorMemory[deviceIdx][i] = rand_cts() % DEVICELEDCOUNT;
             }
         } else if(RainBrightnessMemory[deviceIdx][i] > GetAnimationSpeed(deviceIdx)) {
             RainBrightnessMemory[deviceIdx][i] = RainBrightnessMemory[deviceIdx][i] - GetAnimationSpeed(deviceIdx);
@@ -579,11 +587,11 @@ static float FlickerBrightness[DEVICECOUNT];
 void AnimFlicker(BYTE deviceIdx) {
     BYTE i;
     
-    if(rand() % 20 >= GetAnimationSpeed(deviceIdx)) {
-        if(rand() % 2 == 0) {
-            FlickerBrightness[deviceIdx] += ((float)(rand() % 7) / 100.0f);
+    if(rand_cts() % 20 >= GetAnimationSpeed(deviceIdx)) {
+        if(rand_cts() % 2 == 0) {
+            FlickerBrightness[deviceIdx] += ((float)(rand_cts() % 7) / 100.0f);
         } else {
-            FlickerBrightness[deviceIdx] -= ((float)(rand() % 7) / 100.0f);
+            FlickerBrightness[deviceIdx] -= ((float)(rand_cts() % 7) / 100.0f);
         }
         if(FlickerBrightness[deviceIdx] < 0.10f) {
             FlickerBrightness[deviceIdx] = 0.30f;
