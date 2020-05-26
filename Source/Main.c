@@ -49,7 +49,8 @@ INT main(void)
 	// Setup configuration
 	pbClk = SYSTEMConfig(SYS_FREQ, SYS_CFG_WAIT_STATES | SYS_CFG_PCACHE);
     INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);
-    INTEnableInterrupts();
+    INTDisableInterrupts();
+    
     
     // no analog inputs
     ANSELA = 0;
@@ -95,12 +96,17 @@ INT main(void)
     TRISBbits.TRISB9 = 1;
     TRISCbits.TRISC6 = 1;
     
+    // wait for power to stabilize
+    DelayMs(100);
+    
     EnableWDT();
     
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
     ControllerInitialize();
     DelayMs(10);
+    
+    INTEnableInterrupts();
 
     while(1) // main loop
     {

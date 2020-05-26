@@ -41,6 +41,8 @@ void ControlDefaultConfig(void);
 void ControllerInitialize(void) 
 {
     EepromInit(&eepromHandle, EE_I2C, 400000, EE_ADDR, FALSE);
+    // Let I2C stabilize
+    DelayMs(10); 
     configHandle = ConfigInit(&eepromHandle);
     
     LightingInit();
@@ -243,7 +245,7 @@ void HandleCommand(void)
             }
             AnimationWriteCustomFrame((BYTE *)&RcvBuff.Data[0]);
             status = 1;
-            SetResponseSendData((void*)&status, 0);
+            SetResponseSendData((void*)&status, 1);
             break;
             
         case CMD_READ_EE_DEBUG: 

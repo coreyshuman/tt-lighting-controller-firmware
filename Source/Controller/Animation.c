@@ -92,12 +92,14 @@ void AnimationSetTime(BYTE time[]) {
     ClockMinute = time[1];
     ClockSecond = time[2];
     
-    if(++ClockSecond >= 60) {
-        if(++ClockMinute >= 60) {
-            if(++ClockHour >= 12) {
-                ClockHour = 0;
-            }
-        }
+    if(ClockHour >= 12) {
+        ClockHour = 11;
+    }
+    if(ClockMinute >= 60) {
+        ClockMinute = 59;
+    }
+    if(ClockSecond >= 60) {
+        ClockSecond = 59;
     }
 }
 
