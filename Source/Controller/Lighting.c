@@ -5,15 +5,14 @@
 #include "./Controller/Config.h"
 #include "./Controller/Lighting.h"
 
-BYTE LedBufferA[DEVICECOUNT][DEVICESIZEBYTES];
-BYTE LedBufferB[DEVICECOUNT][DEVICESIZEBYTES];
+static BYTE LedBufferA[DEVICECOUNT][DEVICESIZEBYTES];
+static BYTE LedBufferB[DEVICECOUNT][DEVICESIZEBYTES];
 BYTE *LedDrawBuffer = (BYTE*)&LedBufferA;
 BYTE *LedWriteBuffer = (BYTE*)&LedBufferB;
 BOOL LedBusy = FALSE;
-
-DWORD byteIndex = 0x0;
-DWORD bitIndex = 0x100;
-DWORD shiftAmount = 8;
+static DWORD byteIndex = 0x0;
+static DWORD bitIndex = 0x100;
+static DWORD shiftAmount = 8;
 
 void LightingInit(void) 
 {
@@ -26,8 +25,6 @@ void LightingInit(void)
     // Can be done in a single operation by assigning PC2SET = 0x0000000D
     IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
     IEC0SET = _IEC0_T1IE_MASK; // Enable timer interrupts
-    
-    T1CONbits.TON = 1;
 }
 
 void SwapBuffer(void)
@@ -112,7 +109,7 @@ void LightingCopyBuffer(BYTE* buf)
 void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
 {
     INTDisableInterrupts();
-    IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
+    //IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
     
     asm volatile (
         "LW $t5, LedDrawBuffer \n"
@@ -195,5 +192,8 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
         }
         shiftAmount = 8;
     }
+    
+    TMR1 = 0x0;
+    IFS0CLR = _IFS0_T1IF_MASK; // Clear the timer interrupt status flag
     INTEnableInterrupts();
 }

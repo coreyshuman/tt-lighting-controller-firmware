@@ -64,6 +64,11 @@ void AnimationUpdateBuffer(BYTE *frameData);
 void AnimationWriteCustomFrame(BYTE *frameData);
 void AnimationSetTime(BYTE time[]);
 
+BYTE* DebugGetCurrentAnimationBufferPointer(void);
+BYTE* DebugGetCurrentAnimationFramePointer(void);
+void DebugSetPlayPause(BOOL play);
+void DebugStepAnimation(void);
+
     /* Provide C++ Compatibility */
 #ifdef __cplusplus
 }

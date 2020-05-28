@@ -34,12 +34,24 @@ static WORD animIntervalMsec = 0;
 #define GetAnimationSpeed(x) animConfigPtr->ledSpeed[x]
 #define GetAnimationMode(x) animConfigPtr->ledMode[i]
 
-static unsigned long int randStore = 1;
+// animation development debug helpers
+static BOOL debugIsAnimationPlay = TRUE;
+static BOOL debugIsAnimationStep = FALSE;
 
-int rand_cts(void) // RAND_MAX assumed to be 32767
-{
-    randStore = randStore * 1103515245 + 12345;
-    return (unsigned int)(randStore/65536) % 32768;
+BYTE* DebugGetCurrentAnimationBufferPointer() {
+    return &AnimationBuffer[0][0];
+}
+
+BYTE* DebugGetCurrentAnimationFramePointer() {
+    return &AnimationFrame[0];
+}
+
+void DebugSetPlayPause(BOOL play) {
+    debugIsAnimationPlay = play;
+}
+
+void DebugStepAnimation() {
+    debugIsAnimationStep = TRUE;
 }
 
 void AnimationInit(config_t* config)
@@ -343,10 +355,9 @@ void AnimBlink(BYTE deviceIdx)
 }
 
 // fill ring with next color one led at a time, overwriting previous color
-// todo: reverse doesn't work correctly
-void AnimWipe(BYTE deviceIdx, BYTE dir) {
+void AnimWipe(BYTE deviceIdx) {
     int i;
-    
+
     if(AnimationFrame[deviceIdx] >= DEVICELEDCOUNT*DEVICELEDCOUNT) {
         AnimationFrame[deviceIdx] = 0;
     }
@@ -357,33 +368,29 @@ void AnimWipe(BYTE deviceIdx, BYTE dir) {
     ClearLedsForDevice(deviceIdx);
     
     BYTE* colorPtr = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE];
-    for(i = location; i >= 0; i--) {      
+    for(i = location; i < DEVICELEDCOUNT; i++) {      
         SetDeviceLedColor(deviceIdx, i, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     }
     
-    (dir == 1) ? colorIdx-- : colorIdx++;
-    if(colorIdx < 0) {
-        colorIdx += DEVICELEDCOUNT;
-    }
+    colorIdx++;
     if(colorIdx >= DEVICELEDCOUNT) {
         colorIdx -= DEVICELEDCOUNT;
     }
+    
     colorPtr = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE];
-    for(i = location + 1; i < DEVICELEDCOUNT; i++) {
+    for(i = 0; i < location; i++) {
         SetDeviceLedColor(deviceIdx, i, *colorPtr, *(colorPtr+1), *(colorPtr+2));
     }
 }
 
 // fill ring with next color based on metric range from 0 - 132
-// todo: issues with blend
 void AnimMetricSpectrum(BYTE deviceIdx) {
     int i;
-    
     BYTE color[3];
     BYTE colorIdx = AnimationMetric[deviceIdx] / 12;
     BYTE colorBlend = AnimationMetric[deviceIdx] % 12;
-    BYTE* colorPtr1 = &AnimationBuffer[deviceIdx][colorIdx];
-    BYTE* colorPtr2 = &AnimationBuffer[deviceIdx][colorIdx+LEDSIZE];
+    BYTE* colorPtr1 = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE];
+    BYTE* colorPtr2 = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE+LEDSIZE];
     
     for(i = 0; i < 3; i++) {
         color[i] = (BYTE)(((double)*(colorPtr1+i) * (double)(12 - colorBlend)) / 12.0f);
@@ -447,9 +454,9 @@ void AnimRain(BYTE deviceIdx) {
     
     for(i = 0; i < DEVICELEDCOUNT; i++) {
         if(RainBrightnessMemory[deviceIdx][i] == 0) {
-            if(rand_cts() % 20 >= (15 + (GetAnimationSpeed(deviceIdx) % 4))) {
-                RainBrightnessMemory[deviceIdx][i] = (rand_cts() % 100) * 2;
-                RainColorMemory[deviceIdx][i] = rand_cts() % DEVICELEDCOUNT;
+            if(rand() % 20 >= (15 + (GetAnimationSpeed(deviceIdx) % 4))) {
+                RainBrightnessMemory[deviceIdx][i] = (rand() % 100) * 2;
+                RainColorMemory[deviceIdx][i] = rand() % DEVICELEDCOUNT;
             }
         } else if(RainBrightnessMemory[deviceIdx][i] > GetAnimationSpeed(deviceIdx)) {
             RainBrightnessMemory[deviceIdx][i] = RainBrightnessMemory[deviceIdx][i] - GetAnimationSpeed(deviceIdx);
@@ -589,11 +596,11 @@ static float FlickerBrightness[DEVICECOUNT];
 void AnimFlicker(BYTE deviceIdx) {
     BYTE i;
     
-    if(rand_cts() % 20 >= GetAnimationSpeed(deviceIdx)) {
-        if(rand_cts() % 2 == 0) {
-            FlickerBrightness[deviceIdx] += ((float)(rand_cts() % 7) / 100.0f);
+    if(rand() % 20 >= GetAnimationSpeed(deviceIdx)) {
+        if(rand() % 2 == 0) {
+            FlickerBrightness[deviceIdx] += ((float)(rand() % 7) / 100.0f);
         } else {
-            FlickerBrightness[deviceIdx] -= ((float)(rand_cts() % 7) / 100.0f);
+            FlickerBrightness[deviceIdx] -= ((float)(rand() % 7) / 100.0f);
         }
         if(FlickerBrightness[deviceIdx] < 0.10f) {
             FlickerBrightness[deviceIdx] = 0.30f;
@@ -637,7 +644,7 @@ void AnimationWriteCustomFrame(BYTE *frameData)
 void AnimationUpdate(void)
 {
     int i;
-    if(!frameBusy)
+    if(!frameBusy && (debugIsAnimationPlay || debugIsAnimationStep))
     {
         frameBusy = TRUE;
         
@@ -700,10 +707,8 @@ void AnimationUpdate(void)
                     break;
                     
                 case ANIM_WIPE:
-                    AnimWipe(i, 1);
-                    break;
                 case ANIM_WIPE_REV:
-                    AnimWipe(i, 0);
+                    AnimWipe(i);
                     break;
                     
                 case ANIM_METRIC_SPECTRUM:
@@ -742,6 +747,7 @@ void AnimationUpdate(void)
             }                
         }
         frameReady = TRUE;
+        debugIsAnimationStep = FALSE;
     }
 }
 

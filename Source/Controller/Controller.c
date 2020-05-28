@@ -74,10 +74,12 @@ void ControllerLoop(void)
     if(RxFrameValid)
 	{
 		// Valid frame received, process the command.
-		HandleCommand();	
+		HandleCommand();
+        
 		// Reset the flag.
-		RxFrameValid = FALSE;			
-	}      
+        RxFrameValid = FALSE;
+        RcvBuff.Len = 0;
+	}
 }
 
 // Send error code response to the master.
@@ -174,7 +176,6 @@ void HandleCommand(void)
 			break;
             
         case CMD_READ_CONTROLLER_ADDRESS:
-            //TxmBuff.Data[0] = PORTA & 0x03 | ((PORTB & 0x03) << 2);
             SetResponseSendData((BYTE*)&ControllerAddress, 1);
             SetResponseSendData(NULL, 1);
             break;
@@ -220,16 +221,7 @@ void HandleCommand(void)
             status = 1;
             SetResponseSendData((void*)&status, 1);
             break;
-/*            
-        case CMD_WRITE_METRIC:
-            if(RcvBuff.Len != DEVICECOUNT) {
-                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
-            }
-            AnimationSetMetrics(RcvBuff.Data);
-            status = 1;
-            SetResponseSendData((void*)&status, 1);
-            break;
-*/            
+
         case CMD_SET_TIME:
             if(RcvBuff.Len != 3) {
                 return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
@@ -249,10 +241,61 @@ void HandleCommand(void)
             break;
             
         case CMD_READ_EE_DEBUG: 
-            length = getDebug((char *)&TxmBuff.Data[0]);
-            SetResponseSendData(NULL, length);
-            break;
-			
+        {
+            if(RcvBuff.Len < 1) {
+                return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
+            status = 1;
+            
+            char debugCommand = (char)RcvBuff.Data[0];
+            BYTE *ptr;
+            switch(debugCommand) {
+                case 'r':
+                    DebugReset();
+                    break;
+                case 'a':
+                    ptr = DebugGetCurrentAnimationBufferPointer();
+                    return SetResponseSendData((void*)ptr, DEVICECOUNT*DEVICESIZEBYTES);
+                case 'b':
+                    ptr = DebugGetCurrentAnimationFramePointer();
+                    return SetResponseSendData((void*)ptr, DEVICECOUNT);
+                case 'l':
+                    ptr = LedDrawBuffer;
+                    return SetResponseSendData((void*)ptr, DEVICECOUNT*DEVICESIZEBYTES);
+
+                case 'm':
+                    ptr = LedWriteBuffer;
+                    return SetResponseSendData((void*)ptr, DEVICECOUNT*DEVICESIZEBYTES);
+                case 'd':
+                    length = DebugGet((char *)&TxmBuff.Data[0]);
+                    return SetResponseSendData(NULL, length);
+                    
+                case 'e':
+                {
+                    BYTE metrics[DEVICECOUNT];
+                    for(i=0; i<DEVICECOUNT; i++) {
+                        metrics[i] = RcvBuff.Data[1];
+                    }
+                    AnimationSetMetrics(metrics);
+                    break;
+                }
+                case 'p':
+                    if(RcvBuff.Len != 2) {
+                        return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+                    }
+                    DebugSetPlayPause(RcvBuff.Data[1]);
+                    break;   
+                case 's':
+                    DebugStepAnimation();
+                    break;
+                    
+                default:
+                    status = 0;
+                    return SetResponseErrorOccurred(INVALID_PAYLOAD_LENGTH);
+            }
+            
+            return SetResponseSendData((void*)&status, 1);
+        }
         case CMD_READ_EEPROM: // read eeprom (up to 256 bytes)
             eepromHandle.data = &TxmBuff.Data[0];
             eepromHandle.len = RcvBuff.Data[1] + (RcvBuff.Data[2] << 8);
@@ -301,10 +344,7 @@ void HandleCommand(void)
 	    default:
 	    	SetResponseErrorOccurred(UNKNOWN_COMMAND);
 	    	break;
-	}   
-	
-    RcvBuff.Len = 0; // clear buffer
-		
+	}
 }
 
 BOOL ControlUpdateConfig(void)

@@ -4,6 +4,7 @@
 #include <plib.h>
 #include "./Controller/Config.h"
 #include "./Controller/Animation.h"
+#include "./Controller/Debug.h"
 
 static DWORD DefaultColors[] = {PINK, WINE, RED, ORANGE, SUNSET, YELLOW, LIME, GREEN, TEAL, BLUE, INDIGO, VIOLET};
 //static DWORD DefaultColors[] = {BLACK, WINE, BLACK, BLACK, BLACK, BLACK, LIME, BLACK, BLACK, BLACK, BLACK, BLACK};
@@ -94,7 +95,7 @@ config_t* ConfigInit(EEPROM_HANDLE *eepromHandle)
 {
     configEepromHandle = eepromHandle;
     if(VerifyConfig(configEepromHandle, &Config)) {
-        
+        // success, do nothing
     } else {
         SetDefaultConfig(&Config);
         WriteConfig(configEepromHandle, &Config);

@@ -10,9 +10,9 @@
 extern "C" {
 #endif
 
-void putDebug(char d);
-void resetDebug();
-int getDebug(char *d);
+void DebugPut(char d);
+void DebugReset();
+int DebugGet(char *d);
    
     /* Provide C++ Compatibility */
 #ifdef __cplusplus
