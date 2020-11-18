@@ -5,6 +5,9 @@
 #include "./Controller/Config.h"
 #include "./Controller/Lighting.h"
 
+// support 12 x 5 leds for chaining led strips
+#define NUM_LED_STRIPS_SUPPORTED 5
+
 static BYTE LedBufferA[DEVICECOUNT][DEVICESIZEBYTES];
 static BYTE LedBufferB[DEVICECOUNT][DEVICESIZEBYTES];
 BYTE *LedDrawBuffer = (BYTE*)&LedBufferA;
@@ -13,6 +16,7 @@ BOOL LedBusy = FALSE;
 static DWORD byteIndex = 0x0;
 static DWORD bitIndex = 0x100;
 static DWORD shiftAmount = 8;
+static BYTE ledStripLoop = NUM_LED_STRIPS_SUPPORTED; 
 
 void LightingInit(void) 
 {
@@ -184,11 +188,13 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
     );
     
     if(shiftAmount == 0) {
-        byteIndex += 1;
-        if(byteIndex == 36) {
-            T1CONbits.TON = 0;
+        if(++ byteIndex == 36) {
+            if(-- ledStripLoop == 0) {
+                T1CONbits.TON = 0;
+                LedBusy = FALSE;
+                ledStripLoop = NUM_LED_STRIPS_SUPPORTED;
+            }
             byteIndex = 0;
-            LedBusy = FALSE;
         }
         shiftAmount = 8;
     }

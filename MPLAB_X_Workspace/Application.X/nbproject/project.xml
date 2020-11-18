@@ -11,6 +11,23 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <asminc-extensions/>
             <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>../../linker_scripts</sourceRootElem>
+                <sourceRootElem>../..</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>default__bootloaded_</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>standalone</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
         </data>
     </configuration>
 </project>
