@@ -55,7 +55,10 @@ BOOL I2CIdle(EEPROM_HANDLE *handle)
 
 void EEStart(EEPROM_HANDLE *handle, EEPROM_STATE_MACHINE next)
 {
-    volatile int wait;
+    if(handle->len < 1) {
+        handle->deviceState = EE_ERROR;
+    }
+    
     switch(handle->deviceState)
     {
         case EE_INIT:
