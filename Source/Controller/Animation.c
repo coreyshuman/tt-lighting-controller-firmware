@@ -42,7 +42,7 @@ BYTE* DebugGetCurrentAnimationBufferPointer() {
     return &AnimationBuffer[0][0];
 }
 
-BYTE* DebugGetCurrentAnimationFramePointer() {
+short* DebugGetCurrentAnimationFramePointer() {
     return &AnimationFrame[0];
 }
 
@@ -516,7 +516,7 @@ void AnimStack(BYTE deviceIdx, BYTE dir) {
 // display an analog clock!
 static UINT32 ClockTick;
 static float ClockPulse;
-static float ClockSecondAdjusted = (GetSystemClock()/2) * 1.166667f;
+static UINT32 ClockSecondTicks = (GetSystemClock()/2);
 void AnimClock(BYTE deviceIdx) {
     int i;
     // use speed selection to offset (rotate) the clock
@@ -526,7 +526,7 @@ void AnimClock(BYTE deviceIdx) {
     }
     
     // check if 1 second has passed
-    if(ReadCoreTimer() - ClockTick > (UINT32)(ClockSecondAdjusted)) {
+    if(ReadCoreTimer() - ClockTick > ClockSecondTicks) {
         ClockTick = ReadCoreTimer();
         if(++ClockSecond >= 60) {
             ClockSecond = 0;

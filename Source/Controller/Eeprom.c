@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <plib.h>
 #include "./Controller/Eeprom.h"
+#include "./Controller/Util.h"
 
 int EepromInit(EEPROM_HANDLE *handle, I2C_MODULE id, DWORD clock, WORD deviceAddress, BOOL address16bit)
 {

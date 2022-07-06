@@ -50,7 +50,8 @@
 
 #if defined(__PIC32MX1XX_2XX__)
     // Maximum System frequency of 40MHz for PIC32MX1xx and PIC32MX2xx devices.
-    #define SYS_FREQ (40000000L)
+    // Overclocked to 48MHz (supported on MX1/MX2 line under 85ºC)
+    #define SYS_FREQ (48000000L)
 #elif defined(__PIC32MX3XX_7XX__)
    // Maximum System frequency of 80MHz for PIC32MX3xx, PIC32MX4xx, 
     // PIC32MX5xx, PIC32MX6xx and PIC32MX7xx devices.

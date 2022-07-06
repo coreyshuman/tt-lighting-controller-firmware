@@ -29,9 +29,11 @@
 #pragma config FWDTWINSZ =  WINSZ_50
 
 /*** DEVCFG2 ***/
+// PIC32MX2 clocked to 48MHz (12MHz OSC)
 #pragma config FPLLIDIV =   DIV_3
 #pragma config FPLLMUL =    MUL_24
 #pragma config FPLLODIV =   DIV_2
+// USB 4MHz input for PLL (12MHz OSC / 3)
 #pragma config UPLLIDIV =   DIV_3
 #pragma config UPLLEN =     ON
 
@@ -103,12 +105,12 @@ INT main(void)
     
     // Initialize USB
     TRANS_LAYER_Init(pbClk);
-    ControllerInitialize();
+    ControllerInit();
     DelayMs(10);
     
     INTEnableInterrupts();
 
-    while(1) // main loop
+    while(TRUE) // main loop
     {
         TRANS_LAYER_Task(); // Run Transport layer tasks
         ControllerLoop();

@@ -22,7 +22,7 @@ enum _colors {
     VIOLET =    0x00604000,
     WHITE =     0x00ffffff,
     BLACK =     0x00000000
-} COLORS;
+};
 
 typedef enum _ANIMATION_MODE {
     ANIM_OFF = 0,
@@ -60,12 +60,13 @@ void AnimationSetInterval(WORD msec);
 void AnimationSetMetrics(BYTE metrics[]);
 void AnimationStart(void);
 void AnimationStop(void);
+void AnimationUpdate(void);
 void AnimationUpdateBuffer(BYTE *frameData);
 void AnimationWriteCustomFrame(BYTE *frameData);
 void AnimationSetTime(BYTE time[]);
 
 BYTE* DebugGetCurrentAnimationBufferPointer(void);
-BYTE* DebugGetCurrentAnimationFramePointer(void);
+short* DebugGetCurrentAnimationFramePointer(void);
 void DebugSetPlayPause(BOOL play);
 void DebugStepAnimation(void);
 

@@ -1,7 +1,7 @@
 #ifndef LIGHTING_H
 #define	LIGHTING_H
 
-#define INNERBITDELAY   0x72
+#define INNERBITDELAY   26      // 26 / 48MHz = 0.541us
 
 extern BYTE *LedDrawBuffer;
 extern BYTE *LedWriteBuffer;

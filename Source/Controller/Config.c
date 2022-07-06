@@ -5,6 +5,7 @@
 #include "./Controller/Config.h"
 #include "./Controller/Animation.h"
 #include "./Controller/Debug.h"
+#include "./Controller/Util.h"
 
 static DWORD DefaultColors[] = {PINK, WINE, RED, ORANGE, SUNSET, YELLOW, LIME, GREEN, TEAL, BLUE, INDIGO, VIOLET};
 //static DWORD DefaultColors[] = {BLACK, WINE, BLACK, BLACK, BLACK, BLACK, LIME, BLACK, BLACK, BLACK, BLACK, BLACK};

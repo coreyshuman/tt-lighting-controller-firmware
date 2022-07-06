@@ -5,13 +5,11 @@
 #include "./Controller/Config.h"
 #include "./Controller/Fan.h"
 
-
-#define FAN_SPEED_NUM       (TIMER_2_FREQ * 60u / 2u)
-
 static __IC1CONbits_t *icCONbits[5] = {(__IC1CONbits_t*)&IC3CONbits, (__IC1CONbits_t*)&IC1CONbits, (__IC1CONbits_t*)&IC4CONbits, (__IC1CONbits_t*)&IC2CONbits, (__IC1CONbits_t*)&IC5CONbits};
 static DWORD *icBUF[5] = {(DWORD*)&IC3BUF, (DWORD*)&IC1BUF, (DWORD*)&IC4BUF, (DWORD*)&IC2BUF, (DWORD*)&IC5BUF};
 
-DWORD FanPeriod[5];
+DWORD FanRpmNumerator = TIMER_2_FREQ * 15u; // timer hz * 60s/min / 4 pulse/rev
+DWORD FanCaptureTicks[5];
 DWORD FanLastSample[5];
 WORD FanSpeed[5];
 WORD FanNoUpdateCount[5];
@@ -41,7 +39,7 @@ void PwmSetup(void)
         *ocRs[i] = 0x01e0;
         *ocCon[i] = 0x800E;
         
-        FanPeriod[i] = 0;
+        FanCaptureTicks[i] = 0;
         FanLastSample[i] = 0;
         FanSpeed[i] = 0;
         FanNoUpdateCount[i] = 0;
@@ -68,13 +66,14 @@ void FanInit(void)
     // TMR 2 used for input capture
     T2CON = 0x0; // Stop the timer and clear the control register
     TMR2 = 0x0; // Clear the timer register
-    T2CONbits.TCKPS = 7; // divisor = 256
+    T2CONbits.TCKPS = 7; // divisor = 256, TIMER_2_DIV
     PR2 = 0xFFFF;
     // TMR 3 used for output compare
     T3CON = 0x0; // Stop the timer and clear the control register,
     // prescaler at 1:1,internal clock source
     TMR3 = 0x0; // Clear the timer register
-    PR3 = 0x0780-1; // Set period (25000hz = 48000000/TIMER_3_FREQ)
+    // Set period (25000hz = 48000000/TIMER_3_FREQ)
+    PR3 = GetSystemClock() / TIMER_3_FREQ - 1; 
     
     PwmSetup();
     InputCaptureSetup();
@@ -120,17 +119,17 @@ void FanLoop(void)
             {
                 tmp = val - FanLastSample[i];
             }
-            FanPeriod[i] = (FanPeriod[i] + tmp) >> 1; // average over 1 sample
+            FanCaptureTicks[i] = (FanCaptureTicks[i] + tmp) >> 1; // average over 2 samples
             FanLastSample[i] = val;
         }
         if(FanNoUpdateCount[i] > 50000) {
-            FanPeriod[i] = 0;
+            FanCaptureTicks[i] = 0;
         }
-        if(FanPeriod[i] == 0) {
+        if(FanCaptureTicks[i] == 0) {
             FanSpeed[i] = 0;
         } else {
-            // fan1speed = 187500 / ticks * 60 
-        FanSpeed[i] = (WORD)(FAN_SPEED_NUM / FanPeriod[i]);
+        // Fan RPM = timer_period / timer_ticks * 60s/min / 4pulse/revolution
+        FanSpeed[i] = (WORD)(FanRpmNumerator / FanCaptureTicks[i]);
         }
     }  
 }

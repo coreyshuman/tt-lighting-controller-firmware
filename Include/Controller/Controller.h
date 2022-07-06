@@ -13,7 +13,7 @@
 #define USB_BUFFER_SIZE      960 + 64  //  (60 * N) + (4 * N), N = 16
 
 #define MAJOR_VERSION        1
-#define MINOR_VERSION        25
+#define MINOR_VERSION        26
 
 typedef enum _CONTROL_ERROR_CODES {
     RESPONSE_TOO_LONG = 0x01,
@@ -44,7 +44,7 @@ enum _CONTROL_CMD {
     CMD_READ_EEPROM = 0x38,
     CMD_WRITE_EEPROM = 0x39,
     CMD_ERROR_OCCURED = 0x40
-} CONTROL_CMD;
+};
 
 #ifdef __cplusplus
 extern "C" {

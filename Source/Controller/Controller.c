@@ -6,6 +6,7 @@
 #include "./Controller/Config.h"
 #include "./Controller/Controller.h"
 #include "./Common.h"
+#include "./Controller/Debug.h"
 
 typedef struct
 {
@@ -38,7 +39,7 @@ BOOL ControlUpdateConfig(void);
 void ControlDefaultConfig(void);
 
 
-void ControllerInitialize(void) 
+void ControllerInit(void) 
 {
     EepromInit(&eepromHandle, EE_I2C, 400000, EE_ADDR, FALSE);
     // Let I2C stabilize
@@ -257,7 +258,7 @@ void HandleCommand(void)
                     ptr = DebugGetCurrentAnimationBufferPointer();
                     return SetResponseSendData((void*)ptr, DEVICECOUNT*DEVICESIZEBYTES);
                 case 'b':
-                    ptr = DebugGetCurrentAnimationFramePointer();
+                    ptr = (BYTE*)DebugGetCurrentAnimationFramePointer();
                     return SetResponseSendData((void*)ptr, DEVICECOUNT);
                 case 'l':
                     ptr = LedDrawBuffer;

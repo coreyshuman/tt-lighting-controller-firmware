@@ -25,7 +25,8 @@
 
     
     /**************************** App Stuff ********************************/
-#define TIMER_2_FREQ    187500u
+#define TIMER_2_FREQ    187500u     // 48 MHz / 256 divisor
+#define TIMER_2_DIV     256
 #define TIMER_3_FREQ    25000u
 				
    // Error indication.	
