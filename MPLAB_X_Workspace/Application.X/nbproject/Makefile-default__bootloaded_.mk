@@ -107,174 +107,174 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/_ext/1332549744/Lighting.o: ../../Source/Controller/Lighting.c  .generated_files/flags/default__bootloaded_/c02b61e796e1b1bf694081a1023211fc9a1d1319 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Lighting.o: ../../Source/Controller/Lighting.c  .generated_files/flags/default__bootloaded_/9c38db38287be6cc14161a12ffb6ff23ca846865 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" -o ${OBJECTDIR}/_ext/1332549744/Lighting.o ../../Source/Controller/Lighting.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" -o ${OBJECTDIR}/_ext/1332549744/Lighting.o ../../Source/Controller/Lighting.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Controller.o: ../../Source/Controller/Controller.c  .generated_files/flags/default__bootloaded_/2dc22d257a9ba64043c47f23999df3e0a6574590 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Controller.o: ../../Source/Controller/Controller.c  .generated_files/flags/default__bootloaded_/2d4b3842a4c1dc8f89d6b01aed5ff5457cf28b30 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Controller.o.d" -o ${OBJECTDIR}/_ext/1332549744/Controller.o ../../Source/Controller/Controller.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Controller.o.d" -o ${OBJECTDIR}/_ext/1332549744/Controller.o ../../Source/Controller/Controller.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Animation.o: ../../Source/Controller/Animation.c  .generated_files/flags/default__bootloaded_/cfd69a33c1138eef231eae6101b1f99e35080e60 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Animation.o: ../../Source/Controller/Animation.c  .generated_files/flags/default__bootloaded_/40a44e36c527d8dfab8d93a9c4e16798e6e5df63 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Animation.o.d" -o ${OBJECTDIR}/_ext/1332549744/Animation.o ../../Source/Controller/Animation.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Animation.o.d" -o ${OBJECTDIR}/_ext/1332549744/Animation.o ../../Source/Controller/Animation.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Fan.o: ../../Source/Controller/Fan.c  .generated_files/flags/default__bootloaded_/d986fc6897e49040badef0edba48f99db6b1d0f9 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Fan.o: ../../Source/Controller/Fan.c  .generated_files/flags/default__bootloaded_/553f475a671ef3422a01022b95b6b2b02c94e46c .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Fan.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Fan.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Fan.o.d" -o ${OBJECTDIR}/_ext/1332549744/Fan.o ../../Source/Controller/Fan.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Fan.o.d" -o ${OBJECTDIR}/_ext/1332549744/Fan.o ../../Source/Controller/Fan.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Eeprom.o: ../../Source/Controller/Eeprom.c  .generated_files/flags/default__bootloaded_/881cd3ad5daa91f1253b036a468ce49b4bbb7732 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Eeprom.o: ../../Source/Controller/Eeprom.c  .generated_files/flags/default__bootloaded_/12f1e60a5f04c8edd279d48b27f5fa269bd25857 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Eeprom.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Eeprom.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Eeprom.o.d" -o ${OBJECTDIR}/_ext/1332549744/Eeprom.o ../../Source/Controller/Eeprom.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Eeprom.o.d" -o ${OBJECTDIR}/_ext/1332549744/Eeprom.o ../../Source/Controller/Eeprom.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Config.o: ../../Source/Controller/Config.c  .generated_files/flags/default__bootloaded_/93086277d5a65239b728b52b5845bc51075bad99 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Config.o: ../../Source/Controller/Config.c  .generated_files/flags/default__bootloaded_/966093bd4a877d701663e779dfee9c75d17aa302 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Config.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Config.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Config.o.d" -o ${OBJECTDIR}/_ext/1332549744/Config.o ../../Source/Controller/Config.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Config.o.d" -o ${OBJECTDIR}/_ext/1332549744/Config.o ../../Source/Controller/Config.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Util.o: ../../Source/Controller/Util.c  .generated_files/flags/default__bootloaded_/18172b9fa1e7bac338fb9c273275742092a44f03 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Util.o: ../../Source/Controller/Util.c  .generated_files/flags/default__bootloaded_/a5ba7764cbfe00a878890cafa497d432b846b783 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Util.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Util.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Util.o.d" -o ${OBJECTDIR}/_ext/1332549744/Util.o ../../Source/Controller/Util.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Util.o.d" -o ${OBJECTDIR}/_ext/1332549744/Util.o ../../Source/Controller/Util.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Debug.o: ../../Source/Controller/Debug.c  .generated_files/flags/default__bootloaded_/b97f97670cd6110539935d5582b5d23bf5251716 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Debug.o: ../../Source/Controller/Debug.c  .generated_files/flags/default__bootloaded_/65b5576236cf445e468ec0c7d9540c8239225321 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Debug.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Debug.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Debug.o.d" -o ${OBJECTDIR}/_ext/1332549744/Debug.o ../../Source/Controller/Debug.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Debug.o.d" -o ${OBJECTDIR}/_ext/1332549744/Debug.o ../../Source/Controller/Debug.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o: ../../Source/USB/Usb_HID_tasks_application.c  .generated_files/flags/default__bootloaded_/6d185af022339137c8b6598f1bbe879ef87f483d .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o: ../../Source/USB/Usb_HID_tasks_application.c  .generated_files/flags/default__bootloaded_/6ad7cbbc83f64e8ed5593e304adf9e0db6c7333c .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o: ../../Source/USB/usb_descriptors_app.c  .generated_files/flags/default__bootloaded_/c4a9f81a2b06410095f4fc56a16eec70d5ed2501 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o: ../../Source/USB/usb_descriptors_app.c  .generated_files/flags/default__bootloaded_/c99f78451cc2ba925646598d3db6d9148d68d9f0 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o ../../Source/USB/usb_descriptors_app.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o ../../Source/USB/usb_descriptors_app.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  .generated_files/flags/default__bootloaded_/20baaee673b3684113dba13bfcc131dfa68454e0 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  .generated_files/flags/default__bootloaded_/e9a6e2b7e3211d1f76f409ecdec902e2e0908fff .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  .generated_files/flags/default__bootloaded_/787c61fc50db5ed6e6ed0e7c5e1b506026205300 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  .generated_files/flags/default__bootloaded_/9d94bf512ac7a50dbbbc958bbcec6e2a3191d41d .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1787047461/Main.o: ../../Source/Main.c  .generated_files/flags/default__bootloaded_/2828997c15a2d67cac01bfc8c125541a426f4a4e .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1787047461/Main.o: ../../Source/Main.c  .generated_files/flags/default__bootloaded_/f8f02dac8670ab3c13391e72b149add23744d905 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Main.o.d" -o ${OBJECTDIR}/_ext/1787047461/Main.o ../../Source/Main.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Main.o.d" -o ${OBJECTDIR}/_ext/1787047461/Main.o ../../Source/Main.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1787047461/Exception.o: ../../Source/Exception.c  .generated_files/flags/default__bootloaded_/8faf972534a3eb51e26b773c062b7650e31d16a8 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1787047461/Exception.o: ../../Source/Exception.c  .generated_files/flags/default__bootloaded_/4dfbe99cc9f63735d0686e45b45d763c13537719 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Exception.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Exception.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Exception.o.d" -o ${OBJECTDIR}/_ext/1787047461/Exception.o ../../Source/Exception.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Exception.o.d" -o ${OBJECTDIR}/_ext/1787047461/Exception.o ../../Source/Exception.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
 else
-${OBJECTDIR}/_ext/1332549744/Lighting.o: ../../Source/Controller/Lighting.c  .generated_files/flags/default__bootloaded_/7ce826ceb3b696254663bea49da21bfbd06a1046 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Lighting.o: ../../Source/Controller/Lighting.c  .generated_files/flags/default__bootloaded_/f7a462c220061fd4dbe71195fe0469d2178591a9 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Lighting.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" -o ${OBJECTDIR}/_ext/1332549744/Lighting.o ../../Source/Controller/Lighting.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Lighting.o.d" -o ${OBJECTDIR}/_ext/1332549744/Lighting.o ../../Source/Controller/Lighting.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Controller.o: ../../Source/Controller/Controller.c  .generated_files/flags/default__bootloaded_/c14ce42e795be61b1e1a25b2b706e9d8807438db .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Controller.o: ../../Source/Controller/Controller.c  .generated_files/flags/default__bootloaded_/db94c23dc80e904c6c9d218c42822f6c277e0b4 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Controller.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Controller.o.d" -o ${OBJECTDIR}/_ext/1332549744/Controller.o ../../Source/Controller/Controller.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Controller.o.d" -o ${OBJECTDIR}/_ext/1332549744/Controller.o ../../Source/Controller/Controller.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Animation.o: ../../Source/Controller/Animation.c  .generated_files/flags/default__bootloaded_/3dd247f1313e0ec18d5ce6251d754f3b0e2eae49 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Animation.o: ../../Source/Controller/Animation.c  .generated_files/flags/default__bootloaded_/89cc336b89fe5e3e2be6668d93e0fdf0b178b508 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Animation.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Animation.o.d" -o ${OBJECTDIR}/_ext/1332549744/Animation.o ../../Source/Controller/Animation.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Animation.o.d" -o ${OBJECTDIR}/_ext/1332549744/Animation.o ../../Source/Controller/Animation.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Fan.o: ../../Source/Controller/Fan.c  .generated_files/flags/default__bootloaded_/f73df60e3f01a07fda548762e940e4b4a267068e .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Fan.o: ../../Source/Controller/Fan.c  .generated_files/flags/default__bootloaded_/af7983937ed923cd8ef8a30ddfa77c0163917774 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Fan.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Fan.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Fan.o.d" -o ${OBJECTDIR}/_ext/1332549744/Fan.o ../../Source/Controller/Fan.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Fan.o.d" -o ${OBJECTDIR}/_ext/1332549744/Fan.o ../../Source/Controller/Fan.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Eeprom.o: ../../Source/Controller/Eeprom.c  .generated_files/flags/default__bootloaded_/6d61f72e11872553a88b7ababe7e979353b6d69b .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Eeprom.o: ../../Source/Controller/Eeprom.c  .generated_files/flags/default__bootloaded_/59bdcc6e0569f0f4b5276d956c9e13b4d46f46e1 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Eeprom.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Eeprom.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Eeprom.o.d" -o ${OBJECTDIR}/_ext/1332549744/Eeprom.o ../../Source/Controller/Eeprom.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Eeprom.o.d" -o ${OBJECTDIR}/_ext/1332549744/Eeprom.o ../../Source/Controller/Eeprom.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Config.o: ../../Source/Controller/Config.c  .generated_files/flags/default__bootloaded_/e3a0637bac7548d8316fcdc5549f3352fe9c4850 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Config.o: ../../Source/Controller/Config.c  .generated_files/flags/default__bootloaded_/2b43159bcfb1d69c09ee8656394fe31c4ccb8fb3 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Config.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Config.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Config.o.d" -o ${OBJECTDIR}/_ext/1332549744/Config.o ../../Source/Controller/Config.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Config.o.d" -o ${OBJECTDIR}/_ext/1332549744/Config.o ../../Source/Controller/Config.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Util.o: ../../Source/Controller/Util.c  .generated_files/flags/default__bootloaded_/d0ce54b721b1dd289fb9150644f0803e511461ad .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Util.o: ../../Source/Controller/Util.c  .generated_files/flags/default__bootloaded_/b068654e967b3e1bf8f60e241e15fc8a1987c091 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Util.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Util.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Util.o.d" -o ${OBJECTDIR}/_ext/1332549744/Util.o ../../Source/Controller/Util.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Util.o.d" -o ${OBJECTDIR}/_ext/1332549744/Util.o ../../Source/Controller/Util.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1332549744/Debug.o: ../../Source/Controller/Debug.c  .generated_files/flags/default__bootloaded_/a050748c200afaa86095e71b90e70828e12000f0 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1332549744/Debug.o: ../../Source/Controller/Debug.c  .generated_files/flags/default__bootloaded_/98698d0bf6ec62743432e604320ac0aadfcef8d4 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1332549744" 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Debug.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1332549744/Debug.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Debug.o.d" -o ${OBJECTDIR}/_ext/1332549744/Debug.o ../../Source/Controller/Debug.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1332549744/Debug.o.d" -o ${OBJECTDIR}/_ext/1332549744/Debug.o ../../Source/Controller/Debug.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o: ../../Source/USB/Usb_HID_tasks_application.c  .generated_files/flags/default__bootloaded_/8c5f3350a0579d7864fbf1064ad3443bf213e95a .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o: ../../Source/USB/Usb_HID_tasks_application.c  .generated_files/flags/default__bootloaded_/33ef45f111911a6fa98fbea86fcddf2600941887 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o.d" -o ${OBJECTDIR}/_ext/313519312/Usb_HID_tasks_application.o ../../Source/USB/Usb_HID_tasks_application.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o: ../../Source/USB/usb_descriptors_app.c  .generated_files/flags/default__bootloaded_/eb419896953bc3a8eee6201d467f6a4f2304649d .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o: ../../Source/USB/usb_descriptors_app.c  .generated_files/flags/default__bootloaded_/b159aef4f12ad24a242219fd5bd81c60037282d0 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o ../../Source/USB/usb_descriptors_app.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_descriptors_app.o ../../Source/USB/usb_descriptors_app.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  .generated_files/flags/default__bootloaded_/7ff3d4a36167247222f266bccb0dfbcefca67a7 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/usb_device.o: ../../Source/USB/usb_device.c  .generated_files/flags/default__bootloaded_/9ef55a9dd5bd5307349b2a11d7bbd3e6003d9ad2 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_device.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_device.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_device.o ../../Source/USB/usb_device.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  .generated_files/flags/default__bootloaded_/677cfad5d377a1fccb5b9f582fe9146778af9793 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/313519312/usb_function_hid.o: ../../Source/USB/usb_function_hid.c  .generated_files/flags/default__bootloaded_/2c8ef1d7a7ff5c79d276c03740acf987ed89f15f .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/313519312" 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d 
 	@${RM} ${OBJECTDIR}/_ext/313519312/usb_function_hid.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/313519312/usb_function_hid.o.d" -o ${OBJECTDIR}/_ext/313519312/usb_function_hid.o ../../Source/USB/usb_function_hid.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1787047461/Main.o: ../../Source/Main.c  .generated_files/flags/default__bootloaded_/5aef8c8d18a753ae0a1f3f88495d462bbd1d4c8c .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1787047461/Main.o: ../../Source/Main.c  .generated_files/flags/default__bootloaded_/bf19c40599e5031635cf55ce6fa83d2d12fd48c8 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Main.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Main.o.d" -o ${OBJECTDIR}/_ext/1787047461/Main.o ../../Source/Main.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Main.o.d" -o ${OBJECTDIR}/_ext/1787047461/Main.o ../../Source/Main.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
-${OBJECTDIR}/_ext/1787047461/Exception.o: ../../Source/Exception.c  .generated_files/flags/default__bootloaded_/f6e315855488a601998a838448a40795af8bea42 .generated_files/flags/default__bootloaded_/99f3dccf676a45fa6804d5afac85c14b7050b57f
+${OBJECTDIR}/_ext/1787047461/Exception.o: ../../Source/Exception.c  .generated_files/flags/default__bootloaded_/f9a2361ee4b8e70067eb238b2e6a9b14c5b0da89 .generated_files/flags/default__bootloaded_/7ba097bc94b9dc57ccaa532d046fa2c160885927
 	@${MKDIR} "${OBJECTDIR}/_ext/1787047461" 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Exception.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1787047461/Exception.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -Os -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Exception.o.d" -o ${OBJECTDIR}/_ext/1787047461/Exception.o ../../Source/Exception.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)    
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -O1 -fno-common -D_SUPPRESS_PLIB_WARNING -I"../../Include" -MP -MMD -MF "${OBJECTDIR}/_ext/1787047461/Exception.o.d" -o ${OBJECTDIR}/_ext/1787047461/Exception.o ../../Source/Exception.c    -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}"  
 	
 endif
 
@@ -289,12 +289,12 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    ../../linker_scripts/app_32MX230F064D.ld
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE) -g -mdebugger -D__MPLAB_DEBUGGER_PK3=1 -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -o dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)   -mreserve=data@0x0:0x1FC -mreserve=boot@0x1FC00490:0x1FC00BEF  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D=__DEBUG_D,--defsym=__MPLAB_DEBUGGER_PK3=1,--gc-sections,--no-code-in-dinit,--no-dinit-in-serial-mem,-L"../../MPLAB_Workspace",-Map="$(BINDIR_)$(TARGETBASE).map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml 
+	${MP_CC} $(MP_EXTRA_LD_PRE) -g   -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)      -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D=__DEBUG_D,--gc-sections,--no-code-in-dinit,--no-dinit-in-serial-mem,-L"../../MPLAB_Workspace",-Map="$(BINDIR_)$(TARGETBASE).map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml -mdfp="${DFP_DIR}"
 	
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   ../../linker_scripts/app_32MX230F064D.ld
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -o dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--gc-sections,--no-code-in-dinit,--no-dinit-in-serial-mem,-L"../../MPLAB_Workspace",-Map="$(BINDIR_)$(TARGETBASE).map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default__bootloaded_=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),--gc-sections,--no-code-in-dinit,--no-dinit-in-serial-mem,-L"../../MPLAB_Workspace",-Map="$(BINDIR_)$(TARGETBASE).map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml -mdfp="${DFP_DIR}"
 	${MP_CC_DIR}\\xc32-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/Application.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
 endif
 

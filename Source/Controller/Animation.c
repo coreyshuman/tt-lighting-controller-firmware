@@ -9,12 +9,6 @@
 #include "./Controller/Config.h"
 #include "./Controller/Debug.h"
 
-// todo:
-//   clock min/hour getting flipped sometimes?
-//   flicker working great on left res, colors swapping on right?
-//   general signal integrity issues?
-
-// shared variables
 static short AnimationFrame[DEVICECOUNT];
 static BYTE AnimationBuffer[DEVICECOUNT][DEVICESIZEBYTES];
 static BYTE AnimationSpeedCounter[DEVICECOUNT];
@@ -22,7 +16,6 @@ static BYTE AnimationMetric[DEVICECOUNT];
 static BYTE ClockSecond;
 static BYTE ClockMinute;
 static BYTE ClockHour;
-// private variables
 static volatile BOOL frameBusy = TRUE;
 static volatile BOOL frameReady = FALSE;
 static BOOL customFrameMode = FALSE;
@@ -31,12 +24,12 @@ static BYTE fanDir = 1;
 static config_t *animConfigPtr = 0;
 static WORD animIntervalMsec = 0;
 
-#define GetAnimationSpeed(x) animConfigPtr->ledSpeed[x]
-#define GetAnimationMode(x) animConfigPtr->ledMode[i]
-
 // animation development debug helpers
 static BOOL debugIsAnimationPlay = TRUE;
 static BOOL debugIsAnimationStep = FALSE;
+
+#define GetAnimationSpeed(x) animConfigPtr->ledSpeed[x]
+#define GetAnimationMode(x) animConfigPtr->ledMode[i]
 
 BYTE* DebugGetCurrentAnimationBufferPointer() {
     return &AnimationBuffer[0][0];
@@ -618,6 +611,23 @@ void AnimFlicker(BYTE deviceIdx) {
     }
 }
 
+// move two leds across opposite sides of the bar/fan
+void AnimCross(BYTE deviceIdx) {
+    if(AnimationFrame[deviceIdx] >= DEVICELEDCOUNT * DEVICELEDCOUNT / 2) {
+        AnimationFrame[deviceIdx] = 0;
+    }
+    
+    BYTE location = AnimationFrame[deviceIdx] % (DEVICELEDCOUNT / 2);
+    int colorIdx = (AnimationFrame[deviceIdx] / (DEVICELEDCOUNT / 2));
+    
+    ClearLedsForDevice(deviceIdx);
+    
+    BYTE* colorPtr = &AnimationBuffer[deviceIdx][colorIdx*LEDSIZE];
+    
+    SetDeviceLedColor(deviceIdx, location, *colorPtr, *(colorPtr+1), *(colorPtr+2));
+    SetDeviceLedColor(deviceIdx, DEVICELEDCOUNT-location-1, *colorPtr, *(colorPtr+1), *(colorPtr+2));
+}
+
 void AnimationResetFrames() {
     int i;
      for(i=0; i<DEVICECOUNT; i++) {
@@ -655,7 +665,8 @@ void AnimationUpdate(void)
                 if( ledMode == ANIM_ROTATE_REV ||
                     ledMode == ANIM_RIPPLE_REV ||
                     ledMode == ANIM_RIPPLE_SPECTRUM_REV ||
-                    ledMode == ANIM_WIPE_REV 
+                    ledMode == ANIM_WIPE_REV ||
+                    ledMode == ANIM_CROSS_REV
                 ) {
                     if(--AnimationFrame[i] < 0) {
                         AnimationFrame[i] = MAX_ANIMATION_FRAMES - 1;
@@ -743,6 +754,11 @@ void AnimationUpdate(void)
                     
                 case ANIM_FLICKER:
                     AnimFlicker(i);
+                    break;
+                    
+                case ANIM_CROSS:
+                case ANIM_CROSS_REV:
+                    AnimCross(i);
                     break;
             }                
         }

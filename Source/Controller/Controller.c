@@ -51,11 +51,13 @@ void ControllerInit(void)
     
     FanInit();
     FanSetSpeeds(configHandle->fanSpeed);
-    FanCaptureEnable();
+    
     
     AnimationSetInterval(ANIMATION_INTERVAL);
     AnimationUpdate();
     AnimationStart();
+    
+    FanCaptureEnable();
     
     RxFrameValid = FALSE;
     
@@ -67,10 +69,10 @@ void ControllerInit(void)
 
 void ControllerLoop(void)
 {
-    if(LedBusy) return;
-    
-    AnimationUpdate();
-    FanLoop();
+    if(!LedBusy) {
+        FanLoop();
+        AnimationUpdate();
+    }
     
     if(RxFrameValid)
 	{
@@ -339,7 +341,7 @@ void HandleCommand(void)
             }
             break;
         
-        case CMD_ERROR_OCCURED:
+        case CMD_ERROR_OCCURRED:
             SetResponseErrorOccurred(RcvBuff.Data[0]);
             break;
 	    default:

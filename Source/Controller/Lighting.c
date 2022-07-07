@@ -131,30 +131,30 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
         "LB $t4, 144($t5) \n"       // load data 5
         "LA $t6, LATCCLR \n"
         "LI $t5, 0x0384 \n"         // bit mask for LATC outputs
+        "LI $v0, 0x0000 \n"
+        "LI $v1, 0x0100 \n"         // bit mask for LATB output
     
         // Start data bit, set outputs 1,2,4,5 high
         // LATC Clock 0
         "SW $t5, 0($t6) \n"         // set LATC output high
     
-        "LI $v0, 0x0000 \n"
-        "LI $v1, 0x0100 \n"         // bit mask for LATB output
-        "LA $t8, LATBCLR \n"
-        
-        // Start data bit, set output 3 high
-        // LATB Clock 0
-        "SW $v1, 0($t8) \n"         // set LATB output high
+        "LA $t8, LATBCLR \n"  
     
         // output 1, read bit
         "SRLV $t6, $t0, $t7 \n"     // shift bit to [0]
         "ANDI $t6, $t6, 0x1 \n"     // mask bit [0]
         "SLL $t6, $t6, 0x09 \n"     // shift bit to rc[9] location
         "OR $v0, $v0, $t6 \n"       // OR into v0
+    
+        // Start data bit, set output 3 high
+        // LATB Clock 0
+        "SW $v1, 0($t8) \n"         // set LATB output high
+    
         // output 2, read bit
         "SRLV $t6, $t1, $t7 \n"     // shift bit to [0]
         "ANDI $t6, $t6, 0x1 \n"     // mask bit [0]
         "SLL $t6, $t6, 0x02 \n"     // shift bit to rc[2] location
         "OR $v0, $v0, $t6 \n"       // OR into v0
-        
         // output 4, read bit
         "SRLV $t6, $t3, $t7 \n"     // shift bit to [0]
         "ANDI $t6, $t6, 0x1 \n"     // mask bit [0]
@@ -169,7 +169,7 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
         // update data bit hi/lo status for output 1,2,4,5
         "XOR $v0, $v0, $t5 \n"      // xor to invert bit status
         "LA $t1, LATCSET \n"
-         // LATC Clock 23 = 0.479us
+         // LATC Clock 21 = 0.437us
         "SW $v0, 0($t1) \n"
 
         // output 3, read bit
@@ -180,11 +180,13 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
         // update data bit hi/lo status for output 3
         "XOR $v0, $v0, $v1 \n"      // xor to invert bit status
         "LA $t1, LATBSET \n"
-        // LATB Clock 25 = 0.521us
+        // LATB Clock 21 = 0.437us
         "SW $v0, 0($t1) \n"
     
         // end data bit, set low for output 1,2,4,5
         "LA $t1, LATCSET \n"
+        "NOP \n"
+        "NOP \n"
         "NOP \n"
         "NOP \n"
         // LATC Clock 33 = 0.688us
@@ -192,13 +194,14 @@ void __ISR(_TIMER_1_VECTOR, IPL7SOFT) Timer1Handler(void)
         "NOP \n"
         "NOP \n"
         "NOP \n"
+        "NOP \n"
         // end data bit, set low for output 3
         "LA $t1, LATBSET \n"
-        // LATB Clock 34 = 0.708us
+        // LATB Clock 33 = 0.688us
         "SW $v1, 0($t1) \n"
         
-        // 0.708us of 1.25us elapsed
-        // Interrupt should refire in 0.55us to 0.55us
+        // 0.688us of 1.25us elapsed
+        // Interrupt should refire in 0.56us to 0.86us
     );
     
     // update index, shift amount, and led strip count

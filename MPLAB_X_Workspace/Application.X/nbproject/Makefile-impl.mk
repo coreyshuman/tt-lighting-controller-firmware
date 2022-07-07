@@ -27,7 +27,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 PROJECTNAME=Application.X
 
 # Active Configuration
-DEFAULTCONF=standalone
+DEFAULTCONF=default__bootloaded_
 CONF=${DEFAULTCONF}
 
 # All Configurations

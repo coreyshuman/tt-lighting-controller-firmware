@@ -5,14 +5,18 @@
 #include "./Controller/Config.h"
 #include "./Controller/Fan.h"
 
-static __IC1CONbits_t *icCONbits[5] = {(__IC1CONbits_t*)&IC3CONbits, (__IC1CONbits_t*)&IC1CONbits, (__IC1CONbits_t*)&IC4CONbits, (__IC1CONbits_t*)&IC2CONbits, (__IC1CONbits_t*)&IC5CONbits};
-static DWORD *icBUF[5] = {(DWORD*)&IC3BUF, (DWORD*)&IC1BUF, (DWORD*)&IC4BUF, (DWORD*)&IC2BUF, (DWORD*)&IC5BUF};
+static volatile __IC1CONbits_t *icCONbits[5] = {(__IC1CONbits_t*)&IC3CONbits, (__IC1CONbits_t*)&IC1CONbits, (__IC1CONbits_t*)&IC4CONbits, (__IC1CONbits_t*)&IC2CONbits, (__IC1CONbits_t*)&IC5CONbits};
+static volatile DWORD *icBUF[5] = {(DWORD*)&IC3BUF, (DWORD*)&IC1BUF, (DWORD*)&IC4BUF, (DWORD*)&IC2BUF, (DWORD*)&IC5BUF};
 
-DWORD FanRpmNumerator = TIMER_2_FREQ * 15u; // timer hz * 60s/min / 4 pulse/rev
-DWORD FanCaptureTicks[5];
-DWORD FanLastSample[5];
+static DWORD FanRpmNumerator = TIMER_2_FREQ * 120u; // timer hz * 60s/min / 2 pulse/rev * 4 pulse/capture
+static BYTE FanUpdateIndex = 0;
+static DWORD FanCaptureTicks[5];
+static DWORD FanLastSample[5];
+static WORD FanNoUpdateCount[5];
+
+// shared variables
 WORD FanSpeed[5];
-WORD FanNoUpdateCount[5];
+
 
 WORD CalcFanPeriod(BYTE percent);
 
@@ -55,9 +59,9 @@ void InputCaptureSetup(void)
     int i;
     for(i=0; i<5; i++)
     {
-        *icCon[i] = 0x0000;    // disable input capture modules
-        *rcpxr[i] = rcpxrVal[i];
-        *icCon[i] = 0x8081;
+        *icCon[i] = 0x0000;         // disable input capture modules
+        *rcpxr[i] = rcpxrVal[i];    // assign input capture pin
+        *icCon[i] = IC_TIMER2_SRC | IC_EVERY_4_RISE_EDGE | IC_ON;
     }
 }
 
@@ -100,38 +104,43 @@ void FanCaptureDisable()
 
 void FanLoop(void)
 {
-    int i;
+    int i = FanUpdateIndex;
     
-    for(i=0; i<5; i++) {
-        if(!icCONbits[i]->ICBNE) {
-            FanNoUpdateCount[i]++;
+    // no captures available
+    if(!icCONbits[i]->ICBNE) {
+        FanNoUpdateCount[i]++;
+    } 
+
+    // loop to get all buffered measurements
+    while(icCONbits[i]->ICBNE) {
+        FanNoUpdateCount[i] = 0;
+        DWORD val = *icBUF[i];
+        DWORD tmp;
+        if(val < FanLastSample[i])
+        {
+            tmp = 0xFFFF - FanLastSample[i] + val + 1;
         }
-        // loop to get all buffered measurements
-        while(icCONbits[i]->ICBNE) {
-            FanNoUpdateCount[i] = 0;
-            DWORD val = *icBUF[i];
-            DWORD tmp;
-            if(val < FanLastSample[i])
-            {
-                tmp = 0xFFFF - FanLastSample[i] + val + 1;
-            }
-            else
-            {
-                tmp = val - FanLastSample[i];
-            }
-            FanCaptureTicks[i] = (FanCaptureTicks[i] + tmp) >> 1; // average over 2 samples
-            FanLastSample[i] = val;
+        else
+        {
+            tmp = val - FanLastSample[i];
         }
-        if(FanNoUpdateCount[i] > 50000) {
-            FanCaptureTicks[i] = 0;
-        }
-        if(FanCaptureTicks[i] == 0) {
-            FanSpeed[i] = 0;
-        } else {
+        FanCaptureTicks[i] = (FanCaptureTicks[i] + tmp) >> 1; // average over 2 samples
+        FanLastSample[i] = val;
+    }
+
+    if(FanNoUpdateCount[i] > 50000) {
+        FanCaptureTicks[i] = 0;
+    }
+    if(FanCaptureTicks[i] == 0) {
+        FanSpeed[i] = 0;
+    } else {
         // Fan RPM = timer_period / timer_ticks * 60s/min / 4pulse/revolution
         FanSpeed[i] = (WORD)(FanRpmNumerator / FanCaptureTicks[i]);
-        }
-    }  
+    }
+    
+    if(++ FanUpdateIndex == 5) {
+        FanUpdateIndex = 0;
+    }
 }
 
 void FanSetSpeeds(BYTE speeds[])
